@@ -1,0 +1,23 @@
+# Ignore all .json files
+*.json
+
+# Ignoe all .pt files
+*.pt
+
+# Ignore all files in the build/ directory
+libritts_data/
+data/
+handwritten_digits/
+mnist_data/
+preloaded_data/
+testing/
+
+# Ignore .DS_Store file (MacOS specific)
+.DS_Store
+
+# Ignore Python compiled files
+__pycache__/
+*.pyc
+
+# Ignore environment files
+.env
