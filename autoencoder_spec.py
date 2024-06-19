@@ -14,50 +14,71 @@ class Autoencoder(nn.Module):
     def __init__(self):
         super(Autoencoder, self).__init__()
         # Encoder
-        self.conv1 = nn.Conv2d(1, 32, 3, 1)
-        self.conv2 = nn.Conv2d(32, 64, 3, 1)
-        self.dropout1 = nn.Dropout(0.25)
-        self.dropout2 = nn.Dropout(0.5)
-        self.fc1 = nn.Linear(64*38*38, 128)  # Updated to 64*12*12
-        self.fc2 = nn.Linear(128, 64)
+        self.fc1 = nn.Linear(80, 80, False)
+        # self.conv1 = nn.Conv2d(1, 1,  1, 1)
+        # self.conv2 = nn.Conv2d(1, 64, 1, 1)
+        # self.dropout1 = nn.Dropout(0.25)
+        # self.dropout2 = nn.Dropout(0.5)
+        # self.fc1 = nn.Linear(64*80*80, 128)  # Updated to 64*38*38
+        # self.fc2 = nn.Linear(128, 64)
+        # self.fc1 = nn.Linear(64*72*72, 512)
+        # self.fc2 = nn.Linear(512, 64)
 
         # Decoder
-        self.fc3 = nn.Linear(64, 128)
-        self.fc4 = nn.Linear(128, 64*38*38)
-        self.dropout3 = nn.Dropout(0.5)
-        self.dropout4 = nn.Dropout(0.25)
-        self.deconv1 = nn.ConvTranspose2d(64, 32, 3, 1)
-        self.deconv2 = nn.ConvTranspose2d(32, 1, 3, 1)
-        self.sig = nn.Sigmoid()
+        self.fc2 = nn.Linear(80, 80, False)
+        # self.fc3 = nn.Linear(64, 512)
+        # self.fc4 = nn.Linear(512, 64*72*72)
+        # self.fc3 = nn.Linear(64, 128)
+        # self.fc4 = nn.Linear(128, 64*80*80)
+        # self.dropout3 = nn.Dropout(0.5)
+        # self.dropout4 = nn.Dropout(0.25)
+        # self.deconv1 = nn.ConvTranspose2d(64, 1, 1, 1)
+        # self.deconv2 = nn.ConvTranspose2d(1, 1, 1, 1)
+        # self.sig = nn.Sigmoid()
 
     def forward(self, x):
         # Encoding
-        x = self.conv1(x)  # size = [batch_size, 32, 78, 78]
-        x = F.relu(x)  # size = [batch_size, 32, 78, 78]
-        x = self.conv2(x)  # size = [batch_size, 64, 76, 76]
-        x = F.relu(x)  # size = [batch_size, 64, 76, 76]
-        x = F.max_pool2d(x, 2)  # size = [batch_size, 64, 38, 38]
-        x = self.dropout1(x)  # size = [batch_size, 64, 38, 38]
-        x = torch.flatten(x, 1)  # size = [batch_size, 64*38*38]
-        x = self.fc1(x)  # size = [batch_size, 128]
-        x = F.relu(x)  # size = [batch_size, 128]
-        x = self.dropout2(x)  # size = [batch_size, 128]
-        encoded = self.fc2(x)  # size = [batch_size, 64]
+        print("size of input: ", x.size())
+        x = self.fc1(x)
+        print("size after fc1: ", x.size())
+
+
+        # print("size of x input: ", x.size())
+        # x = self.conv1(x)           # size = [batch_size, 32, 78, 78]
+        # print("size of x after conv1: ", x.size())
+        # x = F.relu(x)               # size = [batch_size, 32, 78, 78]
+        # x = self.conv2(x)           # size = [batch_size, 64, 76, 76]
+        # print("size of x after conv2: ", x.size())
+        # x = F.relu(x)               # size = [batch_size, 64, 76, 76]
+        # # x = F.max_pool2d(x, 2)      # size = [batch_size, 64, 38, 38]
+        # print("size of x after relu1: ", x.size())
+        # y = self.dropout1(x)        # size = [batch_size, 64, 38, 38]
+        # x = torch.flatten(x, 1)     # size = [batch_size, 64*38*38]
+        # print("size of x after flatten: ", x.size())
+        # x = self.fc1(x)             # size = [batch_size, 128]
+        # print("size of x after fc1: ", x.size())
+        # x = F.relu(x)               # size = [batch_size, 128]
+        # x = self.dropout2(x)        # size = [batch_size, 128]
+        # encoded = self.fc2(x)       # size = [batch_size, 64]
+        # print("size of x after fc2: ", x.size())
 
         # Decoding
-        y = self.fc3(encoded)  # size = [batch_size, 128]
-        y = self.dropout3(y)  # size = [batch_size, 128]
-        y = F.relu(y)  # size = [batch_size, 128]
-        y = self.fc4(y)  # size = [batch_size, 64*38*38]
-        y = y.view(-1, 64, 38, 38)  # size = [batch_size, 64, 38, 38]
-        y = F.relu(y)  # size = [batch_size, 64, 38, 38]
-        y = self.dropout4(y)  # size = [batch_size, 64, 38, 38]
-        y = F.relu(y)  # size = [batch_size, 64, 38, 38]
-        y = self.deconv1(y)  # size = [batch_size, 32, 40, 40]
-        y = F.relu(y)  # size = [batch_size, 32, 40, 40]
-        y = self.deconv2(y)  # size = [batch_size, 1, 42, 42]
-        final = F.interpolate(y, size=(80, 80), mode='nearest')  # size = [batch_size, 1, 80, 80]
-        final = self.sig(final)  # size = [batch_size, 1, 80, 80]
+        # final = self.fc2(x)
+        # ("size of final: ", final.size)
+        # y = self.fc3(encoded)       # size = [batch_size, 128]
+        # print("size of x after fc3: ", x.size())
+        # y = self.dropout3(y)        # size = [batch_size, 128]
+        # y = F.relu(y)               # size = [batch_size, 128]
+        # y = self.fc4(y)             # size = [batch_size, 64*38*38]
+        # y = y.view(-1, 64, 80, 80)  # size = [batch_size, 64, 38, 38]
+        # y = F.relu(y)               # size = [batch_size, 64, 38, 38]
+        # y = self.dropout4(y)        # size = [batch_size, 64, 38, 38]
+        # y = F.relu(y)               # size = [batch_size, 64, 38, 38]
+        # y = self.deconv1(y)         # size = [batch_size, 32, 40, 40]
+        # y = F.relu(y)               # size = [batch_size, 32, 40, 40]
+        # y = self.deconv2(y)         # size = [batch_size, 1, 42, 42]
+        # final = F.interpolate(y, size=(80, 80), mode='nearest')  # size = [batch_size, 1, 80, 80]
+        # final = self.sig(final)     # size = [batch_size, 1, 80, 80]
 
         return final
 
@@ -73,7 +94,6 @@ def train(args, model, device, train_loader, optimizer, epoch):
         loss.backward()
         optimizer.step()
         
-        # print('epoch [{}], loss: {:.4f}'.format(epoch, loss.item()))
         if batch_idx % args.log_interval == 0:
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 epoch, batch_idx * len(data), len(train_loader.dataset),
@@ -106,7 +126,7 @@ def main():
                         help='input batch size for testing (default: 1000)')
     parser.add_argument('--val-batch-size', type=int, default=32, metavar='N',
                         help='input batch size for validation (default: 32)')
-    parser.add_argument('--epochs', type=int, default=50, metavar='N',
+    parser.add_argument('--epochs', type=int, default=1, metavar='N',
                         help='number of epochs to train (default: 14)')
     parser.add_argument('--lr', type=float, default=0.001, metavar='LR',
                         help='learning rate (default: 0.001)')
