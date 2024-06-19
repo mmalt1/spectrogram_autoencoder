@@ -12,75 +12,127 @@ from torch.autograd import Variable
 
 class Autoencoder(nn.Module):
     def __init__(self):
+
         super(Autoencoder, self).__init__()
+
         # Encoder
-        self.fc1 = nn.Linear(80, 80, False)
-        # self.conv1 = nn.Conv2d(1, 1,  1, 1)
-        # self.conv2 = nn.Conv2d(1, 64, 1, 1)
-        # self.dropout1 = nn.Dropout(0.25)
-        # self.dropout2 = nn.Dropout(0.5)
-        # self.fc1 = nn.Linear(64*80*80, 128)  # Updated to 64*38*38
-        # self.fc2 = nn.Linear(128, 64)
-        # self.fc1 = nn.Linear(64*72*72, 512)
-        # self.fc2 = nn.Linear(512, 64)
+        self.encoder = nn.Sequential(
+            nn.Conv2d(1, 32, kernel_size=3, stride=2, padding=1), 
+            nn.BatchNorm2d(32),
+            nn.ReLU(True),
+            nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=1),  
+            nn.BatchNorm2d(64),
+            nn.ReLU(True),
+            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1),  
+            nn.BatchNorm2d(128),
+            nn.ReLU(True),
+            nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),  
+            nn.BatchNorm2d(256),
+            nn.ReLU(True)
+        )
 
         # Decoder
-        self.fc2 = nn.Linear(80, 80, False)
-        # self.fc3 = nn.Linear(64, 512)
-        # self.fc4 = nn.Linear(512, 64*72*72)
-        # self.fc3 = nn.Linear(64, 128)
-        # self.fc4 = nn.Linear(128, 64*80*80)
-        # self.dropout3 = nn.Dropout(0.5)
-        # self.dropout4 = nn.Dropout(0.25)
-        # self.deconv1 = nn.ConvTranspose2d(64, 1, 1, 1)
-        # self.deconv2 = nn.ConvTranspose2d(1, 1, 1, 1)
-        # self.sig = nn.Sigmoid()
+        self.decoder = nn.Sequential(
+            nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1),  
+            nn.BatchNorm2d(128),
+            nn.ReLU(True),
+            nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=1, output_padding=1), 
+            nn.BatchNorm2d(64),
+            nn.ReLU(True),
+            nn.ConvTranspose2d(64, 32, kernel_size=3, stride=2, padding=1, output_padding=1),  
+            nn.BatchNorm2d(32),
+            nn.ReLU(True),
+            nn.ConvTranspose2d(32, 1, kernel_size=3, stride=2, padding=1, output_padding=1), 
+            nn.Sigmoid()  # To output values between 0 and 1
+        )
 
     def forward(self, x):
-        # Encoding
-        print("size of input: ", x.size())
-        x = self.fc1(x)
-        print("size after fc1: ", x.size())
+        x = self.encoder(x)
+        x = self.decoder(x)
+        return x
+    
+    #     super(Autoencoder, self).__init__()
+    #     # Encoder
+    #     self.conv1 = nn.Conv2d(1, 16, 1, 1)
+    #     # self.fc1 = nn.Linear(80, 80, False)
+    #     # self.conv1 = nn.Conv2d(1, 32,  1, 1)
+    #     self.conv2 = nn.Conv2d(16, 32, 1, 1)
+    #     self.conv3 = nn.Conv2d(32, 64, 1, 1)
+    #     self.conv4 = nn.Conv2d(64, 128, 1, 1)
+    #     self.dropout1 = nn.Dropout(0.25)
+    #     self.dropout2 = nn.Dropout(0.5)
+    #     # self.fc1 = nn.Linear(64*80*80, 512)  # Updated to 64*38*38
+    #     # self.fc2 = nn.Linear(512, 64)
+    #     self.fc1 = nn.Linear(80, 80)
+    #     self.fc2 = nn.Linear(80, 80) #maybe try 1024 (according to Simon)
+
+    #     # Decoder
+    #     # self.deconv1 = nn.ConvTranspose2d(64, 32, 1, 1)
+    #     # self.fc2 = nn.Linear(80, 80, False)
+    #     self.fc3 = nn.Linear(80, 80)
+    #     self.fc4 = nn.Linear(80, 80)
+    #     self.dropout3 = nn.Dropout(0.5)
+    #     self.dropout4 = nn.Dropout(0.25)
+    #     self.deconv4 = nn.ConvTranspose2d(128, 64, 1, 1)
+    #     self.deconv3 = nn.ConvTranspose2d(64, 32, 1, 1)
+    #     self.deconv1 = nn.ConvTranspose2d(32, 16, 1, 1)
+    #     self.deconv2 = nn.ConvTranspose2d(16, 1, 1, 1)
+    #     self.sig = nn.Sigmoid()
+
+    # def forward(self, x):
+    #     # Encoding
+    #     # print("size of input: ", x.size())
+    #     # x = self.fc1(x)
+    #     # x = x
+    #     # print("size x: ", x.size())
 
 
-        # print("size of x input: ", x.size())
-        # x = self.conv1(x)           # size = [batch_size, 32, 78, 78]
-        # print("size of x after conv1: ", x.size())
-        # x = F.relu(x)               # size = [batch_size, 32, 78, 78]
-        # x = self.conv2(x)           # size = [batch_size, 64, 76, 76]
-        # print("size of x after conv2: ", x.size())
-        # x = F.relu(x)               # size = [batch_size, 64, 76, 76]
-        # # x = F.max_pool2d(x, 2)      # size = [batch_size, 64, 38, 38]
-        # print("size of x after relu1: ", x.size())
-        # y = self.dropout1(x)        # size = [batch_size, 64, 38, 38]
-        # x = torch.flatten(x, 1)     # size = [batch_size, 64*38*38]
-        # print("size of x after flatten: ", x.size())
-        # x = self.fc1(x)             # size = [batch_size, 128]
-        # print("size of x after fc1: ", x.size())
-        # x = F.relu(x)               # size = [batch_size, 128]
-        # x = self.dropout2(x)        # size = [batch_size, 128]
-        # encoded = self.fc2(x)       # size = [batch_size, 64]
-        # print("size of x after fc2: ", x.size())
+    #     # print("size of x input: ", x.size())
+    #     x = self.conv1(x)           # size = [batch_size, 32, 78, 78]
+    #     # print("size of x after conv1: ", x.size())
+    #     x = F.relu(x)               # size = [batch_size, 32, 78, 78]
+    #     x = self.conv2(x)           # size = [batch_size, 64, 76, 76]
+    #     # print("size of x after conv2: ", x.size())
+    #     x = F.relu(x)               # size = [batch_size, 64, 76, 76]
+    #     x = self.conv3(x)
+    #     x = F.relu(x)
+    #     # x = F.max_pool2d(x, 2)      # size = [batch_size, 64, 38, 38]
+    #     # print("size of x after relu1: ", x.size())
+    #     # y = self.dropout1(x)        # size = [batch_size, 64, 38, 38]
+    #     # x = torch.flatten(x, 1)     # size = [batch_size, 64*38*38]
+    #     # print("size of x after flatten: ", x.size())
+    #     x = self.conv4(x)
+    #     # encoded = self.fc1(x)             # size = [batch_size, 128]
+    #     # print("size of x after fc1: ", x.size())
+    #     x = F.relu(x)               # size = [batch_size, 128]
+    #     # x = self.dropout2(x)        # size = [batch_size, 128]
+    #     encoded = self.fc2(x)       # size = [batch_size, 64]
+    #     # print("size of x after fc2: ", encoded.size())
 
-        # Decoding
-        # final = self.fc2(x)
-        # ("size of final: ", final.size)
-        # y = self.fc3(encoded)       # size = [batch_size, 128]
-        # print("size of x after fc3: ", x.size())
-        # y = self.dropout3(y)        # size = [batch_size, 128]
-        # y = F.relu(y)               # size = [batch_size, 128]
-        # y = self.fc4(y)             # size = [batch_size, 64*38*38]
-        # y = y.view(-1, 64, 80, 80)  # size = [batch_size, 64, 38, 38]
-        # y = F.relu(y)               # size = [batch_size, 64, 38, 38]
-        # y = self.dropout4(y)        # size = [batch_size, 64, 38, 38]
-        # y = F.relu(y)               # size = [batch_size, 64, 38, 38]
-        # y = self.deconv1(y)         # size = [batch_size, 32, 40, 40]
-        # y = F.relu(y)               # size = [batch_size, 32, 40, 40]
-        # y = self.deconv2(y)         # size = [batch_size, 1, 42, 42]
-        # final = F.interpolate(y, size=(80, 80), mode='nearest')  # size = [batch_size, 1, 80, 80]
-        # final = self.sig(final)     # size = [batch_size, 1, 80, 80]
+    #     # Decoding
+    #     y = self.fc3(encoded)       # size = [batch_size, 128]
+    #     # print("size of x after fc3: ", y.size())
+    #     # y = self.dropout3(y)        # size = [batch_size, 128]
+    #     y = F.relu(y)               # size = [batch_size, 128]
+    #     # y = self.fc4(encoded)             # size = [batch_size, 64*38*38]
+    #     # print("size of y after fc4: ", y.size())
+    #     y = self.deconv4(y)
+    #     y = F.relu(y)
+    #     # y = y.view(-1, 64, 80, 80)  # size = [batch_size, 64, 38, 38]
+    #     y = F.relu(y)               # size = [batch_size, 64, 38, 38]
+    #     y = self.deconv3(y)
+    #     # y = self.dropout4(y)        # size = [batch_size, 64, 38, 38]
+    #     y = F.relu(y)               # size = [batch_size, 64, 38, 38]
+    #     y = self.deconv1(y)         # size = [batch_size, 32, 40, 40]
+    #     # print("size of final y after deconv1: ", y.size())
+    #     y = F.relu(y)               # size = [batch_size, 32, 40, 40]
+    #     final = self.deconv2(y)         # size = [batch_size, 1, 42, 42]
+    #     # print("size of final after deconv2: ", y.size())
+    #     # final = F.interpolate(y, size=(80, 80), mode='nearest')  # size = [batch_size, 1, 80, 80]
+    #     final = self.sig(final)     # size = [batch_size, 1, 80, 80]
 
-        return final
+
+    #     return final
 
 
 def train(args, model, device, train_loader, optimizer, epoch):
@@ -126,9 +178,9 @@ def main():
                         help='input batch size for testing (default: 1000)')
     parser.add_argument('--val-batch-size', type=int, default=32, metavar='N',
                         help='input batch size for validation (default: 32)')
-    parser.add_argument('--epochs', type=int, default=1, metavar='N',
+    parser.add_argument('--epochs', type=int, default=20, metavar='N',
                         help='number of epochs to train (default: 14)')
-    parser.add_argument('--lr', type=float, default=0.001, metavar='LR',
+    parser.add_argument('--lr', type=float, default=0.0005, metavar='LR',
                         help='learning rate (default: 0.001)')
     parser.add_argument('--gamma', type=float, default=0.7, metavar='M',
                         help='Learning rate step gamma (default: 0.7)')

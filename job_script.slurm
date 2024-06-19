@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=mass_spec
-#SBATCH --time=00:20:00
+#SBATCH --time=00:03:00
 #SBATCH --partition=gpu
 #SBATCH --qos=short
 #SBATCH --account=tc062-pool2

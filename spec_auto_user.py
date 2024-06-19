@@ -37,11 +37,11 @@ def visualize_image(og_tensor_path, predicted_image_tensor, sr):
 
     og_tensor = np.load(og_tensor_path)
     # # Plot the input and output images side by side
-     # Convert the predicted tensor to a NumPy array
+    # Convert the predicted tensor to a NumPy array
+    print("predicted_image size: ", predicted_image_tensor.size())
     predicted_image = predicted_image_tensor.squeeze().numpy()
-    # Unnormalize the predicted image
-    predicted_image = np.clip(predicted_image, 0, 1)  # Ensure the values are in [0, 1]
-
+    print("predicted_image size: ", predicted_image.shape)
+    # flip the image for printing PLEASE
     fig, axs = plt.subplots(1, 2, figsize=(9, 5))
     axs[0].imshow(og_tensor, cmap='gray')
     axs[0].set_title('Input Image')
@@ -52,7 +52,7 @@ def visualize_image(og_tensor_path, predicted_image_tensor, sr):
     axs[1].axis('off')
     
     plt.show()
-    plt.savefig('spec_gpu_results1.png')
+    plt.savefig('spec_gpu_results7.png')
 
 print("working directory: ", os.getcwd())
 os.chdir("/work/tc062/tc062/s2501147/autoencoder")
