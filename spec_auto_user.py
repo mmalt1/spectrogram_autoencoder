@@ -52,7 +52,7 @@ def visualize_image(og_tensor_path, predicted_image_tensor, sr):
     axs[1].axis('off')
     
     plt.show()
-    plt.savefig('spec_gpu_results7.png')
+    plt.savefig('spec_gpu_results8.png')
 
 print("working directory: ", os.getcwd())
 os.chdir("/work/tc062/tc062/s2501147/autoencoder")
@@ -66,10 +66,10 @@ model = Autoencoder().to(device)
 print("loaded autoenc")
 model.load_state_dict(torch.load("spec_autoencoder.pt"))
 print("loaded model")
-img = load_and_preprocess_tensor("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/val/array_84_121123_000008_000000.wav_chunk_2.npy")
+img = load_and_preprocess_tensor("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/train/array_84_121123_000008_000000.wav_chunk_0.npy")
 print(img.size())
 
 predicted_image = predict_image_output(model, img)
 # print("predicted digit: ", predicted_digit)
 
-visualize_image("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/val/array_84_121123_000008_000000.wav_chunk_2.npy", predicted_image, 24000)
+visualize_image("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/train/array_84_121123_000008_000000.wav_chunk_0.npy", predicted_image, 24000)

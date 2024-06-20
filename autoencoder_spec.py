@@ -16,33 +16,35 @@ class Autoencoder(nn.Module):
         super(Autoencoder, self).__init__()
 
         # Encoder
+
+        #change the stride and look at the difference
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 32, kernel_size=3, stride=2, padding=1), 
+            nn.Conv2d(1, 32, kernel_size=3, stride=1, padding=1), 
             nn.BatchNorm2d(32),
             nn.ReLU(True),
-            nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=1),  
+            nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),  
             nn.BatchNorm2d(64),
             nn.ReLU(True),
-            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1),  
+            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),  
             nn.BatchNorm2d(128),
             nn.ReLU(True),
-            nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),  
+            nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),  
             nn.BatchNorm2d(256),
             nn.ReLU(True)
         )
 
         # Decoder
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1),  
+            nn.ConvTranspose2d(256, 128, kernel_size=3, stride=1, padding=1, output_padding=1),  
             nn.BatchNorm2d(128),
             nn.ReLU(True),
-            nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=1, output_padding=1), 
+            nn.ConvTranspose2d(128, 64, kernel_size=3, stride=1, padding=1, output_padding=1), 
             nn.BatchNorm2d(64),
             nn.ReLU(True),
-            nn.ConvTranspose2d(64, 32, kernel_size=3, stride=2, padding=1, output_padding=1),  
+            nn.ConvTranspose2d(64, 32, kernel_size=3, stride=1, padding=1, output_padding=1),  
             nn.BatchNorm2d(32),
             nn.ReLU(True),
-            nn.ConvTranspose2d(32, 1, kernel_size=3, stride=2, padding=1, output_padding=1), 
+            nn.ConvTranspose2d(32, 1, kernel_size=3, stride=1, padding=1, output_padding=1), 
             nn.Sigmoid()  # To output values between 0 and 1
         )
 
@@ -178,7 +180,7 @@ def main():
                         help='input batch size for testing (default: 1000)')
     parser.add_argument('--val-batch-size', type=int, default=32, metavar='N',
                         help='input batch size for validation (default: 32)')
-    parser.add_argument('--epochs', type=int, default=20, metavar='N',
+    parser.add_argument('--epochs', type=int, default=10, metavar='N',
                         help='number of epochs to train (default: 14)')
     parser.add_argument('--lr', type=float, default=0.0005, metavar='LR',
                         help='learning rate (default: 0.001)')
@@ -241,7 +243,7 @@ def main():
         scheduler.step()
 
     if args.save_model:
-        torch.save(model.state_dict(), "spec_autoencoder.pt")
+        torch.save(model.state_dict(), "spec_stride1_autoencoder.pt")
 
 
 if __name__ == '__main__':
