@@ -8,6 +8,8 @@ from spec_dataset import SpectrogramDataset, create_dataloaders, load_datasets
 from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
 from torch.autograd import Variable
+# import wandb
+# from wandb_osh.hooks import TriggerWandbSyncHook  # <-- New!
 
 
 class Autoencoder(nn.Module):
@@ -15,36 +17,47 @@ class Autoencoder(nn.Module):
 
         super(Autoencoder, self).__init__()
 
-        # Encoder
-
         #change the stride and look at the difference
+        # Encoder
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 32, kernel_size=3, stride=1, padding=1), 
+            nn.Conv2d(1, 32, kernel_size=3, stride=2, padding=1),  # output size: (32, 40, 40)
             nn.BatchNorm2d(32),
             nn.ReLU(True),
-            nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),  
+            nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=1),  # output size: (64, 20, 20)
             nn.BatchNorm2d(64),
             nn.ReLU(True),
-            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),  
+            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1),  # output size: (128, 10, 10)
             nn.BatchNorm2d(128),
             nn.ReLU(True),
-            nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),  
+            nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),  # output size: (256, 5, 5)
             nn.BatchNorm2d(256),
+            nn.ReLU(True),
+            nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),  # output size: (512, 5, 5)
+            nn.BatchNorm2d(512),
+            nn.ReLU(True),
+            nn.Conv2d(512, 1024, kernel_size=3, stride=1, padding=1),  # output size: (1024, 5, 5)
+            nn.BatchNorm2d(1024),
             nn.ReLU(True)
         )
 
         # Decoder
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(256, 128, kernel_size=3, stride=1, padding=1, output_padding=1),  
+            nn.ConvTranspose2d(1024, 512, kernel_size=3, stride=1, padding=1),  # output size: (512, 5, 5)
+            nn.BatchNorm2d(512),
+            nn.ReLU(True),
+            nn.ConvTranspose2d(512, 256, kernel_size=3, stride=1, padding=1),  # output size: (256, 5, 5)
+            nn.BatchNorm2d(256),
+            nn.ReLU(True),
+            nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (128, 10, 10)
             nn.BatchNorm2d(128),
             nn.ReLU(True),
-            nn.ConvTranspose2d(128, 64, kernel_size=3, stride=1, padding=1, output_padding=1), 
+            nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (64, 20, 20)
             nn.BatchNorm2d(64),
             nn.ReLU(True),
-            nn.ConvTranspose2d(64, 32, kernel_size=3, stride=1, padding=1, output_padding=1),  
+            nn.ConvTranspose2d(64, 32, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (32, 40, 40)
             nn.BatchNorm2d(32),
             nn.ReLU(True),
-            nn.ConvTranspose2d(32, 1, kernel_size=3, stride=1, padding=1, output_padding=1), 
+            nn.ConvTranspose2d(32, 1, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (1, 80, 80)
             nn.Sigmoid()  # To output values between 0 and 1
         )
 
@@ -149,6 +162,8 @@ def train(args, model, device, train_loader, optimizer, epoch):
         optimizer.step()
         
         if batch_idx % args.log_interval == 0:
+            # wandb.log({"loss": loss})
+            # trigger_sync()  # <-- New!
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 epoch, batch_idx * len(data), len(train_loader.dataset),
                 100. * batch_idx / len(train_loader), loss.item()))
@@ -180,7 +195,7 @@ def main():
                         help='input batch size for testing (default: 1000)')
     parser.add_argument('--val-batch-size', type=int, default=32, metavar='N',
                         help='input batch size for validation (default: 32)')
-    parser.add_argument('--epochs', type=int, default=10, metavar='N',
+    parser.add_argument('--epochs', type=int, default=5, metavar='N',
                         help='number of epochs to train (default: 14)')
     parser.add_argument('--lr', type=float, default=0.0005, metavar='LR',
                         help='learning rate (default: 0.001)')
@@ -211,6 +226,13 @@ def main():
         device = torch.device("mps")
     else:
         device = torch.device("cpu")
+    
+    # trigger_sync = TriggerWandbSyncHook()  # <--- New!
+
+    # wandb.init(config=args, mode="offline")
+
+    # # Magic
+    # wandb.watch(model, log_freq=100)
 
     print("device: ", device)
     train_kwargs = {'batch_size': args.batch_size}
@@ -243,7 +265,7 @@ def main():
         scheduler.step()
 
     if args.save_model:
-        torch.save(model.state_dict(), "spec_stride1_autoencoder.pt")
+        torch.save(model.state_dict(), "spec_1024_stride2_pad1_autoencoder.pt")
 
 
 if __name__ == '__main__':

@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #SBATCH --job-name=mass_spec
-#SBATCH --time=00:40:00
+#SBATCH --time=00:03:00
 #SBATCH --partition=gpu
-#SBATCH --qos=gpu
+#SBATCH --qos=short
 #SBATCH --account=tc062-pool2
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:1
