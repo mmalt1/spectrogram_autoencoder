@@ -52,7 +52,7 @@ def visualize_image(og_tensor_path, predicted_image_tensor, sr):
     axs[1].axis('off')
     
     plt.show()
-    plt.savefig('spec_gpu_results12_1024.png')
+    plt.savefig('spec_gpu_results_128_leakyRelu_nosig.png')
 
 print("working directory: ", os.getcwd())
 os.chdir("/work/tc062/tc062/s2501147/autoencoder")
@@ -64,7 +64,7 @@ print("device: ", device)
 
 model = Autoencoder().to(device)
 print("loaded autoenc")
-model.load_state_dict(torch.load("spec_1024_stride2_pad1_autoencoder.pt"))
+model.load_state_dict(torch.load("spec_128_leakyReLu_nosigmoid_autoencoder.pt"))
 print("loaded model")
 img = load_and_preprocess_tensor("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/train/array_84_121123_000008_000000.wav_chunk_0.npy")
 print(img.size())

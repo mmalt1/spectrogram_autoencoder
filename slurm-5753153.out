@@ -1,0 +1,15 @@
+Loading python/3.10.8-gpu
+  Loading requirement: nvidia/nvhpc-nompi/22.2 gcc/10.2.0
+    openmpi/4.1.6-cuda-11.6
+Loading pytorch/1.13.1-gpu
+  Loading requirement: nvidia/cudnn/8.6.0-cuda-11.6 nvidia/tensorrt/8.4.3.1-u2
+    libsndfile/1.0.28
+Matplotlib created a temporary cache directory at /dev/shm/s2501147_5753153/matplotlib-manirkge because the default path (/home/tc062/tc062/s2501147/.config/matplotlib) is not a writable directory; it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+working directory:  /mnt/lustre/e1000/home/tc062/tc062/s2501147/autoencoder
+working directory:  /mnt/lustre/e1000/home/tc062/tc062/s2501147/autoencoder
+device:  cpu
+loaded autoenc
+loaded model
+torch.Size([1, 1, 80, 80])
+predicted_image size:  torch.Size([1, 1, 80, 80])
+predicted_image size:  (80, 80)

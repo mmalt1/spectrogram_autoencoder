@@ -1,0 +1,1643 @@
+Loading python/3.10.8-gpu
+  Loading requirement: nvidia/nvhpc-nompi/22.2 gcc/10.2.0
+    openmpi/4.1.6-cuda-11.6
+Loading pytorch/1.13.1-gpu
+  Loading requirement: nvidia/cudnn/8.6.0-cuda-11.6 nvidia/tensorrt/8.4.3.1-u2
+    libsndfile/1.0.28
+[32m13:59:40 INFO: This is wandb-osh v1.2.2 using communication directory /work/tc062/tc062/s2501147/autoencoder[0m
+wandb: Tracking run with wandb version 0.16.3
+wandb: W&B syncing is set to `offline` in this directory.  
+wandb: Run `wandb online` or set WANDB_MODE=online to enable cloud syncing.
+working directory:  /mnt/lustre/e1000/home/tc062/tc062/s2501147/autoencoder
+working directory:  /mnt/lustre/e1000/home/tc062/tc062/s2501147/autoencoder
+device:  cuda
+[33m14:00:09 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:00:17 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:00:26 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:00:34 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:00:42 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:00:49 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:00:55 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:01:02 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:01:08 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:01:13 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:01:19 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:01:24 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:01:28 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:01:34 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:01:38 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:01:43 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:01:48 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:01:52 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:01:56 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:02:01 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:02:05 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:02:10 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:02:14 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:02:18 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:02:23 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:02:27 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:02:31 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:02:35 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:02:39 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:02:42 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:02:46 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:02:50 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:02:54 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:02:58 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:03:02 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:03:06 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:03:10 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:03:14 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:03:19 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 1 [0/24515 (0%)]	Loss: 11.334934
+Train Epoch: 1 [640/24515 (3%)]	Loss: 7.590869
+Train Epoch: 1 [1280/24515 (5%)]	Loss: 6.717940
+Train Epoch: 1 [1920/24515 (8%)]	Loss: 6.050389
+Train Epoch: 1 [2560/24515 (10%)]	Loss: 5.645821
+Train Epoch: 1 [3200/24515 (13%)]	Loss: 5.110014
+Train Epoch: 1 [3840/24515 (16%)]	Loss: 4.677546
+Train Epoch: 1 [4480/24515 (18%)]	Loss: 4.528429
+Train Epoch: 1 [5120/24515 (21%)]	Loss: 4.236251
+Train Epoch: 1 [5760/24515 (23%)]	Loss: 4.026577
+Train Epoch: 1 [6400/24515 (26%)]	Loss: 3.683890
+Train Epoch: 1 [7040/24515 (29%)]	Loss: 3.751778
+Train Epoch: 1 [7680/24515 (31%)]	Loss: 3.461198
+Train Epoch: 1 [8320/24515 (34%)]	Loss: 3.124413
+Train Epoch: 1 [8960/24515 (36%)]	Loss: 3.063079
+Train Epoch: 1 [9600/24515 (39%)]	Loss: 2.843146
+Train Epoch: 1 [10240/24515 (42%)]	Loss: 2.590422
+Train Epoch: 1 [10880/24515 (44%)]	Loss: 2.389428
+Train Epoch: 1 [11520/24515 (47%)]	Loss: 2.242085
+Train Epoch: 1 [12160/24515 (49%)]	Loss: 2.049804
+Train Epoch: 1 [12800/24515 (52%)]	Loss: 1.792774
+Train Epoch: 1 [13440/24515 (55%)]	Loss: 1.725831
+Train Epoch: 1 [14080/24515 (57%)]	Loss: 1.520392
+Train Epoch: 1 [14720/24515 (60%)]	Loss: 1.411357
+Train Epoch: 1 [15360/24515 (62%)]	Loss: 1.280862
+Train Epoch: 1 [16000/24515 (65%)]	Loss: 1.169143
+Train Epoch: 1 [16640/24515 (68%)]	Loss: 1.040335
+Train Epoch: 1 [17280/24515 (70%)]	Loss: 0.918975
+Train Epoch: 1 [17920/24515 (73%)]	Loss: 0.860354
+Train Epoch: 1 [18560/24515 (76%)]	Loss: 0.740685
+Train Epoch: 1 [19200/24515 (78%)]	Loss: 0.630753
+Train Epoch: 1 [19840/24515 (81%)]	Loss: 0.608643
+Train Epoch: 1 [20480/24515 (83%)]	Loss: 0.578792
+Train Epoch: 1 [21120/24515 (86%)]	Loss: 0.448405
+Train Epoch: 1 [21760/24515 (89%)]	Loss: 0.436239
+Train Epoch: 1 [22400/24515 (91%)]	Loss: 0.408263
+Train Epoch: 1 [23040/24515 (94%)]	Loss: 0.416709
+Train Epoch: 1 [23680/24515 (96%)]	Loss: 0.360972
+Train Epoch: 1 [24320/24515 (99%)]	Loss: 0.323542
+
+Test set: Average loss: 0.2990
+
+[33m14:03:45 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:03:46 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:03:47 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:03:48 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:03:49 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:03:50 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:03:51 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:03:53 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:03:54 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:03:55 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:03:56 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:03:58 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:03:59 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:00 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:01 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:02 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:03 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:05 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:06 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:07 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:08 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:09 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:10 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:11 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:12 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:13 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:14 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:15 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:16 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:17 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:18 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:19 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:21 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:22 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:23 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:24 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:25 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:26 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:28 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 2 [0/24515 (0%)]	Loss: 0.316351
+Train Epoch: 2 [640/24515 (3%)]	Loss: 0.274294
+Train Epoch: 2 [1280/24515 (5%)]	Loss: 0.264997
+Train Epoch: 2 [1920/24515 (8%)]	Loss: 0.249367
+Train Epoch: 2 [2560/24515 (10%)]	Loss: 0.233100
+Train Epoch: 2 [3200/24515 (13%)]	Loss: 0.221806
+Train Epoch: 2 [3840/24515 (16%)]	Loss: 0.210554
+Train Epoch: 2 [4480/24515 (18%)]	Loss: 0.186642
+Train Epoch: 2 [5120/24515 (21%)]	Loss: 0.197941
+Train Epoch: 2 [5760/24515 (23%)]	Loss: 0.198295
+Train Epoch: 2 [6400/24515 (26%)]	Loss: 0.158526
+Train Epoch: 2 [7040/24515 (29%)]	Loss: 0.146445
+Train Epoch: 2 [7680/24515 (31%)]	Loss: 0.126839
+Train Epoch: 2 [8320/24515 (34%)]	Loss: 0.120193
+Train Epoch: 2 [8960/24515 (36%)]	Loss: 0.115354
+Train Epoch: 2 [9600/24515 (39%)]	Loss: 0.103716
+Train Epoch: 2 [10240/24515 (42%)]	Loss: 0.098947
+Train Epoch: 2 [10880/24515 (44%)]	Loss: 0.094840
+Train Epoch: 2 [11520/24515 (47%)]	Loss: 0.106218
+Train Epoch: 2 [12160/24515 (49%)]	Loss: 0.106600
+Train Epoch: 2 [12800/24515 (52%)]	Loss: 0.077868
+Train Epoch: 2 [13440/24515 (55%)]	Loss: 0.072835
+Train Epoch: 2 [14080/24515 (57%)]	Loss: 0.062078
+Train Epoch: 2 [14720/24515 (60%)]	Loss: 0.070786
+Train Epoch: 2 [15360/24515 (62%)]	Loss: 0.055938
+Train Epoch: 2 [16000/24515 (65%)]	Loss: 0.047431
+Train Epoch: 2 [16640/24515 (68%)]	Loss: 0.054777
+Train Epoch: 2 [17280/24515 (70%)]	Loss: 0.042498
+Train Epoch: 2 [17920/24515 (73%)]	Loss: 0.040883
+Train Epoch: 2 [18560/24515 (76%)]	Loss: 0.038430
+Train Epoch: 2 [19200/24515 (78%)]	Loss: 0.032708
+Train Epoch: 2 [19840/24515 (81%)]	Loss: 0.033096
+Train Epoch: 2 [20480/24515 (83%)]	Loss: 0.035515
+Train Epoch: 2 [21120/24515 (86%)]	Loss: 0.035483
+Train Epoch: 2 [21760/24515 (89%)]	Loss: 0.027249
+Train Epoch: 2 [22400/24515 (91%)]	Loss: 0.038147
+Train Epoch: 2 [23040/24515 (94%)]	Loss: 0.025793
+Train Epoch: 2 [23680/24515 (96%)]	Loss: 0.027952
+Train Epoch: 2 [24320/24515 (99%)]	Loss: 0.024815
+
+Test set: Average loss: 0.0273
+
+[33m14:04:34 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:35 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:36 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:37 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:38 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:39 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:40 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:41 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:42 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:43 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:44 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:45 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:46 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:47 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:48 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:49 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:50 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:51 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:52 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:53 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:53 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:54 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:55 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:56 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:57 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:58 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:59 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:04:59 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:01 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:01 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:02 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:03 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:04 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:05 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:06 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:07 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:08 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:09 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:10 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 3 [0/24515 (0%)]	Loss: 0.026580
+Train Epoch: 3 [640/24515 (3%)]	Loss: 0.021375
+Train Epoch: 3 [1280/24515 (5%)]	Loss: 0.019498
+Train Epoch: 3 [1920/24515 (8%)]	Loss: 0.021968
+Train Epoch: 3 [2560/24515 (10%)]	Loss: 0.018847
+Train Epoch: 3 [3200/24515 (13%)]	Loss: 0.018416
+Train Epoch: 3 [3840/24515 (16%)]	Loss: 0.019669
+Train Epoch: 3 [4480/24515 (18%)]	Loss: 0.017548
+Train Epoch: 3 [5120/24515 (21%)]	Loss: 0.019064
+Train Epoch: 3 [5760/24515 (23%)]	Loss: 0.016708
+Train Epoch: 3 [6400/24515 (26%)]	Loss: 0.024852
+Train Epoch: 3 [7040/24515 (29%)]	Loss: 0.017177
+Train Epoch: 3 [7680/24515 (31%)]	Loss: 0.017341
+Train Epoch: 3 [8320/24515 (34%)]	Loss: 0.016827
+Train Epoch: 3 [8960/24515 (36%)]	Loss: 0.016775
+Train Epoch: 3 [9600/24515 (39%)]	Loss: 0.016595
+Train Epoch: 3 [10240/24515 (42%)]	Loss: 0.015127
+Train Epoch: 3 [10880/24515 (44%)]	Loss: 0.015825
+Train Epoch: 3 [11520/24515 (47%)]	Loss: 0.015013
+Train Epoch: 3 [12160/24515 (49%)]	Loss: 0.014341
+Train Epoch: 3 [12800/24515 (52%)]	Loss: 0.016940
+Train Epoch: 3 [13440/24515 (55%)]	Loss: 0.018154
+Train Epoch: 3 [14080/24515 (57%)]	Loss: 0.013725
+Train Epoch: 3 [14720/24515 (60%)]	Loss: 0.013754
+Train Epoch: 3 [15360/24515 (62%)]	Loss: 0.014100
+Train Epoch: 3 [16000/24515 (65%)]	Loss: 0.013613
+Train Epoch: 3 [16640/24515 (68%)]	Loss: 0.014050
+Train Epoch: 3 [17280/24515 (70%)]	Loss: 0.013875
+Train Epoch: 3 [17920/24515 (73%)]	Loss: 0.014007
+Train Epoch: 3 [18560/24515 (76%)]	Loss: 0.013533
+Train Epoch: 3 [19200/24515 (78%)]	Loss: 0.013612
+Train Epoch: 3 [19840/24515 (81%)]	Loss: 0.013357
+Train Epoch: 3 [20480/24515 (83%)]	Loss: 0.014031
+Train Epoch: 3 [21120/24515 (86%)]	Loss: 0.013710
+Train Epoch: 3 [21760/24515 (89%)]	Loss: 0.015836
+Train Epoch: 3 [22400/24515 (91%)]	Loss: 0.013670
+Train Epoch: 3 [23040/24515 (94%)]	Loss: 0.013366
+Train Epoch: 3 [23680/24515 (96%)]	Loss: 0.013579
+Train Epoch: 3 [24320/24515 (99%)]	Loss: 0.014133
+
+Test set: Average loss: 0.0136
+
+[33m14:05:13 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:14 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:14 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:15 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:15 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:16 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:16 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:17 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:17 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:18 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:18 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:19 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:19 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:20 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:21 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:21 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:22 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:22 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:23 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:23 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:24 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:24 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:25 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:25 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:26 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:26 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:27 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:27 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:28 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:28 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:29 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:29 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:30 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:30 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:31 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:31 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:32 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:32 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:33 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 4 [0/24515 (0%)]	Loss: 0.014397
+Train Epoch: 4 [640/24515 (3%)]	Loss: 0.014460
+Train Epoch: 4 [1280/24515 (5%)]	Loss: 0.014417
+Train Epoch: 4 [1920/24515 (8%)]	Loss: 0.012046
+Train Epoch: 4 [2560/24515 (10%)]	Loss: 0.012533
+Train Epoch: 4 [3200/24515 (13%)]	Loss: 0.011821
+Train Epoch: 4 [3840/24515 (16%)]	Loss: 0.012227
+Train Epoch: 4 [4480/24515 (18%)]	Loss: 0.012431
+Train Epoch: 4 [5120/24515 (21%)]	Loss: 0.011623
+Train Epoch: 4 [5760/24515 (23%)]	Loss: 0.012136
+Train Epoch: 4 [6400/24515 (26%)]	Loss: 0.012920
+Train Epoch: 4 [7040/24515 (29%)]	Loss: 0.012743
+Train Epoch: 4 [7680/24515 (31%)]	Loss: 0.014494
+Train Epoch: 4 [8320/24515 (34%)]	Loss: 0.011860
+Train Epoch: 4 [8960/24515 (36%)]	Loss: 0.013887
+Train Epoch: 4 [9600/24515 (39%)]	Loss: 0.014894
+Train Epoch: 4 [10240/24515 (42%)]	Loss: 0.012794
+Train Epoch: 4 [10880/24515 (44%)]	Loss: 0.012653
+Train Epoch: 4 [11520/24515 (47%)]	Loss: 0.013192
+Train Epoch: 4 [12160/24515 (49%)]	Loss: 0.012290
+Train Epoch: 4 [12800/24515 (52%)]	Loss: 0.011408
+Train Epoch: 4 [13440/24515 (55%)]	Loss: 0.011182
+Train Epoch: 4 [14080/24515 (57%)]	Loss: 0.012441
+Train Epoch: 4 [14720/24515 (60%)]	Loss: 0.012038
+Train Epoch: 4 [15360/24515 (62%)]	Loss: 0.011061
+Train Epoch: 4 [16000/24515 (65%)]	Loss: 0.011464
+Train Epoch: 4 [16640/24515 (68%)]	Loss: 0.011613
+Train Epoch: 4 [17280/24515 (70%)]	Loss: 0.011550
+Train Epoch: 4 [17920/24515 (73%)]	Loss: 0.013569
+Train Epoch: 4 [18560/24515 (76%)]	Loss: 0.011320
+Train Epoch: 4 [19200/24515 (78%)]	Loss: 0.011866
+Train Epoch: 4 [19840/24515 (81%)]	Loss: 0.011947
+Train Epoch: 4 [20480/24515 (83%)]	Loss: 0.011849
+Train Epoch: 4 [21120/24515 (86%)]	Loss: 0.015107
+Train Epoch: 4 [21760/24515 (89%)]	Loss: 0.011417
+Train Epoch: 4 [22400/24515 (91%)]	Loss: 0.016002
+Train Epoch: 4 [23040/24515 (94%)]	Loss: 0.010428
+Train Epoch: 4 [23680/24515 (96%)]	Loss: 0.010491
+Train Epoch: 4 [24320/24515 (99%)]	Loss: 0.010440
+
+Test set: Average loss: 0.0120
+
+[33m14:05:36 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:37 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:38 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:38 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:39 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:39 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:40 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:41 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:41 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:42 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:42 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:43 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:43 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:44 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:44 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:45 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:46 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:46 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:47 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:47 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:48 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:48 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:49 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:49 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:50 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:50 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:51 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:51 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:52 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:52 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:53 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:53 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:54 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:54 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:55 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:55 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:55 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:56 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:05:56 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 5 [0/24515 (0%)]	Loss: 0.014267
+Train Epoch: 5 [640/24515 (3%)]	Loss: 0.011788
+Train Epoch: 5 [1280/24515 (5%)]	Loss: 0.010406
+Train Epoch: 5 [1920/24515 (8%)]	Loss: 0.011621
+Train Epoch: 5 [2560/24515 (10%)]	Loss: 0.010149
+Train Epoch: 5 [3200/24515 (13%)]	Loss: 0.010532
+Train Epoch: 5 [3840/24515 (16%)]	Loss: 0.014096
+Train Epoch: 5 [4480/24515 (18%)]	Loss: 0.014294
+Train Epoch: 5 [5120/24515 (21%)]	Loss: 0.011455
+Train Epoch: 5 [5760/24515 (23%)]	Loss: 0.009966
+Train Epoch: 5 [6400/24515 (26%)]	Loss: 0.010573
+Train Epoch: 5 [7040/24515 (29%)]	Loss: 0.010567
+Train Epoch: 5 [7680/24515 (31%)]	Loss: 0.009956
+Train Epoch: 5 [8320/24515 (34%)]	Loss: 0.010199
+Train Epoch: 5 [8960/24515 (36%)]	Loss: 0.010347
+Train Epoch: 5 [9600/24515 (39%)]	Loss: 0.012867
+Train Epoch: 5 [10240/24515 (42%)]	Loss: 0.011004
+Train Epoch: 5 [10880/24515 (44%)]	Loss: 0.010472
+Train Epoch: 5 [11520/24515 (47%)]	Loss: 0.010472
+Train Epoch: 5 [12160/24515 (49%)]	Loss: 0.012437
+Train Epoch: 5 [12800/24515 (52%)]	Loss: 0.012781
+Train Epoch: 5 [13440/24515 (55%)]	Loss: 0.010497
+Train Epoch: 5 [14080/24515 (57%)]	Loss: 0.019803
+Train Epoch: 5 [14720/24515 (60%)]	Loss: 0.010105
+Train Epoch: 5 [15360/24515 (62%)]	Loss: 0.010448
+Train Epoch: 5 [16000/24515 (65%)]	Loss: 0.012881
+Train Epoch: 5 [16640/24515 (68%)]	Loss: 0.011614
+Train Epoch: 5 [17280/24515 (70%)]	Loss: 0.010959
+Train Epoch: 5 [17920/24515 (73%)]	Loss: 0.010964
+Train Epoch: 5 [18560/24515 (76%)]	Loss: 0.010770
+Train Epoch: 5 [19200/24515 (78%)]	Loss: 0.012198
+Train Epoch: 5 [19840/24515 (81%)]	Loss: 0.013073
+Train Epoch: 5 [20480/24515 (83%)]	Loss: 0.010719
+Train Epoch: 5 [21120/24515 (86%)]	Loss: 0.009563
+Train Epoch: 5 [21760/24515 (89%)]	Loss: 0.009991
+Train Epoch: 5 [22400/24515 (91%)]	Loss: 0.009980
+Train Epoch: 5 [23040/24515 (94%)]	Loss: 0.010202
+Train Epoch: 5 [23680/24515 (96%)]	Loss: 0.009616
+Train Epoch: 5 [24320/24515 (99%)]	Loss: 0.009659
+
+Test set: Average loss: 0.0099
+
+[33m14:05:59 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:00 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:01 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:01 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:02 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:02 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:03 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:03 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:04 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:04 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:05 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:05 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:06 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:07 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:07 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:08 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:08 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:09 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:09 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:10 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:10 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:11 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:12 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:12 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:13 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:13 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:14 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:14 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:15 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:15 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:16 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:16 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:17 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:17 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:18 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:18 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:19 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:19 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:20 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 6 [0/24515 (0%)]	Loss: 0.013227
+Train Epoch: 6 [640/24515 (3%)]	Loss: 0.009871
+Train Epoch: 6 [1280/24515 (5%)]	Loss: 0.011701
+Train Epoch: 6 [1920/24515 (8%)]	Loss: 0.009630
+Train Epoch: 6 [2560/24515 (10%)]	Loss: 0.010025
+Train Epoch: 6 [3200/24515 (13%)]	Loss: 0.010127
+Train Epoch: 6 [3840/24515 (16%)]	Loss: 0.010370
+Train Epoch: 6 [4480/24515 (18%)]	Loss: 0.009643
+Train Epoch: 6 [5120/24515 (21%)]	Loss: 0.009469
+Train Epoch: 6 [5760/24515 (23%)]	Loss: 0.009530
+Train Epoch: 6 [6400/24515 (26%)]	Loss: 0.009348
+Train Epoch: 6 [7040/24515 (29%)]	Loss: 0.009242
+Train Epoch: 6 [7680/24515 (31%)]	Loss: 0.009748
+Train Epoch: 6 [8320/24515 (34%)]	Loss: 0.009851
+Train Epoch: 6 [8960/24515 (36%)]	Loss: 0.010067
+Train Epoch: 6 [9600/24515 (39%)]	Loss: 0.010146
+Train Epoch: 6 [10240/24515 (42%)]	Loss: 0.009625
+Train Epoch: 6 [10880/24515 (44%)]	Loss: 0.009084
+Train Epoch: 6 [11520/24515 (47%)]	Loss: 0.011695
+Train Epoch: 6 [12160/24515 (49%)]	Loss: 0.009181
+Train Epoch: 6 [12800/24515 (52%)]	Loss: 0.014754
+Train Epoch: 6 [13440/24515 (55%)]	Loss: 0.013070
+Train Epoch: 6 [14080/24515 (57%)]	Loss: 0.010378
+Train Epoch: 6 [14720/24515 (60%)]	Loss: 0.010411
+Train Epoch: 6 [15360/24515 (62%)]	Loss: 0.011342
+Train Epoch: 6 [16000/24515 (65%)]	Loss: 0.009984
+Train Epoch: 6 [16640/24515 (68%)]	Loss: 0.009751
+Train Epoch: 6 [17280/24515 (70%)]	Loss: 0.009305
+Train Epoch: 6 [17920/24515 (73%)]	Loss: 0.008967
+Train Epoch: 6 [18560/24515 (76%)]	Loss: 0.010725
+Train Epoch: 6 [19200/24515 (78%)]	Loss: 0.011442
+Train Epoch: 6 [19840/24515 (81%)]	Loss: 0.008960
+Train Epoch: 6 [20480/24515 (83%)]	Loss: 0.010129
+Train Epoch: 6 [21120/24515 (86%)]	Loss: 0.010406
+Train Epoch: 6 [21760/24515 (89%)]	Loss: 0.009292
+Train Epoch: 6 [22400/24515 (91%)]	Loss: 0.012207
+Train Epoch: 6 [23040/24515 (94%)]	Loss: 0.009352
+Train Epoch: 6 [23680/24515 (96%)]	Loss: 0.009804
+Train Epoch: 6 [24320/24515 (99%)]	Loss: 0.009502
+
+Test set: Average loss: 0.0087
+
+[33m14:06:23 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:24 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:25 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:25 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:26 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:27 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:27 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:28 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:28 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:29 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:29 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:30 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:30 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:31 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:31 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:32 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:33 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:33 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:34 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:35 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:35 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:36 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:36 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:37 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:37 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:38 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:39 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:39 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:40 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:41 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:41 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:43 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:44 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:44 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:45 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:46 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:46 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:47 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:48 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 7 [0/24515 (0%)]	Loss: 0.010106
+Train Epoch: 7 [640/24515 (3%)]	Loss: 0.008816
+Train Epoch: 7 [1280/24515 (5%)]	Loss: 0.009191
+Train Epoch: 7 [1920/24515 (8%)]	Loss: 0.010414
+Train Epoch: 7 [2560/24515 (10%)]	Loss: 0.010492
+Train Epoch: 7 [3200/24515 (13%)]	Loss: 0.011578
+Train Epoch: 7 [3840/24515 (16%)]	Loss: 0.009944
+Train Epoch: 7 [4480/24515 (18%)]	Loss: 0.011513
+Train Epoch: 7 [5120/24515 (21%)]	Loss: 0.010010
+Train Epoch: 7 [5760/24515 (23%)]	Loss: 0.011545
+Train Epoch: 7 [6400/24515 (26%)]	Loss: 0.008737
+Train Epoch: 7 [7040/24515 (29%)]	Loss: 0.009536
+Train Epoch: 7 [7680/24515 (31%)]	Loss: 0.010207
+Train Epoch: 7 [8320/24515 (34%)]	Loss: 0.008646
+Train Epoch: 7 [8960/24515 (36%)]	Loss: 0.009417
+Train Epoch: 7 [9600/24515 (39%)]	Loss: 0.012381
+Train Epoch: 7 [10240/24515 (42%)]	Loss: 0.009153
+Train Epoch: 7 [10880/24515 (44%)]	Loss: 0.010268
+Train Epoch: 7 [11520/24515 (47%)]	Loss: 0.010393
+Train Epoch: 7 [12160/24515 (49%)]	Loss: 0.009759
+Train Epoch: 7 [12800/24515 (52%)]	Loss: 0.010801
+Train Epoch: 7 [13440/24515 (55%)]	Loss: 0.008810
+Train Epoch: 7 [14080/24515 (57%)]	Loss: 0.008824
+Train Epoch: 7 [14720/24515 (60%)]	Loss: 0.011918
+Train Epoch: 7 [15360/24515 (62%)]	Loss: 0.009773
+Train Epoch: 7 [16000/24515 (65%)]	Loss: 0.008508
+Train Epoch: 7 [16640/24515 (68%)]	Loss: 0.028144
+Train Epoch: 7 [17280/24515 (70%)]	Loss: 0.010359
+Train Epoch: 7 [17920/24515 (73%)]	Loss: 0.017253
+Train Epoch: 7 [18560/24515 (76%)]	Loss: 0.008660
+Train Epoch: 7 [19200/24515 (78%)]	Loss: 0.008233
+Train Epoch: 7 [19840/24515 (81%)]	Loss: 0.008477
+Train Epoch: 7 [20480/24515 (83%)]	Loss: 0.008186
+Train Epoch: 7 [21120/24515 (86%)]	Loss: 0.008749
+Train Epoch: 7 [21760/24515 (89%)]	Loss: 0.009353
+Train Epoch: 7 [22400/24515 (91%)]	Loss: 0.008674
+Train Epoch: 7 [23040/24515 (94%)]	Loss: 0.009443
+Train Epoch: 7 [23680/24515 (96%)]	Loss: 0.008317
+Train Epoch: 7 [24320/24515 (99%)]	Loss: 0.008162
+
+Test set: Average loss: 0.0090
+
+[33m14:06:53 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:54 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:54 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:55 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:56 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:57 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:58 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:06:59 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:00 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:00 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:01 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:02 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:03 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:04 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:05 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:06 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:07 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:08 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:10 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:11 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:11 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:12 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:14 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:15 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:16 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:17 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:18 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:19 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:20 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:21 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:21 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:22 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:23 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:24 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:25 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:26 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:27 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:27 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:28 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 8 [0/24515 (0%)]	Loss: 0.008669
+Train Epoch: 8 [640/24515 (3%)]	Loss: 0.008736
+Train Epoch: 8 [1280/24515 (5%)]	Loss: 0.008749
+Train Epoch: 8 [1920/24515 (8%)]	Loss: 0.008406
+Train Epoch: 8 [2560/24515 (10%)]	Loss: 0.009473
+Train Epoch: 8 [3200/24515 (13%)]	Loss: 0.010616
+Train Epoch: 8 [3840/24515 (16%)]	Loss: 0.008954
+Train Epoch: 8 [4480/24515 (18%)]	Loss: 0.009859
+Train Epoch: 8 [5120/24515 (21%)]	Loss: 0.008519
+Train Epoch: 8 [5760/24515 (23%)]	Loss: 0.012784
+Train Epoch: 8 [6400/24515 (26%)]	Loss: 0.010220
+Train Epoch: 8 [7040/24515 (29%)]	Loss: 0.009147
+Train Epoch: 8 [7680/24515 (31%)]	Loss: 0.008901
+Train Epoch: 8 [8320/24515 (34%)]	Loss: 0.011890
+Train Epoch: 8 [8960/24515 (36%)]	Loss: 0.008232
+Train Epoch: 8 [9600/24515 (39%)]	Loss: 0.008039
+Train Epoch: 8 [10240/24515 (42%)]	Loss: 0.008834
+Train Epoch: 8 [10880/24515 (44%)]	Loss: 0.008679
+Train Epoch: 8 [11520/24515 (47%)]	Loss: 0.009097
+Train Epoch: 8 [12160/24515 (49%)]	Loss: 0.008821
+Train Epoch: 8 [12800/24515 (52%)]	Loss: 0.008736
+Train Epoch: 8 [13440/24515 (55%)]	Loss: 0.009027
+Train Epoch: 8 [14080/24515 (57%)]	Loss: 0.009035
+Train Epoch: 8 [14720/24515 (60%)]	Loss: 0.008821
+Train Epoch: 8 [15360/24515 (62%)]	Loss: 0.008607
+Train Epoch: 8 [16000/24515 (65%)]	Loss: 0.009227
+Train Epoch: 8 [16640/24515 (68%)]	Loss: 0.008184
+Train Epoch: 8 [17280/24515 (70%)]	Loss: 0.008403
+Train Epoch: 8 [17920/24515 (73%)]	Loss: 0.009135
+Train Epoch: 8 [18560/24515 (76%)]	Loss: 0.008468
+Train Epoch: 8 [19200/24515 (78%)]	Loss: 0.008500
+Train Epoch: 8 [19840/24515 (81%)]	Loss: 0.008912
+Train Epoch: 8 [20480/24515 (83%)]	Loss: 0.008704
+Train Epoch: 8 [21120/24515 (86%)]	Loss: 0.009234
+Train Epoch: 8 [21760/24515 (89%)]	Loss: 0.008605
+Train Epoch: 8 [22400/24515 (91%)]	Loss: 0.008335
+Train Epoch: 8 [23040/24515 (94%)]	Loss: 0.008621
+Train Epoch: 8 [23680/24515 (96%)]	Loss: 0.008486
+Train Epoch: 8 [24320/24515 (99%)]	Loss: 0.010330
+
+Test set: Average loss: 0.0080
+
+[33m14:07:33 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:34 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:34 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:35 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:35 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:36 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:37 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:37 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:38 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:39 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:39 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:40 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:41 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:41 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:41 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:42 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:42 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:43 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:43 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:44 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:44 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:44 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:45 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:45 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:46 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:46 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:46 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:47 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:47 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:48 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:48 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:49 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:49 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:50 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:50 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:51 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:51 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:52 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:52 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 9 [0/24515 (0%)]	Loss: 0.008352
+Train Epoch: 9 [640/24515 (3%)]	Loss: 0.007858
+Train Epoch: 9 [1280/24515 (5%)]	Loss: 0.008015
+Train Epoch: 9 [1920/24515 (8%)]	Loss: 0.011020
+Train Epoch: 9 [2560/24515 (10%)]	Loss: 0.008973
+Train Epoch: 9 [3200/24515 (13%)]	Loss: 0.008087
+Train Epoch: 9 [3840/24515 (16%)]	Loss: 0.008732
+Train Epoch: 9 [4480/24515 (18%)]	Loss: 0.007796
+Train Epoch: 9 [5120/24515 (21%)]	Loss: 0.008000
+Train Epoch: 9 [5760/24515 (23%)]	Loss: 0.007907
+Train Epoch: 9 [6400/24515 (26%)]	Loss: 0.007805
+Train Epoch: 9 [7040/24515 (29%)]	Loss: 0.007914
+Train Epoch: 9 [7680/24515 (31%)]	Loss: 0.008003
+Train Epoch: 9 [8320/24515 (34%)]	Loss: 0.008527
+Train Epoch: 9 [8960/24515 (36%)]	Loss: 0.007971
+Train Epoch: 9 [9600/24515 (39%)]	Loss: 0.009221
+Train Epoch: 9 [10240/24515 (42%)]	Loss: 0.008062
+Train Epoch: 9 [10880/24515 (44%)]	Loss: 0.007989
+Train Epoch: 9 [11520/24515 (47%)]	Loss: 0.008206
+Train Epoch: 9 [12160/24515 (49%)]	Loss: 0.009005
+Train Epoch: 9 [12800/24515 (52%)]	Loss: 0.008390
+Train Epoch: 9 [13440/24515 (55%)]	Loss: 0.010108
+Train Epoch: 9 [14080/24515 (57%)]	Loss: 0.008222
+Train Epoch: 9 [14720/24515 (60%)]	Loss: 0.009953
+Train Epoch: 9 [15360/24515 (62%)]	Loss: 0.009091
+Train Epoch: 9 [16000/24515 (65%)]	Loss: 0.009156
+Train Epoch: 9 [16640/24515 (68%)]	Loss: 0.008172
+Train Epoch: 9 [17280/24515 (70%)]	Loss: 0.007858
+Train Epoch: 9 [17920/24515 (73%)]	Loss: 0.009351
+Train Epoch: 9 [18560/24515 (76%)]	Loss: 0.008398
+Train Epoch: 9 [19200/24515 (78%)]	Loss: 0.010338
+Train Epoch: 9 [19840/24515 (81%)]	Loss: 0.012666
+Train Epoch: 9 [20480/24515 (83%)]	Loss: 0.008204
+Train Epoch: 9 [21120/24515 (86%)]	Loss: 0.007874
+Train Epoch: 9 [21760/24515 (89%)]	Loss: 0.008083
+Train Epoch: 9 [22400/24515 (91%)]	Loss: 0.008096
+Train Epoch: 9 [23040/24515 (94%)]	Loss: 0.017912
+Train Epoch: 9 [23680/24515 (96%)]	Loss: 0.008336
+Train Epoch: 9 [24320/24515 (99%)]	Loss: 0.007887
+
+Test set: Average loss: 0.0083
+
+[33m14:07:55 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:55 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:56 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:56 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:57 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:57 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:58 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:58 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:58 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:59 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:07:59 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:00 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:00 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:00 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:01 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:01 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:02 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:02 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:02 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:03 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:03 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:03 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:04 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:04 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:05 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:05 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:05 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:06 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:06 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:07 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:07 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:07 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:08 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:08 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:08 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:09 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:09 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:09 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:10 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 10 [0/24515 (0%)]	Loss: 0.009927
+Train Epoch: 10 [640/24515 (3%)]	Loss: 0.007815
+Train Epoch: 10 [1280/24515 (5%)]	Loss: 0.008172
+Train Epoch: 10 [1920/24515 (8%)]	Loss: 0.007924
+Train Epoch: 10 [2560/24515 (10%)]	Loss: 0.007730
+Train Epoch: 10 [3200/24515 (13%)]	Loss: 0.008516
+Train Epoch: 10 [3840/24515 (16%)]	Loss: 0.007920
+Train Epoch: 10 [4480/24515 (18%)]	Loss: 0.008226
+Train Epoch: 10 [5120/24515 (21%)]	Loss: 0.007868
+Train Epoch: 10 [5760/24515 (23%)]	Loss: 0.011108
+Train Epoch: 10 [6400/24515 (26%)]	Loss: 0.007548
+Train Epoch: 10 [7040/24515 (29%)]	Loss: 0.007662
+Train Epoch: 10 [7680/24515 (31%)]	Loss: 0.007828
+Train Epoch: 10 [8320/24515 (34%)]	Loss: 0.008262
+Train Epoch: 10 [8960/24515 (36%)]	Loss: 0.009699
+Train Epoch: 10 [9600/24515 (39%)]	Loss: 0.007954
+Train Epoch: 10 [10240/24515 (42%)]	Loss: 0.010185
+Train Epoch: 10 [10880/24515 (44%)]	Loss: 0.007813
+Train Epoch: 10 [11520/24515 (47%)]	Loss: 0.008275
+Train Epoch: 10 [12160/24515 (49%)]	Loss: 0.008023
+Train Epoch: 10 [12800/24515 (52%)]	Loss: 0.008290
+Train Epoch: 10 [13440/24515 (55%)]	Loss: 0.007865
+Train Epoch: 10 [14080/24515 (57%)]	Loss: 0.007654
+Train Epoch: 10 [14720/24515 (60%)]	Loss: 0.007780
+Train Epoch: 10 [15360/24515 (62%)]	Loss: 0.007700
+Train Epoch: 10 [16000/24515 (65%)]	Loss: 0.008342
+Train Epoch: 10 [16640/24515 (68%)]	Loss: 0.008527
+Train Epoch: 10 [17280/24515 (70%)]	Loss: 0.007992
+Train Epoch: 10 [17920/24515 (73%)]	Loss: 0.008391
+Train Epoch: 10 [18560/24515 (76%)]	Loss: 0.007639
+Train Epoch: 10 [19200/24515 (78%)]	Loss: 0.007517
+Train Epoch: 10 [19840/24515 (81%)]	Loss: 0.009271
+Train Epoch: 10 [20480/24515 (83%)]	Loss: 0.007327
+Train Epoch: 10 [21120/24515 (86%)]	Loss: 0.007569
+Train Epoch: 10 [21760/24515 (89%)]	Loss: 0.008131
+Train Epoch: 10 [22400/24515 (91%)]	Loss: 0.007848
+Train Epoch: 10 [23040/24515 (94%)]	Loss: 0.007521
+Train Epoch: 10 [23680/24515 (96%)]	Loss: 0.008035
+Train Epoch: 10 [24320/24515 (99%)]	Loss: 0.007510
+
+Test set: Average loss: 0.0074
+
+[33m14:08:12 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:13 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:13 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:13 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:14 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:14 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:14 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:15 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:15 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:16 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:16 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:16 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:17 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:17 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:17 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:18 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:18 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:18 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:19 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:19 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:19 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:20 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:20 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:21 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:21 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:22 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:23 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:23 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:24 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:25 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:25 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:26 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:26 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:27 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:27 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:28 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:29 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:29 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:30 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 11 [0/24515 (0%)]	Loss: 0.014080
+Train Epoch: 11 [640/24515 (3%)]	Loss: 0.009280
+Train Epoch: 11 [1280/24515 (5%)]	Loss: 0.010361
+Train Epoch: 11 [1920/24515 (8%)]	Loss: 0.008011
+Train Epoch: 11 [2560/24515 (10%)]	Loss: 0.008320
+Train Epoch: 11 [3200/24515 (13%)]	Loss: 0.007528
+Train Epoch: 11 [3840/24515 (16%)]	Loss: 0.007627
+Train Epoch: 11 [4480/24515 (18%)]	Loss: 0.008939
+Train Epoch: 11 [5120/24515 (21%)]	Loss: 0.007367
+Train Epoch: 11 [5760/24515 (23%)]	Loss: 0.007253
+Train Epoch: 11 [6400/24515 (26%)]	Loss: 0.007472
+Train Epoch: 11 [7040/24515 (29%)]	Loss: 0.010131
+Train Epoch: 11 [7680/24515 (31%)]	Loss: 0.007379
+Train Epoch: 11 [8320/24515 (34%)]	Loss: 0.007651
+Train Epoch: 11 [8960/24515 (36%)]	Loss: 0.007324
+Train Epoch: 11 [9600/24515 (39%)]	Loss: 0.007517
+Train Epoch: 11 [10240/24515 (42%)]	Loss: 0.008162
+Train Epoch: 11 [10880/24515 (44%)]	Loss: 0.007971
+Train Epoch: 11 [11520/24515 (47%)]	Loss: 0.007977
+Train Epoch: 11 [12160/24515 (49%)]	Loss: 0.007358
+Train Epoch: 11 [12800/24515 (52%)]	Loss: 0.007671
+Train Epoch: 11 [13440/24515 (55%)]	Loss: 0.007512
+Train Epoch: 11 [14080/24515 (57%)]	Loss: 0.007603
+Train Epoch: 11 [14720/24515 (60%)]	Loss: 0.007481
+Train Epoch: 11 [15360/24515 (62%)]	Loss: 0.008371
+Train Epoch: 11 [16000/24515 (65%)]	Loss: 0.007994
+Train Epoch: 11 [16640/24515 (68%)]	Loss: 0.008540
+Train Epoch: 11 [17280/24515 (70%)]	Loss: 0.007532
+Train Epoch: 11 [17920/24515 (73%)]	Loss: 0.008109
+Train Epoch: 11 [18560/24515 (76%)]	Loss: 0.007419
+Train Epoch: 11 [19200/24515 (78%)]	Loss: 0.007424
+Train Epoch: 11 [19840/24515 (81%)]	Loss: 0.009181
+Train Epoch: 11 [20480/24515 (83%)]	Loss: 0.007654
+Train Epoch: 11 [21120/24515 (86%)]	Loss: 0.007514
+Train Epoch: 11 [21760/24515 (89%)]	Loss: 0.007461
+Train Epoch: 11 [22400/24515 (91%)]	Loss: 0.008476
+Train Epoch: 11 [23040/24515 (94%)]	Loss: 0.007637
+Train Epoch: 11 [23680/24515 (96%)]	Loss: 0.009049
+Train Epoch: 11 [24320/24515 (99%)]	Loss: 0.007711
+
+Test set: Average loss: 0.0077
+
+[33m14:08:34 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:34 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:35 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:36 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:36 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:37 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:37 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:38 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:39 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:39 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:40 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:40 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:41 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:41 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:42 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:42 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:43 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:43 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:44 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:45 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:45 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:46 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:46 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:47 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:47 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:48 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:49 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:49 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:50 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:50 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:51 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:51 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:52 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:52 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:53 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:54 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:54 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:55 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:08:55 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 12 [0/24515 (0%)]	Loss: 0.007425
+Train Epoch: 12 [640/24515 (3%)]	Loss: 0.008107
+Train Epoch: 12 [1280/24515 (5%)]	Loss: 0.007190
+Train Epoch: 12 [1920/24515 (8%)]	Loss: 0.007489
+Train Epoch: 12 [2560/24515 (10%)]	Loss: 0.007585
+Train Epoch: 12 [3200/24515 (13%)]	Loss: 0.020695
+Train Epoch: 12 [3840/24515 (16%)]	Loss: 0.007418
+Train Epoch: 12 [4480/24515 (18%)]	Loss: 0.007305
+Train Epoch: 12 [5120/24515 (21%)]	Loss: 0.007416
+Train Epoch: 12 [5760/24515 (23%)]	Loss: 0.008437
+Train Epoch: 12 [6400/24515 (26%)]	Loss: 0.007387
+Train Epoch: 12 [7040/24515 (29%)]	Loss: 0.008345
+Train Epoch: 12 [7680/24515 (31%)]	Loss: 0.009745
+Train Epoch: 12 [8320/24515 (34%)]	Loss: 0.007800
+Train Epoch: 12 [8960/24515 (36%)]	Loss: 0.008689
+Train Epoch: 12 [9600/24515 (39%)]	Loss: 0.008448
+Train Epoch: 12 [10240/24515 (42%)]	Loss: 0.009775
+Train Epoch: 12 [10880/24515 (44%)]	Loss: 0.008658
+Train Epoch: 12 [11520/24515 (47%)]	Loss: 0.008555
+Train Epoch: 12 [12160/24515 (49%)]	Loss: 0.010578
+Train Epoch: 12 [12800/24515 (52%)]	Loss: 0.011122
+Train Epoch: 12 [13440/24515 (55%)]	Loss: 0.007230
+Train Epoch: 12 [14080/24515 (57%)]	Loss: 0.007092
+Train Epoch: 12 [14720/24515 (60%)]	Loss: 0.008111
+Train Epoch: 12 [15360/24515 (62%)]	Loss: 0.008877
+Train Epoch: 12 [16000/24515 (65%)]	Loss: 0.007272
+Train Epoch: 12 [16640/24515 (68%)]	Loss: 0.008966
+Train Epoch: 12 [17280/24515 (70%)]	Loss: 0.010829
+Train Epoch: 12 [17920/24515 (73%)]	Loss: 0.009944
+Train Epoch: 12 [18560/24515 (76%)]	Loss: 0.007630
+Train Epoch: 12 [19200/24515 (78%)]	Loss: 0.007475
+Train Epoch: 12 [19840/24515 (81%)]	Loss: 0.007508
+Train Epoch: 12 [20480/24515 (83%)]	Loss: 0.013821
+Train Epoch: 12 [21120/24515 (86%)]	Loss: 0.009239
+Train Epoch: 12 [21760/24515 (89%)]	Loss: 0.007945
+Train Epoch: 12 [22400/24515 (91%)]	Loss: 0.007257
+Train Epoch: 12 [23040/24515 (94%)]	Loss: 0.007859
+Train Epoch: 12 [23680/24515 (96%)]	Loss: 0.007292
+Train Epoch: 12 [24320/24515 (99%)]	Loss: 0.007544
+
+Test set: Average loss: 0.0071
+
+[33m14:08:59 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:00 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:00 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:01 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:01 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:02 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:03 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:03 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:04 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:04 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:05 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:06 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:06 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:07 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:07 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:08 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:08 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:09 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:09 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:10 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:11 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:11 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:12 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:12 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:13 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:14 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:14 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:15 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:15 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:16 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:16 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:17 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:17 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:18 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:19 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:20 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:20 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:21 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:22 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 13 [0/24515 (0%)]	Loss: 0.007571
+Train Epoch: 13 [640/24515 (3%)]	Loss: 0.008873
+Train Epoch: 13 [1280/24515 (5%)]	Loss: 0.009439
+Train Epoch: 13 [1920/24515 (8%)]	Loss: 0.007458
+Train Epoch: 13 [2560/24515 (10%)]	Loss: 0.007167
+Train Epoch: 13 [3200/24515 (13%)]	Loss: 0.007503
+Train Epoch: 13 [3840/24515 (16%)]	Loss: 0.007297
+Train Epoch: 13 [4480/24515 (18%)]	Loss: 0.008675
+Train Epoch: 13 [5120/24515 (21%)]	Loss: 0.008792
+Train Epoch: 13 [5760/24515 (23%)]	Loss: 0.007885
+Train Epoch: 13 [6400/24515 (26%)]	Loss: 0.008017
+Train Epoch: 13 [7040/24515 (29%)]	Loss: 0.007887
+Train Epoch: 13 [7680/24515 (31%)]	Loss: 0.007170
+Train Epoch: 13 [8320/24515 (34%)]	Loss: 0.007294
+Train Epoch: 13 [8960/24515 (36%)]	Loss: 0.007362
+Train Epoch: 13 [9600/24515 (39%)]	Loss: 0.008668
+Train Epoch: 13 [10240/24515 (42%)]	Loss: 0.007423
+Train Epoch: 13 [10880/24515 (44%)]	Loss: 0.011055
+Train Epoch: 13 [11520/24515 (47%)]	Loss: 0.011129
+Train Epoch: 13 [12160/24515 (49%)]	Loss: 0.008699
+Train Epoch: 13 [12800/24515 (52%)]	Loss: 0.010201
+Train Epoch: 13 [13440/24515 (55%)]	Loss: 0.008580
+Train Epoch: 13 [14080/24515 (57%)]	Loss: 0.007320
+Train Epoch: 13 [14720/24515 (60%)]	Loss: 0.011556
+Train Epoch: 13 [15360/24515 (62%)]	Loss: 0.008258
+Train Epoch: 13 [16000/24515 (65%)]	Loss: 0.013805
+Train Epoch: 13 [16640/24515 (68%)]	Loss: 0.007801
+Train Epoch: 13 [17280/24515 (70%)]	Loss: 0.007342
+Train Epoch: 13 [17920/24515 (73%)]	Loss: 0.008573
+Train Epoch: 13 [18560/24515 (76%)]	Loss: 0.007543
+Train Epoch: 13 [19200/24515 (78%)]	Loss: 0.008749
+Train Epoch: 13 [19840/24515 (81%)]	Loss: 0.007122
+Train Epoch: 13 [20480/24515 (83%)]	Loss: 0.006982
+Train Epoch: 13 [21120/24515 (86%)]	Loss: 0.007193
+Train Epoch: 13 [21760/24515 (89%)]	Loss: 0.007926
+Train Epoch: 13 [22400/24515 (91%)]	Loss: 0.007301
+Train Epoch: 13 [23040/24515 (94%)]	Loss: 0.007541
+Train Epoch: 13 [23680/24515 (96%)]	Loss: 0.009291
+Train Epoch: 13 [24320/24515 (99%)]	Loss: 0.007147
+
+Test set: Average loss: 0.0071
+
+[33m14:09:25 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:26 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:26 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:27 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:27 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:28 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:29 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:29 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:30 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:30 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:31 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:31 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:32 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:32 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:33 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:33 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:33 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:34 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:34 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:35 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:35 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:35 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:36 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:36 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:37 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:37 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:37 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:38 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:38 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:39 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:39 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:39 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:40 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:40 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:41 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:41 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:42 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:42 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:43 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 14 [0/24515 (0%)]	Loss: 0.007157
+Train Epoch: 14 [640/24515 (3%)]	Loss: 0.008920
+Train Epoch: 14 [1280/24515 (5%)]	Loss: 0.008298
+Train Epoch: 14 [1920/24515 (8%)]	Loss: 0.008576
+Train Epoch: 14 [2560/24515 (10%)]	Loss: 0.008216
+Train Epoch: 14 [3200/24515 (13%)]	Loss: 0.009948
+Train Epoch: 14 [3840/24515 (16%)]	Loss: 0.009850
+Train Epoch: 14 [4480/24515 (18%)]	Loss: 0.007322
+Train Epoch: 14 [5120/24515 (21%)]	Loss: 0.008654
+Train Epoch: 14 [5760/24515 (23%)]	Loss: 0.007326
+Train Epoch: 14 [6400/24515 (26%)]	Loss: 0.007654
+Train Epoch: 14 [7040/24515 (29%)]	Loss: 0.007440
+Train Epoch: 14 [7680/24515 (31%)]	Loss: 0.007208
+Train Epoch: 14 [8320/24515 (34%)]	Loss: 0.007252
+Train Epoch: 14 [8960/24515 (36%)]	Loss: 0.008273
+Train Epoch: 14 [9600/24515 (39%)]	Loss: 0.006848
+Train Epoch: 14 [10240/24515 (42%)]	Loss: 0.007914
+Train Epoch: 14 [10880/24515 (44%)]	Loss: 0.007339
+Train Epoch: 14 [11520/24515 (47%)]	Loss: 0.007053
+Train Epoch: 14 [12160/24515 (49%)]	Loss: 0.008168
+Train Epoch: 14 [12800/24515 (52%)]	Loss: 0.006789
+Train Epoch: 14 [13440/24515 (55%)]	Loss: 0.009532
+Train Epoch: 14 [14080/24515 (57%)]	Loss: 0.009616
+Train Epoch: 14 [14720/24515 (60%)]	Loss: 0.007720
+Train Epoch: 14 [15360/24515 (62%)]	Loss: 0.008420
+Train Epoch: 14 [16000/24515 (65%)]	Loss: 0.008929
+Train Epoch: 14 [16640/24515 (68%)]	Loss: 0.007825
+Train Epoch: 14 [17280/24515 (70%)]	Loss: 0.009755
+Train Epoch: 14 [17920/24515 (73%)]	Loss: 0.007700
+Train Epoch: 14 [18560/24515 (76%)]	Loss: 0.014091
+Train Epoch: 14 [19200/24515 (78%)]	Loss: 0.011141
+Train Epoch: 14 [19840/24515 (81%)]	Loss: 0.008214
+Train Epoch: 14 [20480/24515 (83%)]	Loss: 0.010033
+Train Epoch: 14 [21120/24515 (86%)]	Loss: 0.009838
+Train Epoch: 14 [21760/24515 (89%)]	Loss: 0.007837
+Train Epoch: 14 [22400/24515 (91%)]	Loss: 0.011072
+Train Epoch: 14 [23040/24515 (94%)]	Loss: 0.007534
+Train Epoch: 14 [23680/24515 (96%)]	Loss: 0.008299
+Train Epoch: 14 [24320/24515 (99%)]	Loss: 0.007117
+
+Test set: Average loss: 0.0076
+
+[33m14:09:47 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:47 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:48 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:48 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:49 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:49 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:50 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:51 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:51 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:52 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:52 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:53 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:53 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:54 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:54 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:55 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:56 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:56 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:57 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:57 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:58 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:58 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:59 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:09:59 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:00 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:00 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:01 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:02 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:02 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:03 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:03 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:04 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:04 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:05 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:05 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:06 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:07 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:07 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:08 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 15 [0/24515 (0%)]	Loss: 0.009732
+Train Epoch: 15 [640/24515 (3%)]	Loss: 0.011428
+Train Epoch: 15 [1280/24515 (5%)]	Loss: 0.013718
+Train Epoch: 15 [1920/24515 (8%)]	Loss: 0.012321
+Train Epoch: 15 [2560/24515 (10%)]	Loss: 0.007245
+Train Epoch: 15 [3200/24515 (13%)]	Loss: 0.008864
+Train Epoch: 15 [3840/24515 (16%)]	Loss: 0.009200
+Train Epoch: 15 [4480/24515 (18%)]	Loss: 0.007363
+Train Epoch: 15 [5120/24515 (21%)]	Loss: 0.007313
+Train Epoch: 15 [5760/24515 (23%)]	Loss: 0.007941
+Train Epoch: 15 [6400/24515 (26%)]	Loss: 0.008358
+Train Epoch: 15 [7040/24515 (29%)]	Loss: 0.007009
+Train Epoch: 15 [7680/24515 (31%)]	Loss: 0.007839
+Train Epoch: 15 [8320/24515 (34%)]	Loss: 0.008364
+Train Epoch: 15 [8960/24515 (36%)]	Loss: 0.008128
+Train Epoch: 15 [9600/24515 (39%)]	Loss: 0.007127
+Train Epoch: 15 [10240/24515 (42%)]	Loss: 0.007255
+Train Epoch: 15 [10880/24515 (44%)]	Loss: 0.007444
+Train Epoch: 15 [11520/24515 (47%)]	Loss: 0.010480
+Train Epoch: 15 [12160/24515 (49%)]	Loss: 0.007883
+Train Epoch: 15 [12800/24515 (52%)]	Loss: 0.007321
+Train Epoch: 15 [13440/24515 (55%)]	Loss: 0.007490
+Train Epoch: 15 [14080/24515 (57%)]	Loss: 0.008252
+Train Epoch: 15 [14720/24515 (60%)]	Loss: 0.008339
+Train Epoch: 15 [15360/24515 (62%)]	Loss: 0.007195
+Train Epoch: 15 [16000/24515 (65%)]	Loss: 0.009996
+Train Epoch: 15 [16640/24515 (68%)]	Loss: 0.007886
+Train Epoch: 15 [17280/24515 (70%)]	Loss: 0.009234
+Train Epoch: 15 [17920/24515 (73%)]	Loss: 0.007504
+Train Epoch: 15 [18560/24515 (76%)]	Loss: 0.007726
+Train Epoch: 15 [19200/24515 (78%)]	Loss: 0.007469
+Train Epoch: 15 [19840/24515 (81%)]	Loss: 0.011505
+Train Epoch: 15 [20480/24515 (83%)]	Loss: 0.011455
+Train Epoch: 15 [21120/24515 (86%)]	Loss: 0.006935
+Train Epoch: 15 [21760/24515 (89%)]	Loss: 0.009100
+Train Epoch: 15 [22400/24515 (91%)]	Loss: 0.007243
+Train Epoch: 15 [23040/24515 (94%)]	Loss: 0.007259
+Train Epoch: 15 [23680/24515 (96%)]	Loss: 0.009440
+Train Epoch: 15 [24320/24515 (99%)]	Loss: 0.007031
+
+Test set: Average loss: 0.0070
+
+[33m14:10:11 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:11 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:12 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:12 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:13 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:14 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:14 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:15 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:15 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:16 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:16 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:17 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:17 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:18 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:19 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:19 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:20 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:20 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:21 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:21 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:22 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:22 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:23 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:23 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:24 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:24 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:25 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:25 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:26 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:26 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:27 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:28 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:28 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:29 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:29 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:30 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:30 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:31 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:31 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 16 [0/24515 (0%)]	Loss: 0.007434
+Train Epoch: 16 [640/24515 (3%)]	Loss: 0.007273
+Train Epoch: 16 [1280/24515 (5%)]	Loss: 0.007484
+Train Epoch: 16 [1920/24515 (8%)]	Loss: 0.007385
+Train Epoch: 16 [2560/24515 (10%)]	Loss: 0.007393
+Train Epoch: 16 [3200/24515 (13%)]	Loss: 0.007386
+Train Epoch: 16 [3840/24515 (16%)]	Loss: 0.008308
+Train Epoch: 16 [4480/24515 (18%)]	Loss: 0.007131
+Train Epoch: 16 [5120/24515 (21%)]	Loss: 0.007301
+Train Epoch: 16 [5760/24515 (23%)]	Loss: 0.007089
+Train Epoch: 16 [6400/24515 (26%)]	Loss: 0.008872
+Train Epoch: 16 [7040/24515 (29%)]	Loss: 0.007758
+Train Epoch: 16 [7680/24515 (31%)]	Loss: 0.008453
+Train Epoch: 16 [8320/24515 (34%)]	Loss: 0.009489
+Train Epoch: 16 [8960/24515 (36%)]	Loss: 0.006883
+Train Epoch: 16 [9600/24515 (39%)]	Loss: 0.006828
+Train Epoch: 16 [10240/24515 (42%)]	Loss: 0.009918
+Train Epoch: 16 [10880/24515 (44%)]	Loss: 0.007605
+Train Epoch: 16 [11520/24515 (47%)]	Loss: 0.007163
+Train Epoch: 16 [12160/24515 (49%)]	Loss: 0.009244
+Train Epoch: 16 [12800/24515 (52%)]	Loss: 0.007710
+Train Epoch: 16 [13440/24515 (55%)]	Loss: 0.007230
+Train Epoch: 16 [14080/24515 (57%)]	Loss: 0.007387
+Train Epoch: 16 [14720/24515 (60%)]	Loss: 0.007200
+Train Epoch: 16 [15360/24515 (62%)]	Loss: 0.007000
+Train Epoch: 16 [16000/24515 (65%)]	Loss: 0.007671
+Train Epoch: 16 [16640/24515 (68%)]	Loss: 0.007394
+Train Epoch: 16 [17280/24515 (70%)]	Loss: 0.007147
+Train Epoch: 16 [17920/24515 (73%)]	Loss: 0.007682
+Train Epoch: 16 [18560/24515 (76%)]	Loss: 0.007686
+Train Epoch: 16 [19200/24515 (78%)]	Loss: 0.007120
+Train Epoch: 16 [19840/24515 (81%)]	Loss: 0.007946
+Train Epoch: 16 [20480/24515 (83%)]	Loss: 0.007830
+Train Epoch: 16 [21120/24515 (86%)]	Loss: 0.007868
+Train Epoch: 16 [21760/24515 (89%)]	Loss: 0.006979
+Train Epoch: 16 [22400/24515 (91%)]	Loss: 0.007198
+Train Epoch: 16 [23040/24515 (94%)]	Loss: 0.006982
+Train Epoch: 16 [23680/24515 (96%)]	Loss: 0.007330
+Train Epoch: 16 [24320/24515 (99%)]	Loss: 0.007083
+
+Test set: Average loss: 0.0074
+
+[33m14:10:35 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:35 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:36 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:36 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:37 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:37 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:38 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:38 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:39 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:40 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:40 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:41 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:41 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:42 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:42 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:43 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:43 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:44 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:44 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:45 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:45 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:46 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:46 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:47 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:47 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:48 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:48 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:49 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:50 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:50 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:51 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:51 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:52 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:53 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:53 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:54 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:54 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:55 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:55 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 17 [0/24515 (0%)]	Loss: 0.007618
+Train Epoch: 17 [640/24515 (3%)]	Loss: 0.007149
+Train Epoch: 17 [1280/24515 (5%)]	Loss: 0.007250
+Train Epoch: 17 [1920/24515 (8%)]	Loss: 0.007193
+Train Epoch: 17 [2560/24515 (10%)]	Loss: 0.010562
+Train Epoch: 17 [3200/24515 (13%)]	Loss: 0.006872
+Train Epoch: 17 [3840/24515 (16%)]	Loss: 0.007190
+Train Epoch: 17 [4480/24515 (18%)]	Loss: 0.007138
+Train Epoch: 17 [5120/24515 (21%)]	Loss: 0.007449
+Train Epoch: 17 [5760/24515 (23%)]	Loss: 0.008033
+Train Epoch: 17 [6400/24515 (26%)]	Loss: 0.008192
+Train Epoch: 17 [7040/24515 (29%)]	Loss: 0.006986
+Train Epoch: 17 [7680/24515 (31%)]	Loss: 0.007742
+Train Epoch: 17 [8320/24515 (34%)]	Loss: 0.007157
+Train Epoch: 17 [8960/24515 (36%)]	Loss: 0.008290
+Train Epoch: 17 [9600/24515 (39%)]	Loss: 0.009314
+Train Epoch: 17 [10240/24515 (42%)]	Loss: 0.010233
+Train Epoch: 17 [10880/24515 (44%)]	Loss: 0.008088
+Train Epoch: 17 [11520/24515 (47%)]	Loss: 0.008374
+Train Epoch: 17 [12160/24515 (49%)]	Loss: 0.007212
+Train Epoch: 17 [12800/24515 (52%)]	Loss: 0.007454
+Train Epoch: 17 [13440/24515 (55%)]	Loss: 0.010131
+Train Epoch: 17 [14080/24515 (57%)]	Loss: 0.007240
+Train Epoch: 17 [14720/24515 (60%)]	Loss: 0.008914
+Train Epoch: 17 [15360/24515 (62%)]	Loss: 0.007901
+Train Epoch: 17 [16000/24515 (65%)]	Loss: 0.010683
+Train Epoch: 17 [16640/24515 (68%)]	Loss: 0.006811
+Train Epoch: 17 [17280/24515 (70%)]	Loss: 0.007937
+Train Epoch: 17 [17920/24515 (73%)]	Loss: 0.007553
+Train Epoch: 17 [18560/24515 (76%)]	Loss: 0.008447
+Train Epoch: 17 [19200/24515 (78%)]	Loss: 0.007397
+Train Epoch: 17 [19840/24515 (81%)]	Loss: 0.007348
+Train Epoch: 17 [20480/24515 (83%)]	Loss: 0.007679
+Train Epoch: 17 [21120/24515 (86%)]	Loss: 0.007115
+Train Epoch: 17 [21760/24515 (89%)]	Loss: 0.009406
+Train Epoch: 17 [22400/24515 (91%)]	Loss: 0.008241
+Train Epoch: 17 [23040/24515 (94%)]	Loss: 0.008505
+Train Epoch: 17 [23680/24515 (96%)]	Loss: 0.007472
+Train Epoch: 17 [24320/24515 (99%)]	Loss: 0.007979
+
+Test set: Average loss: 0.0069
+
+[33m14:10:59 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:10:59 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:00 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:01 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:01 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:02 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:02 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:03 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:03 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:04 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:04 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:05 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:05 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:06 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:06 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:07 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:07 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:08 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:08 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:09 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:10 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:10 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:11 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:11 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:12 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:12 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:12 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:13 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:14 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:14 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:15 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:15 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:16 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:16 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:17 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:17 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:18 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:18 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:19 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 18 [0/24515 (0%)]	Loss: 0.007144
+Train Epoch: 18 [640/24515 (3%)]	Loss: 0.007159
+Train Epoch: 18 [1280/24515 (5%)]	Loss: 0.007186
+Train Epoch: 18 [1920/24515 (8%)]	Loss: 0.007022
+Train Epoch: 18 [2560/24515 (10%)]	Loss: 0.007397
+Train Epoch: 18 [3200/24515 (13%)]	Loss: 0.009195
+Train Epoch: 18 [3840/24515 (16%)]	Loss: 0.007573
+Train Epoch: 18 [4480/24515 (18%)]	Loss: 0.007334
+Train Epoch: 18 [5120/24515 (21%)]	Loss: 0.007399
+Train Epoch: 18 [5760/24515 (23%)]	Loss: 0.007692
+Train Epoch: 18 [6400/24515 (26%)]	Loss: 0.007338
+Train Epoch: 18 [7040/24515 (29%)]	Loss: 0.007178
+Train Epoch: 18 [7680/24515 (31%)]	Loss: 0.010878
+Train Epoch: 18 [8320/24515 (34%)]	Loss: 0.010576
+Train Epoch: 18 [8960/24515 (36%)]	Loss: 0.009788
+Train Epoch: 18 [9600/24515 (39%)]	Loss: 0.007327
+Train Epoch: 18 [10240/24515 (42%)]	Loss: 0.007374
+Train Epoch: 18 [10880/24515 (44%)]	Loss: 0.007405
+Train Epoch: 18 [11520/24515 (47%)]	Loss: 0.009214
+Train Epoch: 18 [12160/24515 (49%)]	Loss: 0.006910
+Train Epoch: 18 [12800/24515 (52%)]	Loss: 0.010042
+Train Epoch: 18 [13440/24515 (55%)]	Loss: 0.008573
+Train Epoch: 18 [14080/24515 (57%)]	Loss: 0.007497
+Train Epoch: 18 [14720/24515 (60%)]	Loss: 0.007376
+Train Epoch: 18 [15360/24515 (62%)]	Loss: 0.009392
+Train Epoch: 18 [16000/24515 (65%)]	Loss: 0.007030
+Train Epoch: 18 [16640/24515 (68%)]	Loss: 0.008491
+Train Epoch: 18 [17280/24515 (70%)]	Loss: 0.007611
+Train Epoch: 18 [17920/24515 (73%)]	Loss: 0.007091
+Train Epoch: 18 [18560/24515 (76%)]	Loss: 0.006973
+Train Epoch: 18 [19200/24515 (78%)]	Loss: 0.007279
+Train Epoch: 18 [19840/24515 (81%)]	Loss: 0.007705
+Train Epoch: 18 [20480/24515 (83%)]	Loss: 0.009069
+Train Epoch: 18 [21120/24515 (86%)]	Loss: 0.007387
+Train Epoch: 18 [21760/24515 (89%)]	Loss: 0.009632
+Train Epoch: 18 [22400/24515 (91%)]	Loss: 0.009287
+Train Epoch: 18 [23040/24515 (94%)]	Loss: 0.011304
+Train Epoch: 18 [23680/24515 (96%)]	Loss: 0.007926
+Train Epoch: 18 [24320/24515 (99%)]	Loss: 0.009055
+
+Test set: Average loss: 0.0070
+
+[33m14:11:22 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:23 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:23 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:24 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:24 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:25 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:26 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:26 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:27 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:27 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:28 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:29 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:29 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:29 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:30 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:30 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:31 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:31 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:32 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:32 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:33 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:34 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:34 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:35 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:35 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:36 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:36 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:37 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:37 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:38 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:38 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:39 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:39 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:40 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:40 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:41 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:41 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:42 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:42 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 19 [0/24515 (0%)]	Loss: 0.007602
+Train Epoch: 19 [640/24515 (3%)]	Loss: 0.007302
+Train Epoch: 19 [1280/24515 (5%)]	Loss: 0.007266
+Train Epoch: 19 [1920/24515 (8%)]	Loss: 0.009221
+Train Epoch: 19 [2560/24515 (10%)]	Loss: 0.007232
+Train Epoch: 19 [3200/24515 (13%)]	Loss: 0.008096
+Train Epoch: 19 [3840/24515 (16%)]	Loss: 0.007221
+Train Epoch: 19 [4480/24515 (18%)]	Loss: 0.007730
+Train Epoch: 19 [5120/24515 (21%)]	Loss: 0.009318
+Train Epoch: 19 [5760/24515 (23%)]	Loss: 0.007074
+Train Epoch: 19 [6400/24515 (26%)]	Loss: 0.007262
+Train Epoch: 19 [7040/24515 (29%)]	Loss: 0.007220
+Train Epoch: 19 [7680/24515 (31%)]	Loss: 0.007087
+Train Epoch: 19 [8320/24515 (34%)]	Loss: 0.006785
+Train Epoch: 19 [8960/24515 (36%)]	Loss: 0.009664
+Train Epoch: 19 [9600/24515 (39%)]	Loss: 0.006739
+Train Epoch: 19 [10240/24515 (42%)]	Loss: 0.006777
+Train Epoch: 19 [10880/24515 (44%)]	Loss: 0.006714
+Train Epoch: 19 [11520/24515 (47%)]	Loss: 0.009406
+Train Epoch: 19 [12160/24515 (49%)]	Loss: 0.008078
+Train Epoch: 19 [12800/24515 (52%)]	Loss: 0.007064
+Train Epoch: 19 [13440/24515 (55%)]	Loss: 0.007408
+Train Epoch: 19 [14080/24515 (57%)]	Loss: 0.009355
+Train Epoch: 19 [14720/24515 (60%)]	Loss: 0.007170
+Train Epoch: 19 [15360/24515 (62%)]	Loss: 0.007903
+Train Epoch: 19 [16000/24515 (65%)]	Loss: 0.009040
+Train Epoch: 19 [16640/24515 (68%)]	Loss: 0.006916
+Train Epoch: 19 [17280/24515 (70%)]	Loss: 0.007070
+Train Epoch: 19 [17920/24515 (73%)]	Loss: 0.007473
+Train Epoch: 19 [18560/24515 (76%)]	Loss: 0.008533
+Train Epoch: 19 [19200/24515 (78%)]	Loss: 0.007003
+Train Epoch: 19 [19840/24515 (81%)]	Loss: 0.011335
+Train Epoch: 19 [20480/24515 (83%)]	Loss: 0.010266
+Train Epoch: 19 [21120/24515 (86%)]	Loss: 0.007864
+Train Epoch: 19 [21760/24515 (89%)]	Loss: 0.006934
+Train Epoch: 19 [22400/24515 (91%)]	Loss: 0.007146
+Train Epoch: 19 [23040/24515 (94%)]	Loss: 0.008403
+Train Epoch: 19 [23680/24515 (96%)]	Loss: 0.007160
+Train Epoch: 19 [24320/24515 (99%)]	Loss: 0.007153
+
+Test set: Average loss: 0.0069
+
+[33m14:11:45 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:46 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:46 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:47 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:47 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:48 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:48 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:49 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:49 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:50 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:50 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:51 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:51 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:52 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:52 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:53 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:53 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:54 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:55 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:55 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:56 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:56 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:57 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:57 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:58 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:58 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:59 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:11:59 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:12:00 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:12:00 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:12:01 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:12:01 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:12:02 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:12:03 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:12:03 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:12:04 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:12:04 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:12:05 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+[33m14:12:05 WARNING: Syncing not active or too slow: Command /work/tc062/tc062/s2501147/autoencoder/1c1f71.command file still exists[0m
+Train Epoch: 20 [0/24515 (0%)]	Loss: 0.007101
+Train Epoch: 20 [640/24515 (3%)]	Loss: 0.008047
+Train Epoch: 20 [1280/24515 (5%)]	Loss: 0.007400
+Train Epoch: 20 [1920/24515 (8%)]	Loss: 0.007384
+Train Epoch: 20 [2560/24515 (10%)]	Loss: 0.006915
+Train Epoch: 20 [3200/24515 (13%)]	Loss: 0.006939
+Train Epoch: 20 [3840/24515 (16%)]	Loss: 0.006877
+Train Epoch: 20 [4480/24515 (18%)]	Loss: 0.007753
+Train Epoch: 20 [5120/24515 (21%)]	Loss: 0.010761
+Train Epoch: 20 [5760/24515 (23%)]	Loss: 0.006839
+Train Epoch: 20 [6400/24515 (26%)]	Loss: 0.007819
+Train Epoch: 20 [7040/24515 (29%)]	Loss: 0.007150
+Train Epoch: 20 [7680/24515 (31%)]	Loss: 0.007420
+Train Epoch: 20 [8320/24515 (34%)]	Loss: 0.007301
+Train Epoch: 20 [8960/24515 (36%)]	Loss: 0.007108
+Train Epoch: 20 [9600/24515 (39%)]	Loss: 0.006949
+Train Epoch: 20 [10240/24515 (42%)]	Loss: 0.006889
+Train Epoch: 20 [10880/24515 (44%)]	Loss: 0.011045
+Train Epoch: 20 [11520/24515 (47%)]	Loss: 0.009801
+Train Epoch: 20 [12160/24515 (49%)]	Loss: 0.007487
+Train Epoch: 20 [12800/24515 (52%)]	Loss: 0.007528
+Train Epoch: 20 [13440/24515 (55%)]	Loss: 0.007188
+Train Epoch: 20 [14080/24515 (57%)]	Loss: 0.008027
+Train Epoch: 20 [14720/24515 (60%)]	Loss: 0.007468
+Train Epoch: 20 [15360/24515 (62%)]	Loss: 0.006847
+Train Epoch: 20 [16000/24515 (65%)]	Loss: 0.007573
+Train Epoch: 20 [16640/24515 (68%)]	Loss: 0.007416
+Train Epoch: 20 [17280/24515 (70%)]	Loss: 0.006811
+Train Epoch: 20 [17920/24515 (73%)]	Loss: 0.007168
+Train Epoch: 20 [18560/24515 (76%)]	Loss: 0.008501
+Train Epoch: 20 [19200/24515 (78%)]	Loss: 0.007471
+Train Epoch: 20 [19840/24515 (81%)]	Loss: 0.009245
+Train Epoch: 20 [20480/24515 (83%)]	Loss: 0.007552
+Train Epoch: 20 [21120/24515 (86%)]	Loss: 0.007062
+Train Epoch: 20 [21760/24515 (89%)]	Loss: 0.008500
+Train Epoch: 20 [22400/24515 (91%)]	Loss: 0.006910
+Train Epoch: 20 [23040/24515 (94%)]	Loss: 0.007376
+Train Epoch: 20 [23680/24515 (96%)]	Loss: 0.006909
+Train Epoch: 20 [24320/24515 (99%)]	Loss: 0.006788
+
+Test set: Average loss: 0.0071
+
+wandb: 
+wandb: Run history:
+wandb: loss █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: 
+wandb: Run summary:
+wandb: loss 0.00679
+wandb: 
+wandb: You can sync this run to the cloud by running:
+wandb: wandb sync /work/tc062/tc062/s2501147/autoencoder/wandb/offline-run-20240621_135948-jw7swmdk
+wandb: Find logs at: /work/tc062/tc062/s2501147/autoencoder/wandb/offline-run-20240621_135948-jw7swmdk/logs

@@ -3,8 +3,10 @@
 
 # Ignoe all .pt files
 *.pt
+*.command
 
 # Ignore all files in the build/ directory
+wandb/
 libritts_data/
 data/
 handwritten_digits/

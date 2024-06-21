@@ -13,5 +13,5 @@ module load pytorch/1.13.1-gpu
 
 source /work/tc062/tc062/s2501147/venv/mgpu_env/bin/activate
 
-srun python autoencoder/spec_auto_user.py
+srun python spec_auto_user.py
 
