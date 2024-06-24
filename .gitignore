@@ -4,6 +4,7 @@
 # Ignoe all .pt files
 *.pt
 *.command
+*.out
 
 # Ignore all files in the build/ directory
 wandb/

@@ -1,25 +1,25 @@
 import argparse
 import torch
 import os
-import subprocess
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from spec_dataset import SpectrogramDataset, create_dataloaders, load_datasets
+import subprocess
+from spec_dataset import SpectrogramDataset
+from recon_dataset import ZeroedSpectrogramDataset, create_dataloaders, load_datasets
 from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
 from torch.autograd import Variable
 import wandb
-from wandb_osh.hooks import TriggerWandbSyncHook
+from wandb_osh.hooks import TriggerWandbSyncHook  
 
 comm_dir = "/work/tc062/tc062/s2501147/autoencoder/.wandb_osh_command_dir"
 
-class Autoencoder(nn.Module):
-    def __init__(self, ):
+class RAutoencoder(nn.Module):
+    def __init__(self):
 
-        super(Autoencoder, self).__init__()
+        super(RAutoencoder, self).__init__()
 
-        #change the stride and look at the difference
         # Encoder
         self.encoder = nn.Sequential(
             nn.Conv2d(1, 32, kernel_size=3, stride=2, padding=1),  # output size: (32, 40, 40)
@@ -68,15 +68,13 @@ class Autoencoder(nn.Module):
         x = self.decoder(x)
         return x
 
-
-
-def train(args, model, device, train_loader, optimizer, epoch, trigger_sync):
+def train(args, model, device, train_loader, gold_standard_loader, optimizer, epoch, trigger_sync):
     model.train()
     distance = nn.MSELoss()
-    for batch_idx, data in enumerate(train_loader):
-        data = Variable(data).to(device)
+    for batch_idx, (data, gold_standard) in enumerate(zip(train_loader, gold_standard_loader)):
+        data, gold_standard = Variable(data).to(device), Variable(gold_standard).to(device)
         output = model(data)
-        loss = distance(output, data)
+        loss = distance(output, gold_standard)
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
@@ -84,9 +82,10 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync):
         if batch_idx % args.log_interval == 0:
             wandb.log({"loss": loss})
             trigger_sync()
-            subprocess.Popen("sed -i 's|.*|/work/tc062/tc062/s2501147/autoencoder|g' {}/*.command".format(comm_dir), shell=True,
+            subprocess.Popen("sed -i 's|.*|/work/tc062/tc062/s2501147/autoencoder|g' {}/*.command".format(comm_dir),
+                                                shell=True,
                                                 stdout=subprocess.PIPE,
-                                                stdin=subprocess.PIPE)  # <-- New!
+                                                stdin=subprocess.PIPE)
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 epoch, batch_idx * len(data), len(train_loader.dataset),
                 100. * batch_idx / len(train_loader), loss.item()))
@@ -94,20 +93,22 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync):
                 break
 
 
-def test(model, device, test_loader):
+def test(model, device, test_loader, gold_standard_loader, trigger_sync):
     model.eval()
     test_loss = 0
     with torch.no_grad():
-        for data in test_loader:
+        for data, gold_standard in zip(test_loader, gold_standard_loader):
             data = data.to(device)
+            gold_standard = data.to(device)
             output = model(data)
-            test_loss += F.mse_loss(output, data, reduction='sum').item()
+            test_loss += F.mse_loss(output, gold_standard, reduction='sum').item()
     
     test_loss /= len(test_loader.dataset) * 80 * 80  # Average loss per pixel
     print('\nTest set: Average loss: {:.4f}\n'.format(test_loss))
     wandb.log({"test_loss": test_loss})
     trigger_sync()
-    subprocess.Popen("sed -i 's|.*|/work/tc062/tc062/s2501147/autoencoder|g' {}/*.command".format(comm_dir), shell=True,
+    subprocess.Popen("sed -i 's|.*|/work/tc062/tc062/s2501147/autoencoder|g' {}/*.command".format(comm_dir),
+                                    shell=True,
                                     stdout=subprocess.PIPE,
                                     stdin=subprocess.PIPE)
     return test_loss
@@ -122,9 +123,9 @@ def main():
                         help='input batch size for testing (default: 1000)')
     parser.add_argument('--val-batch-size', type=int, default=32, metavar='N',
                         help='input batch size for validation (default: 32)')
-    parser.add_argument('--epochs', type=int, default=20, metavar='N',
+    parser.add_argument('--epochs', type=int, default=5, metavar='N',
                         help='number of epochs to train (default: 14)')
-    parser.add_argument('--lr', type=float, default=0.0005, metavar='LR',
+    parser.add_argument('--lr', type=float, default=0.001, metavar='LR',
                         help='learning rate (default: 0.001)')
     parser.add_argument('--gamma', type=float, default=0.7, metavar='M',
                         help='Learning rate step gamma (default: 0.7)')
@@ -138,7 +139,7 @@ def main():
                         help='random seed (default: 1)')
     parser.add_argument('--log-interval', type=int, default=10, metavar='N',
                         help='how many batches to wait before logging training status')
-    parser.add_argument('--save-model', action='store_true', default=False,
+    parser.add_argument('--save-model', action='store_true', default=True,
                         help='For Saving the current Model')
 
     args = parser.parse_args()
@@ -175,24 +176,38 @@ def main():
     train_loader = torch.utils.data.DataLoader(train_dataset, **train_kwargs)
     val_dataset = torch.utils.data.DataLoader(val_dataset, **val_kwargs)
     test_loader = torch.utils.data.DataLoader(test_dataset, **test_kwargs)
+
+    # will not work, need to import other dataset
+    gold_train_data = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/train"
+    gold_train_dataset = SpectrogramDataset(gold_train_data)
+    gold_train_loader = torch.utils.data.DataLoader(gold_train_dataset, **train_kwargs)
     
-    model = Autoencoder().to(device)
+    gold_test_data = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/test"
+    gold_test_dataset = SpectrogramDataset(gold_train_data)
+    gold_test_loader = torch.utils.data.DataLoader(gold_test_dataset, **test_kwargs)
+
+    gold_val_data = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/val"
+    gold_val_dataset = SpectrogramDataset(gold_val_data)
+    gold_val_loader = torch.utils.data.DataLoader(gold_val_dataset, **val_kwargs)
+
+
+    model = RAutoencoder().to(device)
 
     # wandb
-    
     wandb.init(config=args, dir="/work/tc062/tc062/s2501147/autoencoder", mode="offline")
     wandb.watch(model, log_freq=100)
-    trigger_sync = TriggerWandbSyncHook(communication_dir = comm_dir)  # <--- New!
+    trigger_sync = TriggerWandbSyncHook(communication_dir = comm_dir)
+
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
     scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
     for epoch in range(1, args.epochs + 1):
-        train_loss = train(args, model, device, train_loader, optimizer, epoch, trigger_sync)
-        test_loss = test(model, device, test_loader)
+        train_loss = train(args, model, device, train_loader, gold_train_loader, optimizer, epoch, trigger_sync)
+        test_loss = test(model, device, test_loader, gold_test_loader, trigger_sync)
         scheduler.step()
 
     if args.save_model:
-        torch.save(model.state_dict(), "spec_128_leakyReLu_nosigmoid_autoencoder.pt")
+        torch.save(model.state_dict(), "reconstructor_base.pt")
 
 
 

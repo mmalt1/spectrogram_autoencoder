@@ -10,7 +10,7 @@ from PIL import Image
 from torchvision import datasets, transforms
 from torchvision.transforms import ToTensor, ToPILImage
 import torch.nn.functional as F
-from autoencoder_spec import Autoencoder
+from reconstructor import RAutoencoder
 import numpy as np
 import os
 
@@ -33,7 +33,7 @@ def predict_image_output(model, image_tensor):
         output = model(image_tensor)
     return output
 
-def visualize_image(og_tensor_path, predicted_image_tensor, sr):
+def visualize_image(og_tensor_path, predicted_image_tensor):
 
     og_tensor = np.load(og_tensor_path)
     og_tensor = np.swapaxes(og_tensor, 0, 1)
@@ -55,7 +55,7 @@ def visualize_image(og_tensor_path, predicted_image_tensor, sr):
     axs[1].axis('off')
     
     plt.show()
-    plt.savefig('test_autoenc_nosig.png')
+    plt.savefig('reconstructed_base.png')
 
 print("working directory: ", os.getcwd())
 os.chdir("/work/tc062/tc062/s2501147/autoencoder")
@@ -65,14 +65,14 @@ device = torch.device("cpu")
 print("device: ", device)
 
 
-model = Autoencoder().to(device)
+model = RAutoencoder().to(device)
 print("loaded autoenc")
-model.load_state_dict(torch.load("spec_128_leakyReLu_nosigmoid_autoencoder.pt"))
+model.load_state_dict(torch.load("reconstructor_base.pt"))
 print("loaded model")
-img = load_and_preprocess_tensor("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/val/array_84_121123_000012_000007.wav_chunk_5.npy")
+img = load_and_preprocess_tensor("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/val_zeroed/array_84_121123_000008_000000.wav_chunk_2_zeroed.npy")
 print(img.size())
 
 predicted_image = predict_image_output(model, img)
 # print("predicted digit: ", predicted_digit)
 
-visualize_image("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/val/array_84_121123_000012_000007.wav_chunk_5.npy", predicted_image, 24000)
+visualize_image("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/val_zeroed/array_84_121123_000008_000000.wav_chunk_2_zeroed.npy", predicted_image)
