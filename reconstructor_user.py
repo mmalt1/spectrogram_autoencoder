@@ -11,6 +11,7 @@ from torchvision import datasets, transforms
 from torchvision.transforms import ToTensor, ToPILImage
 import torch.nn.functional as F
 from reconstructor import RAutoencoder
+from autoencoder_spec import Autoencoder
 import numpy as np
 import os
 
@@ -55,7 +56,7 @@ def visualize_image(og_tensor_path, predicted_image_tensor):
     axs[1].axis('off')
     
     plt.show()
-    plt.savefig('reconstructed_base.png')
+    plt.savefig('reconstructor_test_autoencoder.png')
 
 print("working directory: ", os.getcwd())
 os.chdir("/work/tc062/tc062/s2501147/autoencoder")
@@ -65,14 +66,16 @@ device = torch.device("cpu")
 print("device: ", device)
 
 
-model = RAutoencoder().to(device)
+model = Autoencoder().to(device)
+total_params = sum(p.numel() for p in model.parameters())
+print("total params: ", total_params)
 print("loaded autoenc")
-model.load_state_dict(torch.load("reconstructor_base.pt"))
+model.load_state_dict(torch.load("spec_128_leakyReLu_nosigmoid_autoencoder.pt"))
 print("loaded model")
-img = load_and_preprocess_tensor("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/val_zeroed/array_84_121123_000008_000000.wav_chunk_2_zeroed.npy")
+img = load_and_preprocess_tensor("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/train_zeroed/array_84_121123_000007_000001.wav_chunk_0_zeroed.npy")
 print(img.size())
 
 predicted_image = predict_image_output(model, img)
 # print("predicted digit: ", predicted_digit)
 
-visualize_image("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/val_zeroed/array_84_121123_000008_000000.wav_chunk_2_zeroed.npy", predicted_image)
+visualize_image("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/train_zeroed/array_84_121123_000007_000001.wav_chunk_0_zeroed.npy", predicted_image)

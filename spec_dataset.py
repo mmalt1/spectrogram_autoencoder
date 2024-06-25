@@ -27,8 +27,6 @@ class SpectrogramDataset(Dataset):
 
         if self.transform:
             spectrogram = self.transform(spectrogram)
-
-
         return spectrogram
         
 def load_datasets(base_dir):

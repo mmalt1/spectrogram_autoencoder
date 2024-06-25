@@ -28,15 +28,15 @@ class RAutoencoder(nn.Module):
             nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=1),  # output size: (64, 20, 20)
             nn.BatchNorm2d(64),
             nn.LeakyReLU(0.2),
-            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),  # output size: (128, 10, 10)
+            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1),  # output size: (128, 10, 10)
             nn.BatchNorm2d(128),
             nn.LeakyReLU(0.2),
-            # nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),  # output size: (256, 5, 5)
-            # nn.BatchNorm2d(256),
-            # nn.ReLU(True),
-            # nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),  # output size: (512, 5, 5)
-            # nn.BatchNorm2d(512),
-            # nn.ReLU(True),
+            nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),  # output size: (256, 5, 5)
+            nn.BatchNorm2d(256),
+            nn.ReLU(True),
+            nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),  # output size: (512, 5, 5)
+            nn.BatchNorm2d(512),
+            nn.ReLU(True),
             # nn.Conv2d(512, 1024, kernel_size=3, stride=1, padding=1),  # output size: (1024, 5, 5)
             # nn.BatchNorm2d(1024),
             # nn.ReLU(True)
@@ -47,13 +47,13 @@ class RAutoencoder(nn.Module):
             # nn.ConvTranspose2d(1024, 512, kernel_size=3, stride=1, padding=1),  # output size: (512, 5, 5)
             # nn.BatchNorm2d(512),
             # nn.ReLU(True),
-            # nn.ConvTranspose2d(512, 256, kernel_size=3, stride=1, padding=1),  # output size: (256, 5, 5)
-            # nn.BatchNorm2d(256),
-            # nn.ReLU(True),
-            # nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (128, 10, 10)
-            # nn.BatchNorm2d(128),
-            # nn.ReLU(True),
-            nn.ConvTranspose2d(128, 64, kernel_size=3, stride=1, padding=1, output_padding=0),  # output size: (64, 20, 20)
+            nn.ConvTranspose2d(512, 256, kernel_size=3, stride=1, padding=1),  # output size: (256, 5, 5)
+            nn.BatchNorm2d(256),
+            nn.ReLU(True),
+            nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (128, 10, 10)
+            nn.BatchNorm2d(128),
+            nn.ReLU(True),
+            nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (64, 20, 20)
             nn.BatchNorm2d(64),
             nn.LeakyReLU(True),
             nn.ConvTranspose2d(64, 32, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (32, 40, 40)
@@ -68,30 +68,59 @@ class RAutoencoder(nn.Module):
         x = self.decoder(x)
         return x
 
+# def train(args, model, device, train_loader, gold_standard_loader, optimizer, epoch, trigger_sync):
+#     model.train()
+#     distance = nn.MSELoss()
+#     for batch_idx, (data, gold_standard) in enumerate(zip(train_loader, gold_standard_loader)):
+#         data, gold_standard = Variable(data).to(device), Variable(gold_standard).to(device)
+#         output = model(data)
+#         print("data size: ", output.size())
+#         print("gold standard: ", gold_standard.size())
+#         loss = distance(output, gold_standard)
+#         optimizer.zero_grad()
+#         loss.backward()
+#         optimizer.step()
+        
+#         if batch_idx % args.log_interval == 0:
+#             wandb.log({"loss": loss})
+#             trigger_sync()
+#             subprocess.Popen("sed -i 's|.*|/work/tc062/tc062/s2501147/autoencoder|g' {}/*.command".format(comm_dir),
+#                                                 shell=True,
+#                                                 stdout=subprocess.PIPE,
+#                                                 stdin=subprocess.PIPE)
+#             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+#                 epoch, batch_idx * len(data), len(train_loader.dataset),
+#                 100. * batch_idx / len(train_loader), loss.item()))
+#             if args.dry_run:
+#                 break
+
 def train(args, model, device, train_loader, gold_standard_loader, optimizer, epoch, trigger_sync):
     model.train()
     distance = nn.MSELoss()
+    total_loss = 0
     for batch_idx, (data, gold_standard) in enumerate(zip(train_loader, gold_standard_loader)):
-        data, gold_standard = Variable(data).to(device), Variable(gold_standard).to(device)
+        data, gold_standard = data.to(device), gold_standard.to(device)
+        optimizer.zero_grad()
         output = model(data)
         loss = distance(output, gold_standard)
-        optimizer.zero_grad()
         loss.backward()
         optimizer.step()
+        total_loss += loss.item()
         
         if batch_idx % args.log_interval == 0:
-            wandb.log({"loss": loss})
+            print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                epoch, batch_idx * len(data), len(train_loader.dataset),
+                100. * batch_idx / len(train_loader), loss.item()))
+            wandb.log({"loss": loss.item()})
             trigger_sync()
             subprocess.Popen("sed -i 's|.*|/work/tc062/tc062/s2501147/autoencoder|g' {}/*.command".format(comm_dir),
                                                 shell=True,
                                                 stdout=subprocess.PIPE,
                                                 stdin=subprocess.PIPE)
-            print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                epoch, batch_idx * len(data), len(train_loader.dataset),
-                100. * batch_idx / len(train_loader), loss.item()))
-            if args.dry_run:
-                break
-
+    
+    avg_loss = total_loss / len(train_loader)
+    print('Train Epoch: {} Average loss: {:.4f}'.format(epoch, avg_loss))
+    wandb.log({"epoch_loss": avg_loss})
 
 def test(model, device, test_loader, gold_standard_loader, trigger_sync):
     model.eval()
@@ -133,7 +162,7 @@ def main():
                         help='disables CUDA training')
     parser.add_argument('--no-mps', action='store_true', default=False,
                         help='disables macOS GPU training')
-    parser.add_argument('--dry-run', action='store_true', default=False,
+    parser.add_argument('--dry-run', action='store_true', default=True,
                         help='quickly check a single pass')
     parser.add_argument('--seed', type=int, default=1, metavar='S',
                         help='random seed (default: 1)')
@@ -207,7 +236,7 @@ def main():
         scheduler.step()
 
     if args.save_model:
-        torch.save(model.state_dict(), "reconstructor_base.pt")
+        torch.save(model.state_dict(), "reconstructor_all_layers.pt")
 
 
 

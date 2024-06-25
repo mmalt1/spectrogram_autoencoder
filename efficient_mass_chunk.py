@@ -58,8 +58,8 @@ def chop_arrays(input_directory, output_directory, log_file, frames_per_chunk=80
             remaining_chunk = spectrogram[:, num_chunks * frames_per_chunk :]
             chunk_filename = f"{os.path.splitext(f)[0]}_chunk_{num_chunks}.npy"
             chunk_path = os.path.join(output_directory, chunk_filename)
-            np.save(chunk_path, remaining_chunk)
-            print(f"Saved remaining chunk of {f} with shape {remaining_chunk.shape} to {chunk_path}")
+            # np.save(chunk_path, remaining_chunk)
+            print(f"Did not save remaining chunk of {f} with shape {remaining_chunk.shape} to {chunk_path}")
         
         processed_files.append(f)
         counter += 1
@@ -72,8 +72,8 @@ def chop_arrays(input_directory, output_directory, log_file, frames_per_chunk=80
     save_processed_files(log_file, processed_files)
 
 # Example usage:
-input_directory = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_arrays"
-output_directory = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays"
-log_file = "/work/tc062/tc062/s2501147/autoencoder/processed_files_chunk_log.json"
+input_directory = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_train_arrays"
+output_directory = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_train_arrays"
+log_file = "/work/tc062/tc062/s2501147/autoencoder/processed_train_files_chunk_log.json"
 
 chop_arrays(input_directory, output_directory, log_file, frames_per_chunk=80, batch_size=10)
