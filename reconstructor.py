@@ -28,15 +28,15 @@ class RAutoencoder(nn.Module):
             nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=1),  # output size: (64, 20, 20)
             nn.BatchNorm2d(64),
             nn.LeakyReLU(0.2),
-            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1),  # output size: (128, 10, 10)
+            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),  # output size: (128, 10, 10)
             nn.BatchNorm2d(128),
             nn.LeakyReLU(0.2),
-            nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),  # output size: (256, 5, 5)
-            nn.BatchNorm2d(256),
-            nn.ReLU(True),
-            nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),  # output size: (512, 5, 5)
-            nn.BatchNorm2d(512),
-            nn.ReLU(True),
+            # nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),  # output size: (256, 5, 5)
+            # nn.BatchNorm2d(256),
+            # nn.ReLU(True),
+            # nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),  # output size: (512, 5, 5)
+            # nn.BatchNorm2d(512),
+            # nn.ReLU(True),
             # nn.Conv2d(512, 1024, kernel_size=3, stride=1, padding=1),  # output size: (1024, 5, 5)
             # nn.BatchNorm2d(1024),
             # nn.ReLU(True)
@@ -47,13 +47,13 @@ class RAutoencoder(nn.Module):
             # nn.ConvTranspose2d(1024, 512, kernel_size=3, stride=1, padding=1),  # output size: (512, 5, 5)
             # nn.BatchNorm2d(512),
             # nn.ReLU(True),
-            nn.ConvTranspose2d(512, 256, kernel_size=3, stride=1, padding=1),  # output size: (256, 5, 5)
-            nn.BatchNorm2d(256),
-            nn.ReLU(True),
-            nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (128, 10, 10)
-            nn.BatchNorm2d(128),
-            nn.ReLU(True),
-            nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (64, 20, 20)
+            # nn.ConvTranspose2d(512, 256, kernel_size=3, stride=1, padding=1),  # output size: (256, 5, 5)
+            # nn.BatchNorm2d(256),
+            # nn.ReLU(True),
+            # nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (128, 10, 10)
+            # nn.BatchNorm2d(128),
+            # nn.ReLU(True),
+            nn.ConvTranspose2d(128, 64, kernel_size=3, stride=1, padding=1, output_padding=0),  # output size: (64, 20, 20)
             nn.BatchNorm2d(64),
             nn.LeakyReLU(True),
             nn.ConvTranspose2d(64, 32, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (32, 40, 40)
@@ -100,6 +100,7 @@ def train(args, model, device, train_loader, gold_standard_loader, optimizer, ep
     total_loss = 0
     for batch_idx, (data, gold_standard) in enumerate(zip(train_loader, gold_standard_loader)):
         data, gold_standard = data.to(device), gold_standard.to(device)
+        # make directly 1 column zeroed out
         optimizer.zero_grad()
         output = model(data)
         loss = distance(output, gold_standard)
@@ -152,9 +153,9 @@ def main():
                         help='input batch size for testing (default: 1000)')
     parser.add_argument('--val-batch-size', type=int, default=32, metavar='N',
                         help='input batch size for validation (default: 32)')
-    parser.add_argument('--epochs', type=int, default=5, metavar='N',
+    parser.add_argument('--epochs', type=int, default=10, metavar='N',
                         help='number of epochs to train (default: 14)')
-    parser.add_argument('--lr', type=float, default=0.001, metavar='LR',
+    parser.add_argument('--lr', type=float, default=0.005, metavar='LR',
                         help='learning rate (default: 0.001)')
     parser.add_argument('--gamma', type=float, default=0.7, metavar='M',
                         help='Learning rate step gamma (default: 0.7)')
@@ -236,7 +237,7 @@ def main():
         scheduler.step()
 
     if args.save_model:
-        torch.save(model.state_dict(), "reconstructor_all_layers.pt")
+        torch.save(model.state_dict(), "reconstructor_base_norm.pt")
 
 
 
