@@ -33,11 +33,11 @@ class ZeroedSpectrogramDataset(Dataset):
 def load_datasets(base_dir):
     transform = transforms.Compose([transforms.Normalize(0, 0.5)]) 
     # print("In load datasets")
-    train_dataset = ZeroedSpectrogramDataset(array_dir=os.path.join(base_dir, "train_zeroed"), transform=None)
+    train_dataset = ZeroedSpectrogramDataset(array_dir=os.path.join(base_dir, "train_zeroed"), transform=transform)
     # print("train dataset loaded")
-    val_dataset = ZeroedSpectrogramDataset(array_dir=os.path.join(base_dir, "val_zeroed"), transform=None)
+    val_dataset = ZeroedSpectrogramDataset(array_dir=os.path.join(base_dir, "val_zeroed"), transform=transform)
     # print("val dataset loaded")
-    test_dataset = ZeroedSpectrogramDataset(array_dir=os.path.join(base_dir, "test_zeroed"), transform=None)
+    test_dataset = ZeroedSpectrogramDataset(array_dir=os.path.join(base_dir, "test_zeroed"), transform=transform)
     # print("test dataset loaded")
     
     return train_dataset, val_dataset, test_dataset

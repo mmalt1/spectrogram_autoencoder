@@ -5,8 +5,10 @@
 *.pt
 *.command
 *.out
+*.png
 
 # Ignore all files in the build/ directory
+test_zeroed_tensors/
 wandb/
 libritts_data/
 data/

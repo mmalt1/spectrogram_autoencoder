@@ -32,11 +32,11 @@ class SpectrogramDataset(Dataset):
 def load_datasets(base_dir):
     transform = transforms.Compose([transforms.Normalize(0, 0.5)]) 
     # print("In load datasets")
-    train_dataset = SpectrogramDataset(array_dir=os.path.join(base_dir, "train"), transform=None)
+    train_dataset = SpectrogramDataset(array_dir=os.path.join(base_dir, "train"), transform=transform)
     # print("train dataset loaded")
-    val_dataset = SpectrogramDataset(array_dir=os.path.join(base_dir, "val"), transform=None)
+    val_dataset = SpectrogramDataset(array_dir=os.path.join(base_dir, "val"), transform=transform)
     # print("val dataset loaded")
-    test_dataset = SpectrogramDataset(array_dir=os.path.join(base_dir, "test"), transform=None)
+    test_dataset = SpectrogramDataset(array_dir=os.path.join(base_dir, "test"), transform=transform)
     # print("test dataset loaded")
     
     return train_dataset, val_dataset, test_dataset

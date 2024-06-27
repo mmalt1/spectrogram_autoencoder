@@ -8,7 +8,6 @@ import subprocess
 import random
 import numpy as np
 from spec_dataset import SpectrogramDataset, create_dataloaders, load_datasets
-# from recon_dataset import ZeroedSpectrogramDataset, create_dataloaders, load_datasets
 from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
 from torch.autograd import Variable
@@ -17,52 +16,20 @@ from wandb_osh.hooks import TriggerWandbSyncHook
 
 comm_dir = "/work/tc062/tc062/s2501147/autoencoder/.wandb_osh_command_dir"
 
-class RAutoencoder(nn.Module):
-    def __init__(self):
+class LSTMAutoencoder(nn.Module):
+    def __init__(self, input_size, embedding_dim, lstm_units, hidden_dim, num_classes, lstms_layers, 
+                        bidirectional, droupout, pad_index, batch_size, cnn):
 
-        super(RAutoencoder, self).__init__()
+        super(LSTMAutoencoder, self).__init__()
 
         # Encoder
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 128, kernel_size=3, stride=4, padding=1),  # output size: (32, 40, 40)
-            nn.BatchNorm2d(128),
-            nn.LeakyReLU(0.2),
-            nn.Conv2d(128, 512, kernel_size=3, stride=4, padding=2),  # output size: (64, 20, 20)
-            nn.BatchNorm2d(512),
-            nn.LeakyReLU(0.2),
-            nn.Conv2d(512, 1024, kernel_size=3, stride=1, padding=1),  # output size: (128, 10, 10)
-            nn.BatchNorm2d(1024),
-            nn.LeakyReLU(0.2),
-            # nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),  # output size: (256, 5, 5)
-            # nn.BatchNorm2d(256),
-            # nn.ReLU(True),
-            # nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),  # output size: (512, 5, 5)
-            # nn.BatchNorm2d(512),
-            # nn.ReLU(True),
-            # nn.Conv2d(512, 1024, kernel_size=3, stride=1, padding=1),  # output size: (1024, 5, 5)
-            # nn.BatchNorm2d(1024),
-            # nn.ReLU(True)
+           # TODO try 2 biLSTM layers + 1 conv + 1 linear
         )
 
         # Decoder
         self.decoder = nn.Sequential(
-            # nn.ConvTranspose2d(1024, 512, kernel_size=3, stride=1, padding=1),  # output size: (512, 5, 5)
-            # nn.BatchNorm2d(512),
-            # nn.ReLU(True),
-            # nn.ConvTranspose2d(512, 256, kernel_size=3, stride=1, padding=1),  # output size: (256, 5, 5)
-            # nn.BatchNorm2d(256),
-            # nn.ReLU(True),
-            # nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (128, 10, 10)
-            # nn.BatchNorm2d(128),
-            # nn.ReLU(True),
-            nn.ConvTranspose2d(1024, 512, kernel_size=3, stride=1, padding=1, output_padding=0),  # output size: (64, 20, 20)
-            nn.BatchNorm2d(512),
-            nn.LeakyReLU(True),
-            nn.ConvTranspose2d(512, 128, kernel_size=3, stride=4, padding=2, output_padding=2),  # output size: (32, 40, 40)
-            nn.BatchNorm2d(128),
-            nn.LeakyReLU(True),
-            nn.ConvTranspose2d(128, 1, kernel_size=3, stride=4, padding=2, output_padding=1),  # output size: (1, 80, 80)
-            # nn.Sigmoid()  # To output values between 0 and 1
+            # TODO try 2 biLSTM layers + 1 conv + 1 linear
         )
 
     def forward(self, x):
@@ -87,10 +54,10 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, sav
         for column in columns:
             zeroed_tensor[:,:, :, column]=0
         # save tensor and print tensor; needs to be on cpu
-        # cpu_z_tensor = zeroed_tensor.to('cpu')
-        # numpy_zero_tensor = cpu_z_tensor.numpy()
-        # np.save(f"{save_dir}/zeroed_numpy_tensor_{counter}.npy", numpy_zero_tensor)
-        # counter +=1 
+        cpu_z_tensor = zeroed_tensor.to('cpu')
+        numpy_zero_tensor = cpu_z_tensor.numpy()
+        np.save(f"{save_dir}/zeroed_numpy_tensor_{counter}.npy", numpy_zero_tensor)
+        counter +=1 
         # print("size of zeroed_tensor: ", zeroed_tensor.size())
         
         optimizer.zero_grad()

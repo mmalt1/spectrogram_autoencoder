@@ -69,10 +69,10 @@ model = Autoencoder().to(device)
 print("loaded autoenc")
 model.load_state_dict(torch.load("spec_128_leakyReLu_nosigmoid_autoencoder.pt"))
 print("loaded model")
-img = load_and_preprocess_tensor("autoencoder/libritts_data/saved_chopped_arrays/test_zeroed/array_84_121123_000008_000003.wav_chunk_6_zeroed.npy")
+img = load_and_preprocess_tensor("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/test/array_251_136532_000004_000001.wav_chunk_12.npy")
 print(img.size())
 
 predicted_image = predict_image_output(model, img)
 # print("predicted digit: ", predicted_digit)
 
-visualize_image("autoencoder/libritts_data/saved_chopped_arrays/test_zeroed/array_84_121123_000008_000003.wav_chunk_6_zeroed.npy", predicted_image, 24000)
+visualize_image("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/test/array_251_136532_000004_000001.wav_chunk_12.npy", predicted_image, 24000)
