@@ -27,6 +27,7 @@ class LSTMAutoencoder(nn.Module):
            # TODO try 2 biLSTM layers + 1 conv + 1 linear
         )
 
+
         # Decoder
         self.decoder = nn.Sequential(
             # TODO try 2 biLSTM layers + 1 conv + 1 linear
