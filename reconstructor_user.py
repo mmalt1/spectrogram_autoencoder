@@ -66,7 +66,7 @@ def visualize_image(tensor_masked, predicted_image_tensor):
     axs[1].invert_yaxis()
     
     plt.show()
-    plt.savefig('reconstructor_1024_3layers_4paddings.png')
+    plt.savefig('reconstructor_1line.png')
 
 print("working directory: ", os.getcwd())
 os.chdir("/work/tc062/tc062/s2501147/autoencoder")
@@ -80,9 +80,9 @@ model = RAutoencoder().to(device)
 total_params = sum(p.numel() for p in model.parameters())
 print("total params: ", total_params)
 print("loaded autoenc")
-model.load_state_dict(torch.load("reconstructor_1024_3layers_4paddings.pt"))
+model.load_state_dict(torch.load("reconstructor_1line_20epochs.pt"))
 print("loaded model")
-img = load_and_preprocess_tensor("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/val/array_174_168635_000042_000002.wav_chunk_1.npy")
+img = load_and_preprocess_tensor("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/test/array_1462_170145_000012_000007.wav_chunk_1.npy")
 print(img.size())
 
 predicted_image = predict_image_output(model, img)

@@ -16,26 +16,70 @@ from wandb_osh.hooks import TriggerWandbSyncHook
 
 comm_dir = "/work/tc062/tc062/s2501147/autoencoder/.wandb_osh_command_dir"
 
-class LSTMAutoencoder(nn.Module):
-    def __init__(self, input_size, embedding_dim, lstm_units, hidden_dim, num_classes, lstms_layers, 
-                        bidirectional, droupout, pad_index, batch_size, cnn):
+class BiLSTMAutoencoder(nn.Module):
+    def __init__(self, cnn_out=16, hidden_size=128, num_layers=2):
 
-        super(LSTMAutoencoder, self).__init__()
+        super(BiLSTMAutoencoder, self).__init__()
 
         # Encoder
-        self.encoder = nn.Sequential(
-           # TODO try 2 biLSTM layers + 1 conv + 1 linear
+        # TODO try 2 biLSTM layers + 1 linear
+        # TODO add conv layer 
+        
+        # Encoder
+        self.encoder_conv = nn.Sequential(
+            nn.Conv2d(1, cnn_out, kernel_size=(3, 3), stride=(1, 2), padding=(1, 1)),
+            nn.ReLU(),
+            nn.Conv2d(cnn_out, cnn_out*2, kernel_size=(3, 3), stride=(1, 2), padding=(1, 1)),
+            nn.ReLU(),
         )
-
-
+        
+        self.encoder_bilstm = nn.LSTM(
+            input_size=(cnn_out*2) * 20,  # 32 channels * 20 frequency bins
+            hidden_size=hidden_size,
+            num_layers=num_layers,
+            batch_first=True,
+            bidirectional=True
+        )
+        
         # Decoder
-        self.decoder = nn.Sequential(
-            # TODO try 2 biLSTM layers + 1 conv + 1 linear
+        self.decoder_bilstm = nn.LSTM(
+            input_size=hidden_size * 2,  # *2 because of bidirectional
+            hidden_size=(cnn_out*2) * 20,  # 32 channels * 20 frequency bins
+            num_layers=num_layers,
+            batch_first=True,
+            bidirectional=True
+        )
+        
+        self.decoder_conv = nn.Sequential(
+            nn.ConvTranspose2d(cnn_out*4, cnn_out, kernel_size=(3, 3), stride=(1, 2), padding=(1, 1), output_padding=(0, 1)),
+            nn.ReLU(),
+            nn.ConvTranspose2d(cnn_out, 1, kernel_size=(3, 3), stride=(1, 2), padding=(1, 1), output_padding=(0, 1)),
+            # nn.Sigmoid()
         )
 
-    def forward(self, x):
-        x = self.encoder(x)
-        x = self.decoder(x)
+
+    def forward(self, x, cnn_out=16):
+        # Encoder
+        print('size of x: ', x.size())
+        x = self.encoder_conv(x)  # Output: [batch_size, 32, 80, 20]
+        print('size of x after enc conv: ', x.size())
+        x = x.permute(0, 2, 1, 3)  # Rearrange to [batch_size, 80, 32, 20]
+        print('size of x after permute: ', x.size())
+        x = x.reshape(x.size(0), x.size(1), -1)  # Reshape to [batch_size, 80, 32*20]
+        print('size of x after reshape: ', x.size())
+        x, _ = self.encoder_bilstm(x)
+        print('size of x after enc bilstm: ', x.size())
+        
+        # Decoder
+        x, _ = self.decoder_bilstm(x)
+        print('size of x after dec bilstm: ', x.size())
+        x = x.reshape(x.size(0), x.size(1), cnn_out*4, 20)  # Reshape to [batch_size, 80, 32, 20]
+        print('size of x after view: ', x.size())
+        x = x.permute(0, 2, 1, 3)  # Rearrange to [batch_size, 32, 80, 20]
+        print('size of x after permute: ', x.size())
+        x = self.decoder_conv(x)
+        print('size of x after dec conv: ', x.size())
+        
         return x
 
 
@@ -55,9 +99,9 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, sav
         for column in columns:
             zeroed_tensor[:,:, :, column]=0
         # save tensor and print tensor; needs to be on cpu
-        cpu_z_tensor = zeroed_tensor.to('cpu')
-        numpy_zero_tensor = cpu_z_tensor.numpy()
-        np.save(f"{save_dir}/zeroed_numpy_tensor_{counter}.npy", numpy_zero_tensor)
+        # cpu_z_tensor = zeroed_tensor.to('cpu')
+        # numpy_zero_tensor = cpu_z_tensor.numpy()
+        # np.save(f"{save_dir}/zeroed_numpy_tensor_{counter}.npy", numpy_zero_tensor)
         counter +=1 
         # print("size of zeroed_tensor: ", zeroed_tensor.size())
         
@@ -169,26 +213,14 @@ def main():
     base_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays"
     
     train_dataset, val_dataset, test_dataset = load_datasets(base_dir)
-    # train_loader, val_loader, test_loader = create_dataloaders(train_dataset, val_dataset, test_dataset, batch_size=64)
     
     train_loader = torch.utils.data.DataLoader(train_dataset, **train_kwargs)
     val_dataset = torch.utils.data.DataLoader(val_dataset, **val_kwargs)
     test_loader = torch.utils.data.DataLoader(test_dataset, **test_kwargs)
 
-    # gold_train_data = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/train"
-    # gold_train_dataset = SpectrogramDataset(gold_train_data)
-    # gold_train_loader = torch.utils.data.DataLoader(gold_train_dataset, **train_kwargs)
-    
-    # gold_test_data = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/test"
-    # gold_test_dataset = SpectrogramDataset(gold_train_data)
-    # gold_test_loader = torch.utils.data.DataLoader(gold_test_dataset, **test_kwargs)
-
-    # gold_val_data = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/val"
-    # gold_val_dataset = SpectrogramDataset(gold_val_data)
-    # gold_val_loader = torch.utils.data.DataLoader(gold_val_dataset, **val_kwargs)
 
 
-    model = RAutoencoder().to(device)
+    model = BiLSTMAutoencoder().to(device)
 
     test_dir = "/work/tc062/tc062/s2501147/autoencoder/test_zeroed_tensors"
     mask = 1
@@ -207,7 +239,7 @@ def main():
         scheduler.step()
 
     if args.save_model:
-        torch.save(model.state_dict(), "reconstructor_1024_3layers_4paddings.pt")
+        torch.save(model.state_dict(), "lstm_restorator.pt")
 
 
 

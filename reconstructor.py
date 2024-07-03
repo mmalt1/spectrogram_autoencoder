@@ -17,59 +17,148 @@ from wandb_osh.hooks import TriggerWandbSyncHook
 
 comm_dir = "/work/tc062/tc062/s2501147/autoencoder/.wandb_osh_command_dir"
 
+# class RAutoencoder(nn.Module):
+#     def __init__(self):
+
+#         super(RAutoencoder, self).__init__()
+
+#         # Encoder
+#         self.encoder = nn.Sequential(
+#             nn.Conv2d(1, 64, kernel_size=3, stride=2, padding=1),  # output size: (32, 40, 40)
+#             nn.BatchNorm2d(64),
+#             nn.LeakyReLU(0.2),
+#             nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1),  # output size: (64, 20, 20)
+#             nn.BatchNorm2d(128),
+#             nn.LeakyReLU(0.2),
+#             nn.Conv2d(128, 512, kernel_size=3, stride=1, padding=1),  # output size: (128, 10, 10)
+#             nn.BatchNorm2d(512),
+#             nn.LeakyReLU(0.2),
+#         )
+
+#         # Decoder
+#         self.decoder = nn.Sequential(
+#             nn.Upsample(scale_factor = 4, mode='bilinear', align_corners=True),                  # try with size 4 and change stride next
+#             nn.ConvTranspose2d(512, 128, kernel_size=3, stride=1, padding=1, output_padding=0),  # output size: (64, 20, 20)
+#             nn.BatchNorm2d(128),
+#             nn.LeakyReLU(True),
+#             nn.ConvTranspose2d(128, 64, kernel_size=3, stride=1, padding=1, output_padding=0),  # output size: (32, 40, 40)
+#             nn.BatchNorm2d(64),
+#             nn.LeakyReLU(True),
+#             nn.ConvTranspose2d(64, 1, kernel_size=3, stride=1, padding=1, output_padding=0),  # output size: (1, 80, 80)
+#         )
+
+#     def forward(self, x):
+#         x = self.encoder(x)
+#         x = self.decoder(x)
+#         return x
+
+# class RAutoencoder(nn.Module):
+#     def __init__(self):
+#         super(RAutoencoder, self).__init__()
+
+#         # Encoder
+#         self.enc1 = nn.Sequential(
+#             nn.Conv2d(1, 64, kernel_size=3, stride=2, padding=1),
+#             nn.BatchNorm2d(64),
+#             nn.LeakyReLU(0.2)
+#         )
+#         self.enc2 = nn.Sequential(
+#             nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1),
+#             nn.BatchNorm2d(128),
+#             nn.LeakyReLU(0.2)
+#         )
+#         self.enc3 = nn.Sequential(
+#             nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
+#             nn.BatchNorm2d(256),
+#             nn.LeakyReLU(0.2)
+#         )
+
+#         # Decoder
+#         self.dec3 = nn.Sequential(
+#             nn.ConvTranspose2d(256, 128, kernel_size=3, stride=1, padding=1),
+#             nn.BatchNorm2d(128),
+#             nn.LeakyReLU(0.2)
+#         )
+#         self.dec2 = nn.Sequential(
+#             nn.ConvTranspose2d(256, 64, kernel_size=3, stride=2, padding=1, output_padding=1),
+#             nn.BatchNorm2d(64),
+#             nn.LeakyReLU(0.2)
+#         )
+#         self.dec1 = nn.Sequential(
+#             nn.ConvTranspose2d(128, 1, kernel_size=3, stride=2, padding=1, output_padding=1),
+#             # nn.Tanh()
+#         )
+
+#     def forward(self, x):
+#         # Encoder
+#         e1 = self.enc1(x)
+#         e2 = self.enc2(e1)
+#         e3 = self.enc3(e2)
+
+#         # Decoder with skip connections
+#         d3 = self.dec3(e3)
+#         d2 = self.dec2(torch.cat([d3, e2], 1))
+#         d1 = self.dec1(torch.cat([d2, e1], 1))
+
+#         return d1
+
+
 class RAutoencoder(nn.Module):
     def __init__(self):
-
         super(RAutoencoder, self).__init__()
 
         # Encoder
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 128, kernel_size=3, stride=4, padding=1),  # output size: (32, 40, 40)
+            nn.Conv2d(1, 64, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(64),
+            nn.LeakyReLU(0.2),
+            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(128),
             nn.LeakyReLU(0.2),
-            nn.Conv2d(128, 512, kernel_size=3, stride=4, padding=2),  # output size: (64, 20, 20)
+            nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(256),
+            nn.LeakyReLU(0.2),
+            nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(512),
-            nn.LeakyReLU(0.2),
-            nn.Conv2d(512, 1024, kernel_size=3, stride=1, padding=1),  # output size: (128, 10, 10)
-            nn.BatchNorm2d(1024),
-            nn.LeakyReLU(0.2),
-            # nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),  # output size: (256, 5, 5)
-            # nn.BatchNorm2d(256),
-            # nn.ReLU(True),
-            # nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),  # output size: (512, 5, 5)
-            # nn.BatchNorm2d(512),
-            # nn.ReLU(True),
-            # nn.Conv2d(512, 1024, kernel_size=3, stride=1, padding=1),  # output size: (1024, 5, 5)
-            # nn.BatchNorm2d(1024),
-            # nn.ReLU(True)
+            nn.LeakyReLU(0.2)
         )
 
         # Decoder
         self.decoder = nn.Sequential(
-            # nn.ConvTranspose2d(1024, 512, kernel_size=3, stride=1, padding=1),  # output size: (512, 5, 5)
-            # nn.BatchNorm2d(512),
-            # nn.ReLU(True),
-            # nn.ConvTranspose2d(512, 256, kernel_size=3, stride=1, padding=1),  # output size: (256, 5, 5)
-            # nn.BatchNorm2d(256),
-            # nn.ReLU(True),
-            # nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (128, 10, 10)
-            # nn.BatchNorm2d(128),
-            # nn.ReLU(True),
-            nn.ConvTranspose2d(1024, 512, kernel_size=3, stride=1, padding=1, output_padding=0),  # output size: (64, 20, 20)
-            nn.BatchNorm2d(512),
-            nn.LeakyReLU(True),
-            nn.ConvTranspose2d(512, 128, kernel_size=3, stride=4, padding=2, output_padding=2),  # output size: (32, 40, 40)
+            nn.ConvTranspose2d(512, 256, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(256),
+            nn.LeakyReLU(0.2),
+            nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1),
             nn.BatchNorm2d(128),
-            nn.LeakyReLU(True),
-            nn.ConvTranspose2d(128, 1, kernel_size=3, stride=4, padding=2, output_padding=1),  # output size: (1, 80, 80)
-            # nn.Sigmoid()  # To output values between 0 and 1
+            nn.LeakyReLU(0.2),
+            nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=1, output_padding=1),
+            nn.BatchNorm2d(64),
+            nn.LeakyReLU(0.2),
+            nn.ConvTranspose2d(64, 1, kernel_size=3, stride=1, padding=1)
         )
 
-    def forward(self, x):
-        x = self.encoder(x)
-        x = self.decoder(x)
-        return x
+        # Custom scaling layer
+        self.scaling = nn.Parameter(torch.FloatTensor([1.0]))
+        self.shifting = nn.Parameter(torch.FloatTensor([0.0]))
 
+    def forward(self, x):
+        encoded = self.encoder(x)
+        decoded = self.decoder(encoded)
+        scaled = decoded * self.scaling + self.shifting
+        return scaled
+
+# Custom loss function
+def custom_loss(output, target):
+    # L1 loss for overall structure
+    l1_loss = nn.L1Loss()(output, target)
+    
+    # MSE loss for fine details
+    mse_loss = nn.MSELoss()(output, target)
+    
+    # Combine losses
+    total_loss = l1_loss + 0.1 * mse_loss
+    
+    return total_loss
 
 def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, save_dir, nbr_columns):
     model.train()
@@ -98,7 +187,7 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, sav
         # print("size of output: ", output.size())
         # print("size of data: ", data.size())
         
-        loss = distance(output, data)
+        loss = custom_loss(output, data)
         loss.backward()
         optimizer.step()
         total_loss += loss.item()
@@ -155,7 +244,7 @@ def main():
                         help='input batch size for validation (default: 32)')
     parser.add_argument('--epochs', type=int, default=10, metavar='N',
                         help='number of epochs to train (default: 14)')
-    parser.add_argument('--lr', type=float, default=0.005, metavar='LR',
+    parser.add_argument('--lr', type=float, default=0.00005, metavar='LR',
                         help='learning rate (default: 0.001)')
     parser.add_argument('--gamma', type=float, default=0.7, metavar='M',
                         help='Learning rate step gamma (default: 0.7)')
@@ -239,7 +328,7 @@ def main():
         scheduler.step()
 
     if args.save_model:
-        torch.save(model.state_dict(), "reconstructor_1024_3layers_4paddings.pt")
+        torch.save(model.state_dict(), "reconstructor_1line_lowlr.pt")
 
 
 
