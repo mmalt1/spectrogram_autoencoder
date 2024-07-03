@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=recon1
+#SBATCH --job-name=recon130000
 #SBATCH --time=02:00:00
 #SBATCH --partition=gpu
 #SBATCH --qos=gpu
@@ -13,4 +13,4 @@ module load pytorch/1.13.1-gpu
 
 source /work/tc062/tc062/s2501147/venv/mgpu_env/bin/activate
 
-srun python reconstructor.py --epochs 50
+srun python reconstructor.py --epochs 10
