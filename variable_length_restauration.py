@@ -8,7 +8,6 @@ import subprocess
 import random
 import numpy as np
 from spec_dataset import SpectrogramDataset, create_dataloaders, load_datasets
-# from recon_dataset import ZeroedSpectrogramDataset, create_dataloaders, load_datasets
 from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
 from torch.autograd import Variable
@@ -17,17 +16,80 @@ from wandb_osh.hooks import TriggerWandbSyncHook
 
 comm_dir = "/work/tc062/tc062/s2501147/autoencoder/.wandb_osh_command_dir"
 
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+# class RAutoencoder(nn.Module):
+#     def __init__(self, freq_dim=80, latent_dim=512):
+#         super(RAutoencoder, self).__init__()
+#         self.freq_dim = freq_dim
+#         self.latent_dim = latent_dim
 
-class RAutoencoder(nn.Module):
+#         # encoder
+#         self.encoder = nn.Sequential(
+#             # stride of (1,2) bc only modifies time dimension
+#             nn.Conv2d(1, 64, kernel_size=3, stride=(1,2), padding=1),
+#             nn.BatchNorm2d(64),
+#             nn.LeakyReLU(0.2),
+#             nn.Conv2d(64, 128, kernel_size=3, stride=(1,2), padding=1),
+#             nn.BatchNorm2d(128),
+#             nn.LeakyReLU(0.2),
+#             nn.Conv2d(128, 256, kernel_size=3, stride=(1,2), padding=1),
+#             nn.BatchNorm2d(256),
+#             nn.LeakyReLU(0.2),
+#             nn.Conv2d(256, 512, kernel_size=3, stride=(1,2), padding=1),
+#             nn.BatchNorm2d(512),
+#             nn.LeakyReLU(0.2),
+#         )
+#         self.adaptive_pool = nn.AdaptiveAvgPool2d((freq_dim // 16, 1))  # target size of [5, 1]
+
+#         # fully connected layers for fixed freq dim
+#         self.fc_encode = nn.Linear(512 * (freq_dim // 16), latent_dim)
+#         self.fc_decode = nn.Linear(latent_dim, 512 * (freq_dim // 16))
+
+#         # decoder
+#         self.decoder = nn.Sequential(
+#             nn.ConvTranspose2d(512, 256, kernel_size=3, stride=(1,2), padding=1),
+#             nn.BatchNorm2d(256),
+#             nn.LeakyReLU(0.2),
+#             nn.ConvTranspose2d(256, 128, kernel_size=3, stride=(1,2), padding=1),
+#             nn.BatchNorm2d(128),
+#             nn.LeakyReLU(0.2),
+#             nn.ConvTranspose2d(128, 64, kernel_size=3, stride=(1,2), padding=1),
+#             nn.BatchNorm2d(64),
+#             nn.LeakyReLU(0.2),
+#             nn.ConvTranspose2d(64, 1, kernel_size=3, stride=(1,2), padding=1)
+#         )
+
+#         # Custom scaling layer
+#         self.scaling = nn.Parameter(torch.FloatTensor([1.0]))
+#         self.shifting = nn.Parameter(torch.FloatTensor([0.0]))
+
+#     def forward(self, x):
+#         # store og dims
+#         batch_size, _, _, time_dim = x.shape
+
+#         # encoder
+#         encoded = self.encoder(x)
+#         encoded = self.adaptive_pool(encoded)
+#         encoded = encoded.view(batch_size, -1)
+#         latent = self.fc_encode(encoded)
+
+#         # decoder
+#         decoded = self.fc_decode(latent)
+#         decoded = decoded.view(batch_size, 512, self.freq_dim // 16, 1)
+        
+#         for layer in self.decoder:
+#             decoded = layer(decoded)
+
+#         # Resize the output to match the input dimensions
+#         decoded = F.interpolate(decoded, size=(self.freq_dim, time_dim), mode='bilinear', align_corners=False)
+
+#         scaled = decoded * self.scaling + self.shifting
+#         return scaled
+
+class VariableLengthRAutoencoder(nn.Module):
     def __init__(self, latent_dim=512):
-        super(RAutoencoder, self).__init__()
+        super(VariableLengthRAutoencoder, self).__init__()
 
-        self.latent_dim = latent_dim
-
-        # Encoder
+        # Encoder (mostly unchanged)
         self.encoder = nn.Sequential(
             nn.Conv2d(1, 64, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(64),
@@ -38,25 +100,21 @@ class RAutoencoder(nn.Module):
             nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(256),
             nn.LeakyReLU(0.2),
-            nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(512),
+            nn.Conv2d(256, latent_dim, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(latent_dim),
             nn.LeakyReLU(0.2),
-            nn.AdaptiveAvgPool2d((1, 1))
+            nn.AdaptiveAvgPool2d((1, 1))  # Global average pooling
         )
 
-        self.fc_encode = nn.Linear(512, latent_dim)
-
-        # Decoder
-        self.fc_decode = nn.Linear(latent_dim, 512)
-
+        # Decoder (modified for variable length)
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(512, 256, kernel_size=3, stride=1, padding=1),
+            nn.ConvTranspose2d(latent_dim, 256, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(256),
             nn.LeakyReLU(0.2),
-            nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1),
+            nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1),
             nn.BatchNorm2d(128),
             nn.LeakyReLU(0.2),
-            nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=1),
+            nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=1, output_padding=1),
             nn.BatchNorm2d(64),
             nn.LeakyReLU(0.2),
             nn.ConvTranspose2d(64, 1, kernel_size=3, stride=1, padding=1)
@@ -67,34 +125,23 @@ class RAutoencoder(nn.Module):
         self.shifting = nn.Parameter(torch.FloatTensor([0.0]))
 
     def forward(self, x):
-        # store og dims
-        batch_size, _, height, width = x.shape
-
-        # encoder
-        encoded = self.encoder(x)
-        encoded = encoded.view(batch_size, -1)
-        latent = self.fc_encode(encoded)
-
-        # decoder
-        decoded = self.fc_decode(latent)
-        decoded = decoded.view(batch_size, 512, 1, 1)
+        # Get the og time dimension
+        original_time = x.size(3)
         
-        for i, layer in enumerate(self.decoder):
-            if isinstance(layer, nn.ConvTranspose2d):
-                output_size = None
-                if i == len(self.decoder) - 1:  # for the last layer
-                    output_size = (height, width)
-                decoded = F.conv_transpose2d(decoded, layer.weight, layer.bias, 
-                                             layer.stride, layer.padding, 
-                                             output_padding=layer.output_padding,
-                                             groups=layer.groups, 
-                                             dilation=layer.dilation,
-                                             output_size=output_size)
-            else:
-                decoded = layer(decoded)
-
+        # Encode
+        encoded = self.encoder(x).squeeze(-1).squeeze(-1)
+        
+        # Decode (with dynamic reshaping)
+        decoded = self.decoder(encoded.view(encoded.size(0), -1, 1, 1))
+        
+        # Resize to match original time dimension
+        decoded = F.interpolate(decoded, size=(x.size(2), original_time), mode='bilinear', align_corners=False)
+        
+        # Apply scaling and shifting
         scaled = decoded * self.scaling + self.shifting
         return scaled
+
+
 
 def custom_loss(output, target):
     # L1 loss for overall structure
@@ -107,32 +154,21 @@ def custom_loss(output, target):
 
 def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr_columns):
     model.train()
-    distance = nn.MSELoss()
     total_loss = 0
-    counter = 0
     for batch_idx, data in enumerate(train_loader):
         data = data.to(device)
+        batch_size, _, height, width = data.shape
         
-        # make directly 1 column zeroed out for this batch 
-        columns = random.sample(range(0, 79), nbr_columns)
-        # print("column: ", column)
+        # Zero out random columns
         zeroed_tensor = torch.clone(data)
-        # print("size of zeroed_tensor: ", zeroed_tensor.size())
+        columns = random.sample(range(width), nbr_columns)
         for column in columns:
-            zeroed_tensor[:,:, :, column]=0
-        # save tensor and print tensor; needs to be on cpu
-        # cpu_z_tensor = zeroed_tensor.to('cpu')
-        # numpy_zero_tensor = cpu_z_tensor.numpy()
-        # np.save(f"{save_dir}/zeroed_numpy_tensor_{counter}.npy", numpy_zero_tensor)
-        # counter +=1 
-        # print("size of zeroed_tensor: ", zeroed_tensor.size())
+            zeroed_tensor[:, :, :, column] = 0
         
         optimizer.zero_grad()
         output = model(zeroed_tensor)
-        # print("size of output: ", output.size())
-        # print("size of data: ", data.size())
         
-        loss = custom_loss(output, data)
+        loss = custom_loss(output, data)  # custom loss, but could use MSE
         loss.backward()
         optimizer.step()
         total_loss += loss.item()
@@ -144,13 +180,14 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
             wandb.log({"loss": loss.item()})
             trigger_sync()
             subprocess.Popen("sed -i 's|.*|/work/tc062/tc062/s2501147/autoencoder|g' {}/*.command".format(comm_dir),
-                                                shell=True,
-                                                stdout=subprocess.PIPE,
-                                                stdin=subprocess.PIPE)
+                             shell=True,
+                             stdout=subprocess.PIPE,
+                             stdin=subprocess.PIPE)
     
     avg_loss = total_loss / len(train_loader)
     print('Train Epoch: {} Average loss: {:.4f}'.format(epoch, avg_loss))
     wandb.log({"epoch_loss": avg_loss})
+
 
 def test(model, device, test_loader, trigger_sync, nbr_columns):
     model.eval()
@@ -158,34 +195,47 @@ def test(model, device, test_loader, trigger_sync, nbr_columns):
     with torch.no_grad():
         for data in test_loader:
             data = data.to(device)
-            # make directly 1 column zeroed out for this batch 
-            columns = random.sample(range(0,79), nbr_columns)
+            _, _, height, width = data.shape
+            
+            # zero out random columns
             zeroed_tensor = torch.clone(data)
+            columns = random.sample(range(width), nbr_columns)
             for column in columns:
-                zeroed_tensor[:,:,:, column]=0
+                zeroed_tensor[:, :, :, column] = 0
 
             output = model(zeroed_tensor)
             test_loss += F.mse_loss(output, data, reduction='sum').item()
     
-    test_loss /= len(test_loader.dataset) * 80 * 80  # Average loss per pixel
+    test_loss /= len(test_loader.dataset) * height * width  # Average loss per pixel
     print('\nTest set: Average loss: {:.4f}\n'.format(test_loss))
     wandb.log({"test_loss": test_loss})
     trigger_sync()
     subprocess.Popen("sed -i 's|.*|/work/tc062/tc062/s2501147/autoencoder|g' {}/*.command".format(comm_dir),
-                                    shell=True,
-                                    stdout=subprocess.PIPE,
-                                    stdin=subprocess.PIPE)
+                     shell=True,
+                     stdout=subprocess.PIPE,
+                     stdin=subprocess.PIPE)
     return test_loss
+
+def custom_collate(batch):
+    # Sort the batch by the length of the time dimension (descending order)
+    batch.sort(key=lambda x: x.shape[2], reverse=True)
+    
+    # Pad the time dimension to the max length in the batch
+    max_len = batch[0].shape[2]
+    padded_batch = [F.pad(spec, (0, max_len - spec.shape[2], 0, 0)) for spec in batch]
+    
+    # Stack the padded spectrograms
+    return torch.stack(padded_batch, 0)
 
 
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch Autoencoder for Sepctrograms')
-    parser.add_argument('--batch-size', type=int, default=64, metavar='N',
+    parser.add_argument('--batch-size', type=int, default=16, metavar='N',
                         help='input batch size for training (default: 64)')
-    parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
+    parser.add_argument('--test-batch-size', type=int, default=32, metavar='N',
                         help='input batch size for testing (default: 1000)')
-    parser.add_argument('--val-batch-size', type=int, default=32, metavar='N',
+    parser.add_argument('--val-batch-size', type=int, default=8, metavar='N',
                         help='input batch size for validation (default: 32)')
     parser.add_argument('--epochs', type=int, default=10, metavar='N',
                         help='number of epochs to train (default: 14)')
@@ -232,13 +282,13 @@ def main():
         test_kwargs.update(cuda_kwargs)
         val_kwargs.update(cuda_kwargs)
         
-    base_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_sep"
+    base_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_variable_length"
     
     train_dataset, val_dataset, test_dataset = load_datasets(base_dir)
     
-    train_loader = torch.utils.data.DataLoader(train_dataset, **train_kwargs)
-    val_dataset = torch.utils.data.DataLoader(val_dataset, **val_kwargs)
-    test_loader = torch.utils.data.DataLoader(test_dataset, **test_kwargs)
+    train_loader = torch.utils.data.DataLoader(train_dataset, **train_kwargs, collate_fn=custom_collate)
+    val_dataset = torch.utils.data.DataLoader(val_dataset, **val_kwargs, collate_fn=custom_collate)
+    test_loader = torch.utils.data.DataLoader(test_dataset, **test_kwargs, collate_fn=custom_collate)
 
 
     model = RAutoencoder()
@@ -262,7 +312,7 @@ def main():
         scheduler.step()
 
     if args.save_model:
-        torch.save(model.state_dict(), "reconstructor_finetune_5masks.pt")
+        torch.save(model.state_dict(), "reconstructor_finetune_variable_length.pt")
 
 
 

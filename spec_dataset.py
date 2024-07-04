@@ -17,8 +17,8 @@ class SpectrogramDataset(Dataset):
     def __getitem__(self, idx):
         file_path = os.path.join(self.array_dir, self.file_list[idx])
         spectrogram = np.load(file_path)
-        if spectrogram.shape != (80, 80):
-            raise ValueError(f"Array at {array_path} has an incorrect shape: {array.shape}")
+        # if spectrogram.shape != (80, 80):
+        #     raise ValueError(f"Array at {array_path} has an incorrect shape: {array.shape}")
 
         # Add channel dimension to make it (1, 80, 80) ie grayscale
         spectrogram = np.expand_dims(spectrogram, axis=0)

@@ -244,7 +244,7 @@ def main():
                         help='input batch size for validation (default: 32)')
     parser.add_argument('--epochs', type=int, default=10, metavar='N',
                         help='number of epochs to train (default: 14)')
-    parser.add_argument('--lr', type=float, default=0.0001, metavar='LR',
+    parser.add_argument('--lr', type=float, default=1e-4, metavar='LR',
                         help='learning rate (default: 0.001)')
     parser.add_argument('--gamma', type=float, default=0.7, metavar='M',
                         help='Learning rate step gamma (default: 0.7)')
@@ -312,8 +312,8 @@ def main():
 
     scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
     for epoch in range(1, args.epochs + 1):
-        train_loss = train(args, model, device, train_loader, optimizer, epoch, trigger_sync, mask)
-        test_loss = test(model, device, test_loader, trigger_sync, mask)
+        train_loss = train(args, model, device, train_loader, optimizer, epoch, trigger_sync, fine_tune_mask)
+        test_loss = test(model, device, test_loader, trigger_sync, fine_tune_mask)
         scheduler.step()
 
     if args.save_model:

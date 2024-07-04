@@ -12,7 +12,7 @@ from autoencoder_spec import Autoencoder
 import numpy as np
 import os
 
-def load_and_preprocess_tensor(image_path, save_dir):
+def load_and_preprocess_tensor(image_path, save_dir, nbr_columns):
     spectrogram = np.load(image_path)
     if spectrogram.shape != (80, 80):
         raise ValueError(f"Array at {image_path} has an incorrect shape: {spectrogram.shape}")
@@ -25,11 +25,18 @@ def load_and_preprocess_tensor(image_path, save_dir):
     torch.save(spec_tensor.squeeze(), f"{save_dir}/saved23.pt")
     
     # make directly 1 column zeroed out for this batch 
-    column = random.randint(0, 79)
-    print("column: ", column)
+    # column = random.randint(0, 79)
+    # print("column: ", column)
+    # zeroed_tensor = torch.clone(spec_tensor)
+    # print("size of zeroed_tensor: ", zeroed_tensor.size())
+    # zeroed_tensor[:,:, :, column]=0
+
+    columns = random.sample(range(0, 79), nbr_columns)
+    print("columns: ", columns)
     zeroed_tensor = torch.clone(spec_tensor)
     print("size of zeroed_tensor: ", zeroed_tensor.size())
-    zeroed_tensor[:,:, :, column]=0
+    for column in columns:
+        zeroed_tensor[:,:, :, column]=0
 
 
     return zeroed_tensor
@@ -68,7 +75,7 @@ def visualize_image(tensor_masked, predicted_image_tensor, save_dir):
     # axs[1].invert_yaxis()
     
     plt.show()
-    plt.savefig('reconstructor_unseen_130000_flipagain.png')
+    plt.savefig('reconstructor_8masks.png')
 
 print("working directory: ", os.getcwd())
 os.chdir("/work/tc062/tc062/s2501147/autoencoder")
@@ -82,10 +89,10 @@ model = RAutoencoder().to(device)
 total_params = sum(p.numel() for p in model.parameters())
 print("total params: ", total_params)
 print("loaded autoenc")
-model.load_state_dict(torch.load("reconstructor_130000.pt"))
+model.load_state_dict(torch.load("reconstructor_finetune_5masks.pt"))
 print("loaded model")
 save_directory = 'torch_saved'
-img = load_and_preprocess_tensor("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/test/array_84_121123_000011_000003.wav_chunk_1.npy", save_directory)
+img = load_and_preprocess_tensor("/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/test/array_84_121123_000011_000003.wav_chunk_1.npy", save_directory, 8)
 print(img.size())
 
 predicted_image = predict_image_output(model, img, save_directory)

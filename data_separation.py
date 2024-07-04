@@ -6,8 +6,8 @@ import shutil
 random.seed(42)
 
 # Directories
-source_dir = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_train_arrays'
-dest_dir = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_sep'
+source_dir = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_train_arrays'
+dest_dir = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_variable_length'
 train_dir = os.path.join(dest_dir, 'train')
 val_dir = os.path.join(dest_dir, 'val')
 test_dir = os.path.join(dest_dir, 'test')
@@ -34,16 +34,16 @@ val_files = all_files[test_size:test_size + val_size]
 train_files = all_files[test_size + val_size:]
 
 # Function to move files
-def move_files(file_list, target_dir):
+def copy_files(file_list, target_dir):
     for file_name in file_list:
         src_file = os.path.join(source_dir, file_name)
         dst_file = os.path.join(target_dir, file_name)
-        shutil.move(src_file, dst_file)
+        shutil.copy(src_file, dst_file)
 
 # Move files to respective directories
-move_files(train_files, train_dir)
-move_files(val_files, val_dir)
-move_files(test_files, test_dir)
+copy_files(train_files, train_dir)
+copy_files(val_files, val_dir)
+copy_files(test_files, test_dir)
 
 print(f"Moved {len(train_files)} files to {train_dir}")
 print(f"Moved {len(val_files)} files to {val_dir}")
