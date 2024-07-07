@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #SBATCH --job-name=recon130000
-#SBATCH --time=01:00:00
+#SBATCH --time=00:05:00
 #SBATCH --partition=gpu
-#SBATCH --qos=gpu
+#SBATCH --qos=short
 #SBATCH --account=tc062-pool2
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:1
@@ -13,4 +13,4 @@ module load pytorch/1.13.1-gpu
 
 source /work/tc062/tc062/s2501147/venv/mgpu_env/bin/activate
 
-srun python variable_length_restauration.py --epochs 10
+srun python var_length_user.py

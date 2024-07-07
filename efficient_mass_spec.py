@@ -50,12 +50,12 @@ def wav_to_spec_array(directory, save_array_dir, log_file, batch_size=10):
     # Final save of progress
     save_processed_files(log_file, processed_files)
 
-current_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/LibriTTS/train-clean-100"
+current_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/LibriTTS_R/train-clean-360"
 # save_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/1sec_spectrograms"
-save_array_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_train_arrays"
+save_array_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/librittsR_fullspec"
 # save_chop = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays"
 # save_chop_spec = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_spectrograms"
-log_file = "processed_train_files_log.json"
+log_file = "processed_ttsR_trainclean360.json"
 
 wav_to_spec_array(current_dir, save_array_dir, log_file)
 # chop_arrays(target_size_x=80, target_size_y=80, array_dir=save_array_dir, chop_array_dir=save_chop)

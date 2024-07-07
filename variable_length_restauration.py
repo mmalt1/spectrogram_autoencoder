@@ -7,7 +7,7 @@ import torch.optim as optim
 import subprocess
 import random
 import numpy as np
-from spec_dataset import SpectrogramDataset, create_dataloaders, load_datasets
+from var_length_dataset import VarSpectrogramDataset, load_datasets
 from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
 from torch.autograd import Variable
@@ -16,80 +16,11 @@ from wandb_osh.hooks import TriggerWandbSyncHook
 
 comm_dir = "/work/tc062/tc062/s2501147/autoencoder/.wandb_osh_command_dir"
 
-# class RAutoencoder(nn.Module):
-#     def __init__(self, freq_dim=80, latent_dim=512):
-#         super(RAutoencoder, self).__init__()
-#         self.freq_dim = freq_dim
-#         self.latent_dim = latent_dim
-
-#         # encoder
-#         self.encoder = nn.Sequential(
-#             # stride of (1,2) bc only modifies time dimension
-#             nn.Conv2d(1, 64, kernel_size=3, stride=(1,2), padding=1),
-#             nn.BatchNorm2d(64),
-#             nn.LeakyReLU(0.2),
-#             nn.Conv2d(64, 128, kernel_size=3, stride=(1,2), padding=1),
-#             nn.BatchNorm2d(128),
-#             nn.LeakyReLU(0.2),
-#             nn.Conv2d(128, 256, kernel_size=3, stride=(1,2), padding=1),
-#             nn.BatchNorm2d(256),
-#             nn.LeakyReLU(0.2),
-#             nn.Conv2d(256, 512, kernel_size=3, stride=(1,2), padding=1),
-#             nn.BatchNorm2d(512),
-#             nn.LeakyReLU(0.2),
-#         )
-#         self.adaptive_pool = nn.AdaptiveAvgPool2d((freq_dim // 16, 1))  # target size of [5, 1]
-
-#         # fully connected layers for fixed freq dim
-#         self.fc_encode = nn.Linear(512 * (freq_dim // 16), latent_dim)
-#         self.fc_decode = nn.Linear(latent_dim, 512 * (freq_dim // 16))
-
-#         # decoder
-#         self.decoder = nn.Sequential(
-#             nn.ConvTranspose2d(512, 256, kernel_size=3, stride=(1,2), padding=1),
-#             nn.BatchNorm2d(256),
-#             nn.LeakyReLU(0.2),
-#             nn.ConvTranspose2d(256, 128, kernel_size=3, stride=(1,2), padding=1),
-#             nn.BatchNorm2d(128),
-#             nn.LeakyReLU(0.2),
-#             nn.ConvTranspose2d(128, 64, kernel_size=3, stride=(1,2), padding=1),
-#             nn.BatchNorm2d(64),
-#             nn.LeakyReLU(0.2),
-#             nn.ConvTranspose2d(64, 1, kernel_size=3, stride=(1,2), padding=1)
-#         )
-
-#         # Custom scaling layer
-#         self.scaling = nn.Parameter(torch.FloatTensor([1.0]))
-#         self.shifting = nn.Parameter(torch.FloatTensor([0.0]))
-
-#     def forward(self, x):
-#         # store og dims
-#         batch_size, _, _, time_dim = x.shape
-
-#         # encoder
-#         encoded = self.encoder(x)
-#         encoded = self.adaptive_pool(encoded)
-#         encoded = encoded.view(batch_size, -1)
-#         latent = self.fc_encode(encoded)
-
-#         # decoder
-#         decoded = self.fc_decode(latent)
-#         decoded = decoded.view(batch_size, 512, self.freq_dim // 16, 1)
-        
-#         for layer in self.decoder:
-#             decoded = layer(decoded)
-
-#         # Resize the output to match the input dimensions
-#         decoded = F.interpolate(decoded, size=(self.freq_dim, time_dim), mode='bilinear', align_corners=False)
-
-#         scaled = decoded * self.scaling + self.shifting
-#         return scaled
-
 class VariableLengthRAutoencoder(nn.Module):
-    def __init__(self, latent_dim=512):
+    def __init__(self):
         super(VariableLengthRAutoencoder, self).__init__()
 
-        # Encoder (mostly unchanged)
+        # Encoder
         self.encoder = nn.Sequential(
             nn.Conv2d(1, 64, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(64),
@@ -100,15 +31,14 @@ class VariableLengthRAutoencoder(nn.Module):
             nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(256),
             nn.LeakyReLU(0.2),
-            nn.Conv2d(256, latent_dim, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(latent_dim),
-            nn.LeakyReLU(0.2),
-            nn.AdaptiveAvgPool2d((1, 1))  # Global average pooling
+            nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(512),
+            nn.LeakyReLU(0.2)
         )
 
-        # Decoder (modified for variable length)
+        # Decoder
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(latent_dim, 256, kernel_size=3, stride=1, padding=1),
+            nn.ConvTranspose2d(512, 256, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(256),
             nn.LeakyReLU(0.2),
             nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1),
@@ -125,23 +55,30 @@ class VariableLengthRAutoencoder(nn.Module):
         self.shifting = nn.Parameter(torch.FloatTensor([0.0]))
 
     def forward(self, x):
-        # Get the og time dimension
-        original_time = x.size(3)
-        
-        # Encode
-        encoded = self.encoder(x).squeeze(-1).squeeze(-1)
-        
-        # Decode (with dynamic reshaping)
-        decoded = self.decoder(encoded.view(encoded.size(0), -1, 1, 1))
-        
-        # Resize to match original time dimension
-        decoded = F.interpolate(decoded, size=(x.size(2), original_time), mode='bilinear', align_corners=False)
-        
-        # Apply scaling and shifting
+        encoded = self.encoder(x)
+        decoded = self.decoder(encoded)
         scaled = decoded * self.scaling + self.shifting
-        return scaled
 
+        # Resize the output to match the input size
+        resized = F.interpolate(scaled, size=(x.size(2), x.size(3)), mode='bilinear', align_corners=False)
+        return resized
 
+    # def forward(self, x):
+    #     # Get the og time dimension
+    #     original_time = x.size(3)
+        
+    #     # Encode
+    #     encoded = self.encoder(x).squeeze(-1).squeeze(-1)
+        
+    #     # Decode (with dynamic reshaping)
+    #     decoded = self.decoder(encoded.view(encoded.size(0), -1, 1, 1))
+        
+    #     # Resize to match original time dimension
+    #     decoded = F.interpolate(decoded, size=(x.size(2), original_time), mode='bilinear', align_corners=False)
+        
+    #     # Apply scaling and shifting
+    #     scaled = decoded * self.scaling + self.shifting
+    #     return scaled
 
 def custom_loss(output, target):
     # L1 loss for overall structure
@@ -152,27 +89,44 @@ def custom_loss(output, target):
     
     return total_loss
 
-def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr_columns):
+def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr_columns, accumulation_steps=4):
     model.train()
     total_loss = 0
-    for batch_idx, data in enumerate(train_loader):
+    optimizer.zero_grad()
+
+    for batch_idx, (data, lengths) in enumerate(train_loader):
         data = data.to(device)
-        batch_size, _, height, width = data.shape
+        lengths = lengths.to(device)
+        batch_size, _, height, max_width = data.shape
         
-        # Zero out random columns
+        # create mask for padding
+        mask = torch.arange(max_width, device=device)[None, None, None, :] < lengths[:, None, None, None]
+        mask = mask.float()
+        
+        # zero out random columns (only in non-padded area)
         zeroed_tensor = torch.clone(data)
-        columns = random.sample(range(width), nbr_columns)
-        for column in columns:
-            zeroed_tensor[:, :, :, column] = 0
+        for i, length in enumerate(lengths):
+            columns = random.sample(range(length.item()), min(nbr_columns, length.item()))
+            zeroed_tensor[i, :, :, columns] = 0
         
         optimizer.zero_grad()
         output = model(zeroed_tensor)
         
-        loss = custom_loss(output, data)  # custom loss, but could use MSE
+        # print("output shape:", output.shape)
+        # print("data shape:", data.shape)
+        # print("mask shape:", mask.shape)
+
+        # Apply mask to both output and target
+        loss = custom_loss(output * mask, data * mask)
         loss.backward()
-        optimizer.step()
+        # optimizer.step()
         total_loss += loss.item()
-        
+
+        # Perform optimizer step every 'accumulation_steps' batches
+        if (batch_idx + 1) % accumulation_steps == 0:
+            optimizer.step()
+            optimizer.zero_grad
+
         if batch_idx % args.log_interval == 0:
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 epoch, batch_idx * len(data), len(train_loader.dataset),
@@ -183,30 +137,44 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
                              shell=True,
                              stdout=subprocess.PIPE,
                              stdin=subprocess.PIPE)
+
+    # Perform a final optimizer step if there are remaining gradients
+    if (batch_idx + 1) % accumulation_steps != 0:
+        optimizer.step()
+        optimizer.zero_grad()
     
     avg_loss = total_loss / len(train_loader)
     print('Train Epoch: {} Average loss: {:.4f}'.format(epoch, avg_loss))
     wandb.log({"epoch_loss": avg_loss})
 
-
 def test(model, device, test_loader, trigger_sync, nbr_columns):
     model.eval()
     test_loss = 0
+    total_pixels = 0
     with torch.no_grad():
-        for data in test_loader:
+        for data, lengths in test_loader:
             data = data.to(device)
-            _, _, height, width = data.shape
+            lengths = lengths.to(device)
+            batch_size, _, height, max_width = data.shape
             
-            # zero out random columns
+            # create mask for padding
+            mask = torch.arange(max_width, device=device)[None, None, None, :] < lengths[:, None, None, None]
+            mask = mask.float()
+            
+            # zero out random columns (only in non-padded area)
             zeroed_tensor = torch.clone(data)
-            columns = random.sample(range(width), nbr_columns)
-            for column in columns:
-                zeroed_tensor[:, :, :, column] = 0
+            for i, length in enumerate(lengths):
+                columns = random.sample(range(length.item()), min(nbr_columns, length.item()))
+                zeroed_tensor[i, :, :, columns] = 0
 
             output = model(zeroed_tensor)
-            test_loss += F.mse_loss(output, data, reduction='sum').item()
+            
+            # Apply mask to both output and target
+            loss = F.mse_loss(output * mask, data * mask, reduction='sum')
+            test_loss += loss.item()
+            total_pixels += mask.sum().item()
     
-    test_loss /= len(test_loader.dataset) * height * width  # Average loss per pixel
+    test_loss /= total_pixels  # Average loss per non-padded pixel
     print('\nTest set: Average loss: {:.4f}\n'.format(test_loss))
     wandb.log({"test_loss": test_loss})
     trigger_sync()
@@ -216,26 +184,36 @@ def test(model, device, test_loader, trigger_sync, nbr_columns):
                      stdin=subprocess.PIPE)
     return test_loss
 
+
 def custom_collate(batch):
-    # Sort the batch by the length of the time dimension (descending order)
-    batch.sort(key=lambda x: x.shape[2], reverse=True)
-    
-    # Pad the time dimension to the max length in the batch
-    max_len = batch[0].shape[2]
-    padded_batch = [F.pad(spec, (0, max_len - spec.shape[2], 0, 0)) for spec in batch]
-    
-    # Stack the padded spectrograms
-    return torch.stack(padded_batch, 0)
+    # because goes by batch has shape [1, 80, time]
+    # sort the batch in descending order of length
+    batch.sort(key=lambda x: x[1], reverse=True)
+    spectrograms, lengths = zip(*batch)
+
+    # pad spectrograms to the length of longest 
+    max_len = max(lengths)
+    padded_spectrograms = []
+    for spec in spectrograms:
+        pad_len = max_len - spec.shape[2]  # padding on time dim
+        padded_spec = np.pad(spec, ((0, 0), (0, 0), (0, pad_len)), mode='constant')
+        padded_spectrograms.append(padded_spec)
+
+    # Convert to tensors
+    padded_spectrograms = torch.FloatTensor(np.stack(padded_spectrograms))
+    lengths = torch.LongTensor(lengths)
+
+    return padded_spectrograms, lengths
 
 
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch Autoencoder for Sepctrograms')
-    parser.add_argument('--batch-size', type=int, default=16, metavar='N',
+    parser.add_argument('--batch-size', type=int, default=8, metavar='N',
                         help='input batch size for training (default: 64)')
-    parser.add_argument('--test-batch-size', type=int, default=32, metavar='N',
+    parser.add_argument('--test-batch-size', type=int, default=12, metavar='N',
                         help='input batch size for testing (default: 1000)')
-    parser.add_argument('--val-batch-size', type=int, default=8, metavar='N',
+    parser.add_argument('--val-batch-size', type=int, default=4, metavar='N',
                         help='input batch size for validation (default: 32)')
     parser.add_argument('--epochs', type=int, default=10, metavar='N',
                         help='number of epochs to train (default: 14)')
@@ -291,9 +269,9 @@ def main():
     test_loader = torch.utils.data.DataLoader(test_dataset, **test_kwargs, collate_fn=custom_collate)
 
 
-    model = RAutoencoder()
-    model.load_state_dict(torch.load("reconstructor_baseline.pt"))
-    model.to(device)
+    model = VariableLengthRAutoencoder().to(device)
+    # model.load_state_dict(torch.load("reconstructor_baseline.pt"))
+    # model.to(device)
 
     mask = 1
     fine_tune_mask = 5
@@ -312,7 +290,7 @@ def main():
         scheduler.step()
 
     if args.save_model:
-        torch.save(model.state_dict(), "reconstructor_finetune_variable_length.pt")
+        torch.save(model.state_dict(), "restaurator_variable_length.pt")
 
 
 
