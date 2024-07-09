@@ -22,7 +22,7 @@ def load_and_preprocess_tensor(image_path, save_dir, nbr_columns):
     spectrogram = np.expand_dims(spectrogram, axis=0)
     # dividing by 255.0 because assuming the image is an 8-bit image
     spec_tensor = torch.tensor(spectrogram, dtype=torch.float32)
-    torch.save(spec_tensor.squeeze(), f"{save_dir}/saved23.pt")
+    torch.save(spec_tensor.squeeze(), f"{save_dir}/saved23_new.pt")
     
     # make directly 1 column zeroed out for this batch 
     # column = random.randint(0, 79)
@@ -48,7 +48,7 @@ def predict_image_output(model, image_tensor, save_dir):
         flip1_output = torch.flip(output, dims=[2])
         # flip2_output = torch.flip(filp1_output, dims=[1])
         saved_output = flip1_output.squeeze()
-        torch.save(output.squeeze(), f"{save_dir}/saved22.pt")
+        torch.save(output.squeeze(), f"{save_dir}/saved22_new.pt")
     return saved_output
 
 def visualize_image(tensor_masked, predicted_image_tensor, save_dir):

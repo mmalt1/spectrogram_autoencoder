@@ -6,8 +6,8 @@ import shutil
 random.seed(42)
 
 # Directories
-source_dir = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_train_arrays'
-dest_dir = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_variable_length'
+source_dir = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/librittsR_fullspec'
+dest_dir = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_big_libriTTS'
 train_dir = os.path.join(dest_dir, 'train')
 val_dir = os.path.join(dest_dir, 'val')
 test_dir = os.path.join(dest_dir, 'test')

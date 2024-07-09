@@ -23,7 +23,7 @@ def get_wav_files(root_dir, filetype):
             continue
 
         with open(file, "r") as f:
-            print(f"{counter}: ", file)
+            # print(f"{counter}: ", file)
             file_list.append(file)
         counter+=1
     return file_list
@@ -31,30 +31,30 @@ def get_wav_files(root_dir, filetype):
 
 
 # Example usage:
-root_directory = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/LibriTTS/dev-clean'
-other_directory = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_array"
-# wav_files = get_wav_files(root_directory, '.wav')
+root_directory = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/LibriTTS/train-clean-360'
+# other_directory = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_array"
+wav_files = get_wav_files(root_directory, '.wav')
 # png_files = get_wav_files(other_directory, '.png')
 
 # Print the list of WAV files
-# print("Number of wav files: ", len(wav_files))
+print("Number of wav files: ", len(wav_files))
 # print("Number of png files: ", len(png_files))
 
 
 # Define the directory containing the .npy files
-test_directory = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/test'
-train_directory = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/train'
-val_directory = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/val'
+# test_directory = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/test'
+# train_directory = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/train'
+# val_directory = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays/val'
 
-npy_files = [f for f in os.listdir(test_directory) if f.endswith('.npy')]
-print("number of arrays in test data: ", len(npy_files))
+# npy_files = [f for f in os.listdir(test_directory) if f.endswith('.npy')]
+# print("number of arrays in test data: ", len(npy_files))
 
-npy_files = [f for f in os.listdir(train_directory) if f.endswith('.npy')]
-print("number of arrays in train data: ", len(npy_files))
+# npy_files = [f for f in os.listdir(train_directory) if f.endswith('.npy')]
+# print("number of arrays in train data: ", len(npy_files))
 
 
-npy_files = [f for f in os.listdir(val_directory) if f.endswith('.npy')]
-print("number of arrays in val data: ", len(npy_files))
+# npy_files = [f for f in os.listdir(val_directory) if f.endswith('.npy')]
+# print("number of arrays in val data: ", len(npy_files))
 
 
 # for f in os.listdir(input_directory):

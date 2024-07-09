@@ -27,13 +27,13 @@ def wav_to_spec_array(directory, save_array_dir, log_file, batch_size=10):
                 file_path = os.path.join(dirpath, filename)
                 
                 # loading wav file with desired sampling rate
-                wav, sr = librosa.load(file_path, sr=24000) # sr in LibriTTS = 24kHz
+                wav, sr = librosa.load(file_path, sr=24000) # sr in LibriTTS = 24 kHz
 
                 # applying stft
-                stft_wav = librosa.stft(wav, n_fft=1024, hop_length=256, win_length=1024, window='hann', center=True, dtype=None, pad_mode='constant', out=None)
+                stft_wav = librosa.stft(wav, n_fft=2048, hop_length=256, win_length=1024, window='hann', center=True, dtype=None, pad_mode='constant', out=None)
                 spec = librosa.amplitude_to_db(abs(stft_wav), ref=np.max)
                 # extracting mel spectrogram with FastPitch regulations 
-                mel_spec = librosa.feature.melspectrogram(S=spec, n_fft=2048, hop_length=256, win_length=1024, n_mels=80, fmin=0.0, fmax=8000.0, power=1.0)
+                mel_spec = librosa.feature.melspectrogram(S=spec, sr=24000, n_fft=1024, hop_length=256, win_length=1024, n_mels=80, fmin=0.0, fmax=8000.0, power=1.0)
                 # np.ndarray [shape=(…, n_mels, t)]
                 # librosa.display.specshow(mel_spec, sr=sr)
                 
@@ -50,15 +50,10 @@ def wav_to_spec_array(directory, save_array_dir, log_file, batch_size=10):
     # Final save of progress
     save_processed_files(log_file, processed_files)
 
-current_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/LibriTTS_R/train-clean-360"
-# save_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/1sec_spectrograms"
-save_array_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/librittsR_fullspec"
-# save_chop = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays"
-# save_chop_spec = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_spectrograms"
-log_file = "processed_ttsR_trainclean360.json"
+
+current_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/LibriTTS/train-clean-360"
+save_array_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/libritts_fullspec"
+log_file = "processed_tts_trainclean360.json"
 
 wav_to_spec_array(current_dir, save_array_dir, log_file)
-# chop_arrays(target_size_x=80, target_size_y=80, array_dir=save_array_dir, chop_array_dir=save_chop)
-# make_spec_from_array(save_chop, save_chop_spec, 24000)
-
 
