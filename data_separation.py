@@ -6,7 +6,7 @@ import shutil
 random.seed(42)
 
 # Directories
-source_dir = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/librittsR_fullspec'
+source_dir = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/libritts_fullspec'
 dest_dir = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_big_libriTTS'
 train_dir = os.path.join(dest_dir, 'train')
 val_dir = os.path.join(dest_dir, 'val')
@@ -45,6 +45,6 @@ copy_files(train_files, train_dir)
 copy_files(val_files, val_dir)
 copy_files(test_files, test_dir)
 
-print(f"Moved {len(train_files)} files to {train_dir}")
-print(f"Moved {len(val_files)} files to {val_dir}")
-print(f"Moved {len(test_files)} files to {test_dir}")
+print(f"Copied {len(train_files)} files to {train_dir}")
+print(f"Copied {len(val_files)} files to {val_dir}")
+print(f"Copied {len(test_files)} files to {test_dir}")

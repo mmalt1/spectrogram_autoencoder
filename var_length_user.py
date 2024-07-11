@@ -22,7 +22,7 @@ def load_and_preprocess_tensor(image_path, save_dir, nbr_columns):
     spectrogram = np.expand_dims(spectrogram, axis=0)
     # dividing by 255.0 because assuming the image is an 8-bit image
     spec_tensor = torch.tensor(spectrogram, dtype=torch.float32)
-    torch.save(spec_tensor.squeeze(), f"{save_dir}/saved23_new.pt")
+    torch.save(spec_tensor.squeeze(), f"{save_dir}/bigdata_input.pt")
     
     # make directly 1 column zeroed out for this batch 
     # column = random.randint(0, 79)
@@ -48,7 +48,7 @@ def predict_image_output(model, image_tensor, save_dir):
         flip1_output = torch.flip(output, dims=[2])
         # flip2_output = torch.flip(filp1_output, dims=[1])
         saved_output = flip1_output.squeeze()
-        torch.save(output.squeeze(), f"{save_dir}/saved22_new.pt")
+        torch.save(output.squeeze(), f"{save_dir}/bigdata_output.pt")
     return saved_output
 
 def visualize_image(tensor_masked, predicted_image_tensor, save_dir):
@@ -75,7 +75,7 @@ def visualize_image(tensor_masked, predicted_image_tensor, save_dir):
     # axs[1].invert_yaxis()
     
     plt.show()
-    plt.savefig('var_length_2masks.png')
+    plt.savefig('bigdata_5masks.png')
 
 
 print('STARTING JOB')
@@ -91,10 +91,10 @@ model = RAutoencoder().to(device)
 total_params = sum(p.numel() for p in model.parameters())
 print("total params: ", total_params)
 print("loaded autoenc")
-model.load_state_dict(torch.load("restaurator_variable_length.pt"))
+model.load_state_dict(torch.load("restaurator_variable_length_bigdata.pt"))
 print("loaded model")
 save_directory = 'torch_saved'
-img = load_and_preprocess_tensor("/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_variable_length/val/array_27_124992_000182_000001.wav.npy", save_directory, 2)
+img = load_and_preprocess_tensor("/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_big_libriTTS/test/array_14_208_000005_000000.wav.npy", save_directory, 5)
 print(img.size())
 
 predicted_image = predict_image_output(model, img, save_directory)

@@ -260,7 +260,7 @@ def main():
         test_kwargs.update(cuda_kwargs)
         val_kwargs.update(cuda_kwargs)
         
-    base_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_variable_length"
+    base_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_big_libriTTS"
     
     train_dataset, val_dataset, test_dataset = load_datasets(base_dir)
     
@@ -273,8 +273,8 @@ def main():
     # model.load_state_dict(torch.load("reconstructor_baseline.pt"))
     # model.to(device)
 
-    mask = 1
-    fine_tune_mask = 5
+    mask = 5
+    fine_tune_mask = 10
 
     # wandb
     wandb.init(config=args, dir="/work/tc062/tc062/s2501147/autoencoder", mode="offline")
@@ -290,7 +290,7 @@ def main():
         scheduler.step()
 
     if args.save_model:
-        torch.save(model.state_dict(), "restaurator_variable_length.pt")
+        torch.save(model.state_dict(), "restaurator_variable_length_bigdata.pt")
 
 
 

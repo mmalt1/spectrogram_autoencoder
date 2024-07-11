@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=recon130000
-#SBATCH --time=03:00:00
+#SBATCH --time=04:00:00
 #SBATCH --partition=gpu
 #SBATCH --qos=gpu
 #SBATCH --account=tc062-pool2
@@ -13,4 +13,4 @@ module load pytorch/1.13.1-gpu
 
 source /work/tc062/tc062/s2501147/venv/mgpu_env/bin/activate
 
-srun python data_separation.py
+srun python efficient_mass_spec.py 

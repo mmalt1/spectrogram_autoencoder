@@ -16,6 +16,7 @@ handwritten_digits/
 mnist_data/
 preloaded_data/
 testing/
+noise_train/
 
 # Ignore .DS_Store file (MacOS specific)
 .DS_Store

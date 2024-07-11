@@ -10,9 +10,9 @@ def wav_to_tensor(wav_file, tensor_dir, name):
     stft_wav = librosa.stft(wav, n_fft=2048, hop_length=256, win_length=1024, window='hann', center=True, dtype=None, pad_mode='constant', out=None)
     spec = librosa.amplitude_to_db(abs(stft_wav), ref=np.max)
     mel_spec = librosa.feature.melspectrogram(S=spec, sr=24000, n_fft=1024, hop_length=256, win_length=1024, n_mels=80, fmin=0.0, fmax=8000.0, power=1.0)
-    mel_spec_tensor = torch.tensor(mel_spec)
-    mel_spec_tensor = torch.unsqueeze(mel_spec_tensor, dim=0)
-    torch.save(mel_spec_tensor, f"{tensor_dir}/{name}.pt")
+    mel_spec= torch.tensor(mel_spec)
+    mel_spec_tensor = torch.unsqueeze(mel_spec, dim=0)
+    torch.save(mel_spec, f"{tensor_dir}/{name}.pt")
     
     return mel_spec_tensor
 
@@ -54,15 +54,15 @@ def add_noise_to_spec(spectrogram, noise_dir, tensor_dir, snr_db):
     
     # Scale and add noise to spectrogram
     noisy_spectrogram = spectrogram + scale * noise_spectrogram
-    torch.save(noisy_spectrogram, f"{tensor_dir}/noisy_tensor.pt")
+    torch.save(noisy_spectrogram.squeeze(0), f"{tensor_dir}/noisy_audio.pt")
     return noisy_spectrogram
 
 # when actually training, get random between 5 to 30 db to match Miipher
 snr_db = 10
 
-clean_audio = "/Users/marie/Desktop/autoencoder/libriTTS_data/libriTTS_14_208_000001_000000.wav"
-noisy_directory = "/Users/marie/Desktop/autoencoder/noise_train"
-result_tensors = "/Users/marie/Desktop/autoencoder/result_tensors"
+clean_audio = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/LibriTTS_R/train-clean-360/14/208/14_208_000001_000000.wav"
+noisy_directory = "/work/tc062/tc062/s2501147/autoencoder/noise_train"
+result_tensors = "/work/tc062/tc062/s2501147/FastPitch/FastPitches/PyTorch/SpeechSynthesis/FastPitch/torch_saved/mels"
 
 clean_spectrogram = wav_to_tensor(clean_audio, result_tensors, 'clean_audio')
 noisy_spectrogram = add_noise_to_spec(clean_spectrogram, noisy_directory, result_tensors, snr_db)
