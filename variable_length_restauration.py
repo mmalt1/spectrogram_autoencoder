@@ -1,24 +1,25 @@
 import argparse
-import torch
+import torch # type:ignore
 import os
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
+import torch.nn as nn # type:ignore
+import torch.nn.functional as F #type:ignore
+import torch.optim as optim #type:ignore
 import subprocess
 import random
-import numpy as np
+import numpy as np #type:ignore
 from var_length_dataset import VarSpectrogramDataset, load_datasets
-from torchvision import datasets, transforms
-from torch.optim.lr_scheduler import StepLR
-from torch.autograd import Variable
+from torchvision import datasets, transforms #type:ignore
+from torch.optim.lr_scheduler import StepLR #type:ignore
+from torch.autograd import Variable #type:ignore
 import wandb
-from wandb_osh.hooks import TriggerWandbSyncHook  
+from wandb_osh.hooks import TriggerWandbSyncHook  #type:ignore
 
 comm_dir = "/work/tc062/tc062/s2501147/autoencoder/.wandb_osh_command_dir"
 
 class VariableLengthRAutoencoder(nn.Module):
-    def __init__(self):
+    def __init__(self, debug=False):
         super(VariableLengthRAutoencoder, self).__init__()
+        self.debug = debug
 
         # Encoder
         self.encoder = nn.Sequential(
@@ -55,30 +56,29 @@ class VariableLengthRAutoencoder(nn.Module):
         self.shifting = nn.Parameter(torch.FloatTensor([0.0]))
 
     def forward(self, x):
+        if self.debug:
+            print(f"Input shape: {x.shape}")
+
         encoded = self.encoder(x)
+        if self.debug:
+            print(f"Encoded shape: {encoded.shape}")
+
         decoded = self.decoder(encoded)
+        if self.debug:
+            print(f"decoded shape: {decoded.shape}")
+        
         scaled = decoded * self.scaling + self.shifting
-
-        # Resize the output to match the input size
+        if self.debug:
+            print(f"scaled shape: {scaled.shape}")
+        # print('size of scaled x: ', scaled.shape)
+        # Resize output to match input size
         resized = F.interpolate(scaled, size=(x.size(2), x.size(3)), mode='bilinear', align_corners=False)
+        if self.debug:
+            print(f"resized shape: {resized.shape}")
         return resized
-
-    # def forward(self, x):
-    #     # Get the og time dimension
-    #     original_time = x.size(3)
-        
-    #     # Encode
-    #     encoded = self.encoder(x).squeeze(-1).squeeze(-1)
-        
-    #     # Decode (with dynamic reshaping)
-    #     decoded = self.decoder(encoded.view(encoded.size(0), -1, 1, 1))
-        
-    #     # Resize to match original time dimension
-    #     decoded = F.interpolate(decoded, size=(x.size(2), original_time), mode='bilinear', align_corners=False)
-        
-    #     # Apply scaling and shifting
-    #     scaled = decoded * self.scaling + self.shifting
-    #     return scaled
+    
+    def set_debug(self, debug):
+        self.debug = debug
 
 def custom_loss(output, target):
     # L1 loss for overall structure
@@ -89,33 +89,41 @@ def custom_loss(output, target):
     
     return total_loss
 
-def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr_columns, accumulation_steps=4):
+def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr_columns, name, accumulation_steps=4):
     model.train()
     total_loss = 0
     optimizer.zero_grad()
 
     for batch_idx, (data, lengths) in enumerate(train_loader):
         data = data.to(device)
+        print('shape of data: ', data.shape)
+
         lengths = lengths.to(device)
+        # print('lengths: ', lengths)
+        # print('length type: ', type(lengths))
         batch_size, _, height, max_width = data.shape
         
         # create mask for padding
         mask = torch.arange(max_width, device=device)[None, None, None, :] < lengths[:, None, None, None]
         mask = mask.float()
-        
+        # print('shape of mask: ', mask.shape)
+
         # zero out random columns (only in non-padded area)
         zeroed_tensor = torch.clone(data)
+        # print('zeroed tensor shape: ', zeroed_tensor.shape)
         for i, length in enumerate(lengths):
+            # print('i: ', i)
+            # print('length: ', length)
+            # print('length type: ', type(length))
+            # print('nbr of columns type: ', type(nbr_columns))
+            # print('length item type: ', type(length.item()))
             columns = random.sample(range(length.item()), min(nbr_columns, length.item()))
             zeroed_tensor[i, :, :, columns] = 0
-        
+        # print('shape of zeroed tensor after mask: ', zeroed_tensor.shape)
         optimizer.zero_grad()
         output = model(zeroed_tensor)
+        print('shape of output: ', output.shape)
         
-        # print("output shape:", output.shape)
-        # print("data shape:", data.shape)
-        # print("mask shape:", mask.shape)
-
         # Apply mask to both output and target
         loss = custom_loss(output * mask, data * mask)
         loss.backward()
@@ -142,10 +150,13 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
     if (batch_idx + 1) % accumulation_steps != 0:
         optimizer.step()
         optimizer.zero_grad()
-    
+
     avg_loss = total_loss / len(train_loader)
     print('Train Epoch: {} Average loss: {:.4f}'.format(epoch, avg_loss))
     wandb.log({"epoch_loss": avg_loss})
+
+    torch.save(model.state_dict(), f"{name}/checkpoint_{epoch}.pt")
+    print(f"Model saved at epoch {epoch}")
 
 def test(model, device, test_loader, trigger_sync, nbr_columns):
     model.eval()
@@ -160,29 +171,34 @@ def test(model, device, test_loader, trigger_sync, nbr_columns):
             # create mask for padding
             mask = torch.arange(max_width, device=device)[None, None, None, :] < lengths[:, None, None, None]
             mask = mask.float()
-            
+            # print('shape of mask: ', mask.shape)
             # zero out random columns (only in non-padded area)
             zeroed_tensor = torch.clone(data)
+            # print('zeroed tensor shape: ', zeroed_tensor.shape)
             for i, length in enumerate(lengths):
                 columns = random.sample(range(length.item()), min(nbr_columns, length.item()))
                 zeroed_tensor[i, :, :, columns] = 0
+            # print('shape of zeroed tensor after mask: ', zeroed_tensor.shape)
 
             output = model(zeroed_tensor)
             
             # Apply mask to both output and target
-            loss = F.mse_loss(output * mask, data * mask, reduction='sum')
+            # loss = F.mse_loss(output * mask, data * mask, reduction='sum')
+            loss = custom_loss(output * mask, data * mask)
             test_loss += loss.item()
-            total_pixels += mask.sum().item()
+            # total_pixels += mask.sum().item()
     
-    test_loss /= total_pixels  # Average loss per non-padded pixel
-    print('\nTest set: Average loss: {:.4f}\n'.format(test_loss))
+    # test_loss /= total_pixels  # Average loss per non-padded pixel
+    average_test_loss = test_loss / len(test_loader)
+    print('\nTest set: Average loss: {:.4f}\n'.format(average_test_loss))
     wandb.log({"test_loss": test_loss})
     trigger_sync()
     subprocess.Popen("sed -i 's|.*|/work/tc062/tc062/s2501147/autoencoder|g' {}/*.command".format(comm_dir),
                      shell=True,
                      stdout=subprocess.PIPE,
                      stdin=subprocess.PIPE)
-    return test_loss
+    
+    return average_test_loss
 
 
 def custom_collate(batch):
@@ -275,6 +291,7 @@ def main():
 
     mask = 5
     fine_tune_mask = 10
+    model_name = "restaurator_variable_length_bigdata2"
 
     # wandb
     wandb.init(config=args, dir="/work/tc062/tc062/s2501147/autoencoder", mode="offline")
@@ -285,12 +302,12 @@ def main():
 
     scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
     for epoch in range(1, args.epochs + 1):
-        train_loss = train(args, model, device, train_loader, optimizer, epoch, trigger_sync, mask)
+        train_loss = train(args, model, device, train_loader, optimizer, epoch, trigger_sync, mask, model_name)
         test_loss = test(model, device, test_loader, trigger_sync, mask)
         scheduler.step()
 
     if args.save_model:
-        torch.save(model.state_dict(), "restaurator_variable_length_bigdata.pt")
+        torch.save(model.state_dict(), f"{model_name}.pt")
 
 
 

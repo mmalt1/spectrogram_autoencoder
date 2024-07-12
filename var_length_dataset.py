@@ -23,12 +23,13 @@ class VarSpectrogramDataset(Dataset):
 
         # get the length of the time dimension
         length = spectrogram.shape[2]
-
         # convert to tensor
         spectrogram = torch.tensor(spectrogram, dtype=torch.float32)
+        # print('spectrogram shape in dataloader: ', spectrogram.shape)
 
         if self.transform:
             spectrogram = self.transform(spectrogram)
+            # print('spectrogram shapte after transform: ', spectrogram.shape)
         return spectrogram, length
         
 def load_datasets(base_dir):

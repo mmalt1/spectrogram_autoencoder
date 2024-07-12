@@ -54,17 +54,17 @@ def add_noise_to_spec(spectrogram, noise_dir, tensor_dir, snr_db):
     
     # Scale and add noise to spectrogram
     noisy_spectrogram = spectrogram + scale * noise_spectrogram
-    torch.save(noisy_spectrogram.squeeze(0), f"{tensor_dir}/noisy_audio.pt")
+    torch.save(noisy_spectrogram.squeeze(0), f"{tensor_dir}/noisy_audio5db.pt")
     return noisy_spectrogram
 
 # when actually training, get random between 5 to 30 db to match Miipher
-snr_db = 10
+snr_db = 5
 
 clean_audio = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/LibriTTS_R/train-clean-360/14/208/14_208_000001_000000.wav"
 noisy_directory = "/work/tc062/tc062/s2501147/autoencoder/noise_train"
 result_tensors = "/work/tc062/tc062/s2501147/FastPitch/FastPitches/PyTorch/SpeechSynthesis/FastPitch/torch_saved/mels"
 
-clean_spectrogram = wav_to_tensor(clean_audio, result_tensors, 'clean_audio')
+clean_spectrogram = wav_to_tensor(clean_audio, result_tensors, 'clean_audio5db')
 noisy_spectrogram = add_noise_to_spec(clean_spectrogram, noisy_directory, result_tensors, snr_db)
 
 print(f"Original spectrogram shape: {clean_spectrogram.shape}")

@@ -17,9 +17,11 @@ mnist_data/
 preloaded_data/
 testing/
 noise_train/
+wandb_osh_command_dir/
 
 # Ignore .DS_Store file (MacOS specific)
 .DS_Store
+.wandb_osh_command_dir/
 
 # Ignore Python compiled files
 __pycache__/

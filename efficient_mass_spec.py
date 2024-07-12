@@ -53,7 +53,7 @@ def wav_to_spec_array(directory, save_array_dir, log_file, batch_size=10):
 
 current_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/LibriTTS_R/train-clean-360"
 save_array_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/librittsR_fullspec"
-log_file = "processed_tts_trainclean360.json"
+log_file = "processed_ttsR_trainclean360.json"
 
 wav_to_spec_array(current_dir, save_array_dir, log_file)
 
