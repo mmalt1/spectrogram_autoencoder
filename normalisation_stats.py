@@ -1,24 +1,28 @@
-import os
 import numpy as np
+import os
+from glob import glob
 
-def calculate_stats_from_spectrograms(directory):
-    all_spectrograms = []
-
-    for filename in os.listdir(directory):
-        if filename.endswith('.npy'):  
-            file_path = os.path.join(directory, filename)
-            spectrogram = np.load(file_path)
-            all_spectrograms.append(spectrogram)
+def calculate_stats(directory_path):
+    # Get all .npy files in the directory
+    file_paths = glob(os.path.join(directory_path, '*.npy'))
     
-    all_spectrograms = np.stack(all_spectrograms)
+    # Load and concatenate all arrays
+    all_data = []
+    for file_path in file_paths:
+        arr = np.load(file_path)
+        all_data.append(arr.flatten())  # Flatten each array
     
-    mean = np.mean(all_spectrograms)
-    std_dev = np.std(all_spectrograms)
+    combined_data = np.concatenate(all_data)
     
-    return mean, std_dev
+    # Calculate mean and standard deviation
+    mean = np.mean(combined_data)
+    std = np.std(combined_data)
+    
+    return mean, std
 
-spec_arrays_path = 'path/to/your/spectrogram/directory'
-mean_value, std_dev_value = calculate_stats_from_spectrograms(spec_arrays_path)
+# Usage
+directory_path = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_big_libriTTS/train'
+mean, std = calculate_stats(directory_path)
 
-print(f"Mean: {mean_value}")
-print(f"Standard Deviation: {std_dev_value}")
+print(f"Mean: {mean}")
+print(f"Standard Deviation: {std}")

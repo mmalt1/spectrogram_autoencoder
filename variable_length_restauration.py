@@ -13,6 +13,7 @@ from torch.optim.lr_scheduler import StepLR #type:ignore
 from torch.autograd import Variable #type:ignore
 import wandb
 from wandb_osh.hooks import TriggerWandbSyncHook  #type:ignore
+from noiser_function import add_noise_to_spec, wav_to_tensor
 
 comm_dir = "/work/tc062/tc062/s2501147/autoencoder/.wandb_osh_command_dir"
 
@@ -89,14 +90,14 @@ def custom_loss(output, target):
     
     return total_loss
 
-def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr_columns, name, accumulation_steps=4):
+def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr_columns, name, noise_directory, accumulation_steps=4, masking=False, noising=False):
     model.train()
     total_loss = 0
     optimizer.zero_grad()
 
     for batch_idx, (data, lengths) in enumerate(train_loader):
         data = data.to(device)
-        print('shape of data: ', data.shape)
+        # print('shape of data: ', data.shape)
 
         lengths = lengths.to(device)
         # print('lengths: ', lengths)
@@ -108,21 +109,24 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
         mask = mask.float()
         # print('shape of mask: ', mask.shape)
 
+        if masking == True:
         # zero out random columns (only in non-padded area)
-        zeroed_tensor = torch.clone(data)
-        # print('zeroed tensor shape: ', zeroed_tensor.shape)
-        for i, length in enumerate(lengths):
-            # print('i: ', i)
-            # print('length: ', length)
-            # print('length type: ', type(length))
-            # print('nbr of columns type: ', type(nbr_columns))
-            # print('length item type: ', type(length.item()))
-            columns = random.sample(range(length.item()), min(nbr_columns, length.item()))
-            zeroed_tensor[i, :, :, columns] = 0
-        # print('shape of zeroed tensor after mask: ', zeroed_tensor.shape)
-        optimizer.zero_grad()
-        output = model(zeroed_tensor)
-        print('shape of output: ', output.shape)
+            zeroed_tensor = torch.clone(data)
+            for i, length in enumerate(lengths):
+                columns = random.sample(range(length.item()), min(nbr_columns, length.item()))
+                zeroed_tensor[i, :, :, columns] = 0
+
+            optimizer.zero_grad()
+            output = model(zeroed_tensor)
+        
+        if noising == True:
+            noised_tensor = torch.clone(data)
+            # snr = random.int(5, 30)
+            snr = 10
+            noised_tensor = add_noise_to_spec(noised_tensor, noise_directory, snr)
+            noised_tensor = noised_tensor.to(device)
+            optimizer.zero_grad()
+            output = model(noised_tensor)
         
         # Apply mask to both output and target
         loss = custom_loss(output * mask, data * mask)
@@ -158,7 +162,7 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
     torch.save(model.state_dict(), f"{name}/checkpoint_{epoch}.pt")
     print(f"Model saved at epoch {epoch}")
 
-def test(model, device, test_loader, trigger_sync, nbr_columns):
+def test(model, device, test_loader, trigger_sync, nbr_columns, noise_directory, masking=False, noising=False):
     model.eval()
     test_loss = 0
     total_pixels = 0
@@ -171,16 +175,25 @@ def test(model, device, test_loader, trigger_sync, nbr_columns):
             # create mask for padding
             mask = torch.arange(max_width, device=device)[None, None, None, :] < lengths[:, None, None, None]
             mask = mask.float()
-            # print('shape of mask: ', mask.shape)
-            # zero out random columns (only in non-padded area)
-            zeroed_tensor = torch.clone(data)
-            # print('zeroed tensor shape: ', zeroed_tensor.shape)
-            for i, length in enumerate(lengths):
-                columns = random.sample(range(length.item()), min(nbr_columns, length.item()))
-                zeroed_tensor[i, :, :, columns] = 0
-            # print('shape of zeroed tensor after mask: ', zeroed_tensor.shape)
 
-            output = model(zeroed_tensor)
+            if masking == True:
+            # zero out random columns (only in non-padded area)
+                zeroed_tensor = torch.clone(data)
+                # print('zeroed tensor shape: ', zeroed_tensor.shape)
+                for i, length in enumerate(lengths):
+                    columns = random.sample(range(length.item()), min(nbr_columns, length.item()))
+                    zeroed_tensor[i, :, :, columns] = 0
+                # print('shape of zeroed tensor after mask: ', zeroed_tensor.shape)
+
+                output = model(zeroed_tensor)
+            
+            if noising == True:
+                noised_tensor = torch.clone(data)
+                # snr = random.int(5, 30)
+                snr = 10
+                noised_tensor = add_noise_to_spec(noised_tensor, noise_directory, snr)
+                noised_tensor = noised_tensor.to(device)
+                output = model(noised_tensor)
             
             # Apply mask to both output and target
             # loss = F.mse_loss(output * mask, data * mask, reduction='sum')
@@ -191,7 +204,7 @@ def test(model, device, test_loader, trigger_sync, nbr_columns):
     # test_loss /= total_pixels  # Average loss per non-padded pixel
     average_test_loss = test_loss / len(test_loader)
     print('\nTest set: Average loss: {:.4f}\n'.format(average_test_loss))
-    wandb.log({"test_loss": test_loss})
+    wandb.log({"test_loss": average_test_loss})
     trigger_sync()
     subprocess.Popen("sed -i 's|.*|/work/tc062/tc062/s2501147/autoencoder|g' {}/*.command".format(comm_dir),
                      shell=True,
@@ -291,8 +304,8 @@ def main():
 
     mask = 5
     fine_tune_mask = 10
-    model_name = "restaurator_variable_length_bigdata2"
-
+    model_name = "denoiser_2epochs"
+    noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_train"
     # wandb
     wandb.init(config=args, dir="/work/tc062/tc062/s2501147/autoencoder", mode="offline")
     wandb.watch(model, log_freq=100)
@@ -302,8 +315,8 @@ def main():
 
     scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
     for epoch in range(1, args.epochs + 1):
-        train_loss = train(args, model, device, train_loader, optimizer, epoch, trigger_sync, mask, model_name)
-        test_loss = test(model, device, test_loader, trigger_sync, mask)
+        train_loss = train(args, model, device, train_loader, optimizer, epoch, trigger_sync, mask, model_name, noise_dir, masking=False, noising=True)
+        test_loss = test(model, device, test_loader, trigger_sync, mask, noise_dir, masking=False, noising=True)
         scheduler.step()
 
     if args.save_model:

@@ -10,8 +10,11 @@ def get_max_min_values(directory):
             file_path = os.path.join(directory, filename)
             print(f'loaded array: {filename}')
             array = np.load(file_path)
+            print('hello')
+            print('here is the array: ', array)
             all_values.extend(array.flatten())
-    
+            print('array flattened')
+        break
     # Convert to numpy array and sort
     all_values = np.array(all_values)
     sorted_values = np.sort(all_values)
@@ -28,3 +31,6 @@ min_values, max_values = get_max_min_values(directory_path)
 
 print("Minimum 5 values:", min_values)
 print("Maximum 5 values:", max_values)
+
+# array = np.load("/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_big_libriTTS/test/array_14_208_000004_000000.wav.npy")
+# print(array)

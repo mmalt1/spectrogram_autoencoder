@@ -33,7 +33,7 @@ class VarSpectrogramDataset(Dataset):
         return spectrogram, length
         
 def load_datasets(base_dir):
-    transform = transforms.Compose([transforms.Normalize(0, 0.5)]) 
+    transform = transforms.Compose([transforms.Normalize(-4.8, 1.4)]) 
     # print("In load datasets")
     train_dataset = VarSpectrogramDataset(array_dir=os.path.join(base_dir, "train"), transform=transform)
     # print("train dataset loaded")
