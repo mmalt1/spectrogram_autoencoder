@@ -42,19 +42,19 @@ def add_noise_to_spec(spectrogram, noise_dir, snr_db):
     
     # Ensure noise spectrogram has the same shape as input spectrogram
     if noise_spectrogram.shape != spectrogram.shape:
-        print('spectrogram shape: ', spectrogram.shape)
-        print('noise spectrogram shape: ', noise_spectrogram.shape)
+        # print('spectrogram shape: ', spectrogram.shape)
+        # print('noise spectrogram shape: ', noise_spectrogram.shape)
 
         if noise_spectrogram.shape[3] >= spectrogram.shape[3]:
             # scd_dim_random_start = random.randint(0, (noise_spectrogram.shape[2] - spectrogram.shape[2]))
             trd_dim_random_start = random.randint(0, (noise_spectrogram.shape[3] - spectrogram.shape[3]))
             # print('second dim etc :', scd_dim_random_start)
             trd_dim_random_end = trd_dim_random_start+spectrogram.shape[3]
-            print('third dim etc: ', trd_dim_random_start)
-            print('third dim end: ', trd_dim_random_end)
+            # print('third dim etc: ', trd_dim_random_start)
+            # print('third dim end: ', trd_dim_random_end)
             noise_spectrogram = noise_spectrogram[:, :, :,
-                                                   trd_dim_random_start: trd_dim_random_end]
-            print('noise spec after: ', noise_spectrogram.shape)
+                                                    trd_dim_random_start: trd_dim_random_end]
+            # print('noise spec after: ', noise_spectrogram.shape)
         # skip if noises are shorter
         # print('noise spectrogram: ', noise_spectrogram.shape)
         # print('noise spectrogram 3: ', noise_spectrogram.shape[3])
@@ -73,9 +73,9 @@ def add_noise_to_spec(spectrogram, noise_dir, snr_db):
     # Calculate scaling factor for noise
     snr = 10**(snr_db / 10)
     scale = torch.sqrt(signal_power / (snr * noise_power))
-    print('spectrogram size: ', spectrogram.shape)
-    print('noisy spectrogram size: ', noise_spectrogram.shape)
-    print(f"Noise: {noise}")
+    # print('spectrogram size: ', spectrogram.shape)
+    # print('noisy spectrogram size: ', noise_spectrogram.shape)
+    # print(f"Noise: {noise}")
     # Scale and add noise to spectrogram
     noisy_spectrogram = spectrogram + scale * noise_spectrogram
     # torch.save(noisy_spectrogram.squeeze(0), f"{tensor_dir}/noisy_audio5db_again.pt")
