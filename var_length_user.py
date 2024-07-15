@@ -13,17 +13,20 @@ import numpy as np
 import os
 
 def load_and_preprocess_tensor(image_path, save_dir, nbr_columns):
-    spectrogram = np.load(image_path)
+    # spectrogram = np.load(image_path)
+    spectrogram = torch.load(image_path)
     # if spectrogram.shape != (80, 80):
     #     raise ValueError(f"Array at {image_path} has an incorrect shape: {spectrogram.shape}")
 
     # Add channel dimension to make it (1, 80, 80) ie grayscale
-    spectrogram = np.expand_dims(spectrogram, axis=0)
-    spectrogram = np.expand_dims(spectrogram, axis=0)
-    # dividing by 255.0 because assuming the image is an 8-bit image
-    spec_tensor = torch.tensor(spectrogram, dtype=torch.float32)
-    print('size of spec tensor: ', spec_tensor.shape)
-    torch.save(spec_tensor.squeeze(), f"{save_dir}/bigdata3_input.pt")
+    # spectrogram = np.expand_dims(spectrogram, axis=0)
+    # spectrogram = np.expand_dims(spectrogram, axis=0)
+    spectrogram = spectrogram.unsqueeze(0)
+    spectrogram = spectrogram.unsqueeze(0)
+
+    # spec_tensor = torch.tensor(spectrogram, dtype=torch.float32)
+    print('size of spec tensor: ', spectrogram.shape)
+    torch.save(spectrogram.squeeze(), f"{save_dir}/wg_preparedataset_input.pt")
     
     # make directly 1 column zeroed out for this batch 
     # column = random.randint(0, 79)
@@ -34,7 +37,7 @@ def load_and_preprocess_tensor(image_path, save_dir, nbr_columns):
 
     columns = random.sample(range(0, 79), nbr_columns)
     print("columns: ", columns)
-    zeroed_tensor = torch.clone(spec_tensor)
+    zeroed_tensor = torch.clone(spectrogram)
     print("size of zeroed_tensor: ", zeroed_tensor.size())
     for column in columns:
         zeroed_tensor[:,:, :, column]=0
@@ -50,7 +53,7 @@ def predict_image_output(model, image_tensor, save_dir):
         flip1_output = torch.flip(output, dims=[2])
         # flip2_output = torch.flip(filp1_output, dims=[1])
         saved_output = flip1_output.squeeze()
-        torch.save(output.squeeze(), f"{save_dir}/bigdata3_unseen_output.pt")
+        torch.save(output.squeeze(), f"{save_dir}/wg_preparedataset_output.pt")
         print('size of output in predict image output: ', output.shape)
         print('size of flip1 output: ', flip1_output.shape)
         print('size of saved output: ', saved_output.shape)
@@ -80,7 +83,7 @@ def visualize_image(tensor_masked, predicted_image_tensor, save_dir):
     # axs[1].invert_yaxis()
     
     plt.show()
-    plt.savefig('bigdata_unseen_5masks.png')
+    plt.savefig('wg_preparedataset.png')
 
 
 print('STARTING JOB')
@@ -99,11 +102,12 @@ print("loaded autoenc")
 model.load_state_dict(torch.load("restaurator_variable_length_bigdata2.pt"))
 print("loaded model")
 save_directory = 'torch_saved'
-npy_array = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/librittsR_fullspec/array_14_208_000050_000001.wav.npy"
-torch_tensor_from_array = torch.from_numpy(np.load(npy_array))
-print('size of torch tensor before load and preprocess: ', torch_tensor_from_array.shape)
+# npy_array
+torch_tensor = "/work/tc062/tc062/s2501147/FastPitch/FastPitches/PyTorch/SpeechSynthesis/FastPitch/wav_files/mels/14_208_000005_000000.pt"
+# torch_tensor_from_array = torch.from_numpy(np.load(npy_array))
+print('size of torch tensor before load and preprocess: ', torch.load(torch_tensor).shape)
 
-img = load_and_preprocess_tensor(npy_array, save_directory, 0)
+img = load_and_preprocess_tensor(torch_tensor, save_directory, 0)
 
 predicted_image = predict_image_output(model, img, save_directory)
 # print("predicted digit: ", predicted_digit)
