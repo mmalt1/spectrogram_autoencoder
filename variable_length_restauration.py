@@ -49,12 +49,13 @@ class VariableLengthRAutoencoder(nn.Module):
             nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=1, output_padding=1),
             nn.BatchNorm2d(64),
             nn.LeakyReLU(0.2),
-            nn.ConvTranspose2d(64, 1, kernel_size=3, stride=1, padding=1)
+            nn.ConvTranspose2d(64, 1, kernel_size=3, stride=1, padding=1),
+            nn.Sigmoid()
         )
 
-        # Custom scaling layer
-        self.scaling = nn.Parameter(torch.FloatTensor([1.0]))
-        self.shifting = nn.Parameter(torch.FloatTensor([0.0]))
+        # # Custom scaling layer
+        # self.scaling = nn.Parameter(torch.FloatTensor([1.0]))
+        # self.shifting = nn.Parameter(torch.FloatTensor([0.0]))
 
     def forward(self, x):
         if self.debug:
@@ -68,14 +69,16 @@ class VariableLengthRAutoencoder(nn.Module):
         if self.debug:
             print(f"decoded shape: {decoded.shape}")
         
-        scaled = decoded * self.scaling + self.shifting
-        if self.debug:
-            print(f"scaled shape: {scaled.shape}")
-        # print('size of scaled x: ', scaled.shape)
-        # Resize output to match input size
-        resized = F.interpolate(scaled, size=(x.size(2), x.size(3)), mode='bilinear', align_corners=False)
+        # scaled = decoded * self.scaling + self.shifting
+        
+        # if self.debug:
+        #     print(f"scaled shape: {scaled.shape}")
+        
+
+        resized = F.interpolate(decoded, size=(x.size(2), x.size(3)), mode='bilinear', align_corners=False)
         if self.debug:
             print(f"resized shape: {resized.shape}")
+        
         return resized
     
     def set_debug(self, debug):
@@ -110,7 +113,7 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
         # print('shape of mask: ', mask.shape)
 
         if masking == True:
-        # zero out random columns (only in non-padded area)
+        # zero out random columns in non-padded area
             zeroed_tensor = torch.clone(data)
             for i, length in enumerate(lengths):
                 columns = random.sample(range(length.item()), min(nbr_columns, length.item()))
@@ -304,7 +307,7 @@ def main():
 
     mask = 5
     fine_tune_mask = 10
-    model_name = "denoiser_2epochs"
+    model_name = "restaurator_sigmoid"
     noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_train"
     # wandb
     wandb.init(config=args, dir="/work/tc062/tc062/s2501147/autoencoder", mode="offline")

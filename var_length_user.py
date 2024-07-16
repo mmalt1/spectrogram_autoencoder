@@ -26,7 +26,7 @@ def load_and_preprocess_tensor(image_path, save_dir, nbr_columns):
 
     spec_tensor = torch.tensor(spectrogram, dtype=torch.float32)
     print('size of spec tensor: ', spec_tensor.shape)
-    torch.save(spec_tensor.squeeze(), f"{save_dir}/libriTTS_test_statsnorm_input.pt")
+    # torch.save(spec_tensor.squeeze(), f"{save_dir}/libriTTS_test_moreepochs_statsnorm_input.pt")
 
     columns = random.sample(range(0, 79), nbr_columns)
     print("columns: ", columns)
@@ -46,7 +46,7 @@ def predict_image_output(model, image_tensor, save_dir):
         flip1_output = torch.flip(output, dims=[2])
         # flip2_output = torch.flip(filp1_output, dims=[1])
         saved_output = flip1_output.squeeze()
-        torch.save(output.squeeze(), f"{save_dir}/libriTTS_test_statsnorm_output.pt")
+        # torch.save(output.squeeze(), f"{save_dir}/libriTTS_test_moreepochs_statsnorm_output.pt")
         print('size of output in predict image output: ', output.shape)
         print('size of flip1 output: ', flip1_output.shape)
         print('size of saved output: ', saved_output.shape)
@@ -76,7 +76,7 @@ def visualize_image(tensor_masked, predicted_image_tensor, save_dir):
     # axs[1].invert_yaxis()
     
     plt.show()
-    plt.savefig('libriTTS_test_statsnorm.png')
+    plt.savefig('libriTTS_test_bigdaata2_again.png')
 
 
 print('STARTING JOB')
@@ -92,7 +92,7 @@ model = VariableLengthRAutoencoder(debug=True).to(device)
 total_params = sum(p.numel() for p in model.parameters())
 print("total params: ", total_params)
 print("loaded autoenc")
-model.load_state_dict(torch.load("restaurator_variable_length_statsnorm.pt"))
+model.load_state_dict(torch.load("models/restaurator_variable_length_bigdata2.pt"))
 print("loaded model")
 save_directory = 'torch_saved'
 # npy_array
