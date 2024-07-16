@@ -291,7 +291,7 @@ def main():
 
     mask = 5
     fine_tune_mask = 10
-    model_name = "restaurator_variable_length_bigdata2"
+    model_name = "restaurator_variable_length_bigdata3"
 
     # wandb
     wandb.init(config=args, dir="/work/tc062/tc062/s2501147/autoencoder", mode="offline")
