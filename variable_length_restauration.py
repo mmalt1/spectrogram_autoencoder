@@ -96,7 +96,7 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
 
     for batch_idx, (data, lengths) in enumerate(train_loader):
         data = data.to(device)
-        print('shape of data: ', data.shape)
+        # print('shape of data: ', data.shape)
 
         lengths = lengths.to(device)
         # print('lengths: ', lengths)
@@ -122,7 +122,7 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
         # print('shape of zeroed tensor after mask: ', zeroed_tensor.shape)
         optimizer.zero_grad()
         output = model(zeroed_tensor)
-        print('shape of output: ', output.shape)
+        # print('shape of output: ', output.shape)
         
         # Apply mask to both output and target
         loss = custom_loss(output * mask, data * mask)

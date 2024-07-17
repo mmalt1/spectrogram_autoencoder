@@ -23,7 +23,7 @@ def load_and_preprocess_tensor(image_path, save_dir, nbr_columns):
     # dividing by 255.0 because assuming the image is an 8-bit image
     spec_tensor = torch.tensor(spectrogram, dtype=torch.float32)
     print('size of spec tensor: ', spec_tensor.shape)
-    torch.save(spec_tensor.squeeze(), f"{save_dir}/bigdata3_input.pt")
+    # torch.save(spec_tensor.squeeze(), f"{save_dir}/bigdata3_input.pt")
     
     # make directly 1 column zeroed out for this batch 
     # column = random.randint(0, 79)
@@ -50,7 +50,7 @@ def predict_image_output(model, image_tensor, save_dir):
         flip1_output = torch.flip(output, dims=[2])
         # flip2_output = torch.flip(filp1_output, dims=[1])
         saved_output = flip1_output.squeeze()
-        torch.save(output.squeeze(), f"{save_dir}/bigdata3_unseen_output.pt")
+        # torch.save(output.squeeze(), f"{save_dir}/bigdata3_unseen_output.pt")
         print('size of output in predict image output: ', output.shape)
         print('size of flip1 output: ', flip1_output.shape)
         print('size of saved output: ', saved_output.shape)
@@ -80,7 +80,7 @@ def visualize_image(tensor_masked, predicted_image_tensor, save_dir):
     # axs[1].invert_yaxis()
     
     plt.show()
-    plt.savefig('bigdata_unseen_5masks.png')
+    plt.savefig('mask_bigdata_checkpoint3.png')
 
 
 print('STARTING JOB')
@@ -96,7 +96,7 @@ model = VariableLengthRAutoencoder(debug=True).to(device)
 total_params = sum(p.numel() for p in model.parameters())
 print("total params: ", total_params)
 print("loaded autoenc")
-model.load_state_dict(torch.load("restaurator_variable_length_bigdata2.pt"))
+model.load_state_dict(torch.load("mask_bigdata_test/checkpoint_3.pt"))
 print("loaded model")
 save_directory = 'torch_saved'
 npy_array = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/librittsR_fullspec/array_14_208_000050_000001.wav.npy"
