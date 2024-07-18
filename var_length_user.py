@@ -46,7 +46,7 @@ def predict_image_output(model, image_tensor, save_dir):
         flip1_output = torch.flip(output, dims=[2])
         # flip2_output = torch.flip(filp1_output, dims=[1])
         saved_output = flip1_output.squeeze()
-        torch.save(output.squeeze(), f"{save_dir}/old_var_checkpoin1_input.pt")
+        torch.save(output.squeeze(), f"{save_dir}/old_var_nonorm_checkpoin1_input.pt")
         print('size of output in predict image output: ', output.shape)
         print('size of flip1 output: ', flip1_output.shape)
         print('size of saved output: ', saved_output.shape)
@@ -59,7 +59,7 @@ def visualize_image(tensor_masked, predicted_image_tensor, save_dir):
     # tensor_masked = tensor_masked.numpy()
     # # Plot the input and output images side by side
     # Convert the predicted tensor to a NumPy array
-    torch.save(predicted_image_tensor, f"{save_dir}/old_var_checkpoint1_output.pt")
+    torch.save(predicted_image_tensor, f"{save_dir}/old_var_nonorm_checkpoint1_output.pt")
     print("predicted_image size: ", predicted_image_tensor.size())
     predicted_image = predicted_image_tensor.numpy()
     print("predicted_image size: ", predicted_image.shape)
@@ -76,7 +76,7 @@ def visualize_image(tensor_masked, predicted_image_tensor, save_dir):
     # axs[1].invert_yaxis()
     
     plt.show()
-    plt.savefig('bigdata3_nomask_wg.png')
+    plt.savefig('old_var_length_restoration_nonorm_checkpoint1.png')
 
 
 print('STARTING JOB')
@@ -92,7 +92,7 @@ model = VariableLengthRAutoencoder(debug=True).to(device)
 total_params = sum(p.numel() for p in model.parameters())
 print("total params: ", total_params)
 print("loaded autoenc")
-model.load_state_dict(torch.load("old_var_length_restoration/checkpoint_1.pt"))
+model.load_state_dict(torch.load("old_var_length_restoration_nonorm/checkpoint_1.pt"))
 print("loaded model")
 save_directory = 'torch_saved'
 # npy_array

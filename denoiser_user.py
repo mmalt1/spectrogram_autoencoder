@@ -13,22 +13,24 @@ import numpy as np
 import os
 from noiser_function import add_noise_to_spec, wav_to_tensor
 
-def load_and_preprocess_tensor(image_path, noise_directory, snr):
-    spectrogram = np.load(image_path)
-    # spectrogram = torch.load(image_path)
+def load_and_preprocess_tensor(image_path, noise_directory, snr, save_dir):
+    # spectrogram = np.load(image_path)
+    spectrogram = torch.load(image_path)
 
     # Add channel dimension to make it (1, 80, 80) ie grayscale
-    spectrogram = np.expand_dims(spectrogram, axis=0)
-    spectrogram = np.expand_dims(spectrogram, axis=0)
-    # spectrogram = spectrogram.unsqueeze(0)
-    # spectrogram = spectrogram.unsqueeze(0)
+    # spectrogram = np.expand_dims(spectrogram, axis=0)
+    # spectrogram = np.expand_dims(spectrogram, axis=0)
+    spectrogram = spectrogram.unsqueeze(0)
+    spec_tensor = spectrogram.unsqueeze(0)
 
-    spec_tensor = torch.tensor(spectrogram, dtype=torch.float32)
+    # spec_tensor = torch.tensor(spectrogram, dtype=torch.float32)
     print('size of spec tensor: ', spec_tensor.shape)
 
     noised_tensor = torch.clone(spec_tensor)
-    noised_tensor = add_noise_to_spec(noised_tensor, noise_directory, snr)
-
+    noised_tensor = add_noise_to_spec(noised_tensor, noise_directory, snr, device='cpu')
+    saving_tensor = noised_tensor.squeeze()
+    torch.save(saving_tensor, f"{save_dir}/denoiser1noise_noised_input7.pt")
+    
     return noised_tensor
 
 def predict_image_output(model, image_tensor, save_dir):
@@ -37,9 +39,12 @@ def predict_image_output(model, image_tensor, save_dir):
         print('size of image tensor: ', image_tensor.shape)
         output = model(image_tensor)
         flip1_output = torch.flip(output, dims=[2])
+        # torch.save(flip1_output, f"{save_dir}/denoiser_model_output.pt")
         # flip2_output = torch.flip(filp1_output, dims=[1])
         saved_output = flip1_output.squeeze()
-        
+        print('saved ouput shape: ', saved_output.shape)
+        torch.save(saved_output, f"{save_dir}/denoiser1noise_model_output7.pt")
+    
     return saved_output
 
 def visualize_image(og_tensor, tensor_noised, predicted_image_tensor, save_dir):
@@ -67,7 +72,7 @@ def visualize_image(og_tensor, tensor_noised, predicted_image_tensor, save_dir):
 
    
     plt.show()
-    plt.savefig('denoiser_nonorm_cpt5_5db.png')
+    plt.savefig('denoiser1noise_checkpoint7_wg.png')
 
 
 print('STARTING JOB')
@@ -83,14 +88,16 @@ model = VariableLengthRAutoencoder().to(device)
 total_params = sum(p.numel() for p in model.parameters())
 print("total params: ", total_params)
 
-model.load_state_dict(torch.load("denoiser_bigdata/checkpoint_5.pt"))
+model.load_state_dict(torch.load("denoiser_1noise/checkpoint_7.pt"))
 
-save_directory = 'torch_saved'
-noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_unseen"
+save_directory = '/work/tc062/tc062/s2501147/FastPitch/FastPitches/PyTorch/SpeechSynthesis/FastPitch/torch_saved/mels'
+noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_data/noise_onetype"
+tensor = "/work/tc062/tc062/s2501147/FastPitch/FastPitches/PyTorch/SpeechSynthesis/FastPitch/wav_files/mels/14_208_000005_000000.pt"
 array = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_big_libriTTS/test/array_14_208_000015_000002.wav.npy"
-og_tensor = torch.tensor(np.load(array))
+# og_tensor = torch.tensor(np.load(array))
+og_tensor = torch.load(tensor)
 
-noised_spec = load_and_preprocess_tensor(array, noise_dir, 5)
+noised_spec = load_and_preprocess_tensor(tensor, noise_dir, 30, save_directory)
 predicted_image = predict_image_output(model, noised_spec, save_directory)
 # print("predicted digit: ", predicted_digit)
 

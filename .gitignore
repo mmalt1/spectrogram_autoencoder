@@ -6,6 +6,7 @@
 *.command
 *.out
 *.png
+*.wav
 
 # Ignore all files in the build/ directory
 test_zeroed_tensors/
@@ -18,6 +19,9 @@ preloaded_data/
 testing/
 noise_train/
 wandb_osh_command_dir/
+noise_data/
+noise_dataset/
+
 
 # Ignore .DS_Store file (MacOS specific)
 .DS_Store

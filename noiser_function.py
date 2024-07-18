@@ -4,7 +4,6 @@ import librosa
 import numpy as np
 import os, random
 
-device = torch.device('cuda')
 
 def wav_to_tensor(wav_file, name):
     
@@ -19,7 +18,7 @@ def wav_to_tensor(wav_file, name):
     return mel_spec_tensor
 
 
-def add_noise_to_spec(spectrogram, noise_dir, snr_db):
+def add_noise_to_spec(spectrogram, noise_dir, snr_db, device='cuda'):
     """
     Add noise from a WAV file to a spectrogram tensor.
     
@@ -34,6 +33,7 @@ def add_noise_to_spec(spectrogram, noise_dir, snr_db):
     noise = random.choice(os.listdir(f"{noise_dir}"))
     noise_file = os.path.join(noise_dir, noise)
     noise_spectrogram = wav_to_tensor(noise_file, f"noise_{noise}")
+    # noise_spectrogram = torch.load(noise_file) and add another unsqueeze 0; comment out function
     noise_spectrogram = noise_spectrogram.unsqueeze(0)
     noise_spectrogram = noise_spectrogram.to(device)
     # noise_spectrogram = torch.load("/work/tc062/tc062/s2501147/FastPitch/FastPitches/PyTorch/SpeechSynthesis/FastPitch/wav_files/mels/Typing_4.pt")
@@ -42,33 +42,24 @@ def add_noise_to_spec(spectrogram, noise_dir, snr_db):
     
     # Ensure noise spectrogram has the same shape as input spectrogram
     if noise_spectrogram.shape != spectrogram.shape:
-        # print('spectrogram shape: ', spectrogram.shape)
-        # print('noise spectrogram shape: ', noise_spectrogram.shape)
 
         if noise_spectrogram.shape[3] >= spectrogram.shape[3]:
-            # scd_dim_random_start = random.randint(0, (noise_spectrogram.shape[2] - spectrogram.shape[2]))
             trd_dim_random_start = random.randint(0, (noise_spectrogram.shape[3] - spectrogram.shape[3]))
-            # print('second dim etc :', scd_dim_random_start)
             trd_dim_random_end = trd_dim_random_start+spectrogram.shape[3]
-            # print('third dim etc: ', trd_dim_random_start)
-            # print('third dim end: ', trd_dim_random_end)
+            
             noise_spectrogram = noise_spectrogram[:, :, :,
                                                     trd_dim_random_start: trd_dim_random_end]
-            # print('noise spec after: ', noise_spectrogram.shape)
-        # skip if noises are shorter
-        # print('noise spectrogram: ', noise_spectrogram.shape)
-        # print('noise spectrogram 3: ', noise_spectrogram.shape[3])
-        # print('noise spectrogram 2: ', noise_spectrogram.shape[2])
+            
         if noise_spectrogram.shape[3] < spectrogram.shape[3]:
             # # If noise is shorter, repeat it
             repeats = spectrogram.shape[3] // noise_spectrogram.shape[3] + 1
             noise_spectrogram = noise_spectrogram.repeat(1, 1, 1, repeats)[:, :, :, :spectrogram.shape[3]]
             # return spectrogram
     # Calculate signal power
-    signal_power = torch.mean(torch.abs(spectrogram)**2)
+    signal_power = torch.mean((spectrogram)**2)
     
     # Calculate noise power
-    noise_power = torch.mean(torch.abs(noise_spectrogram)**2)
+    noise_power = torch.mean((noise_spectrogram)**2)
     
     # Calculate scaling factor for noise
     snr = 10**(snr_db / 10)

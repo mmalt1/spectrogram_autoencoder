@@ -110,7 +110,7 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
         mask = mask.float()
         # print('shape of mask: ', mask.shape)
 
-        if masking == True:
+        if masking:
         # zero out random columns in non-padded area
             zeroed_tensor = torch.clone(data)
             for i, length in enumerate(lengths):
@@ -119,9 +119,9 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
             optimizer.zero_grad()
             output = model(zeroed_tensor)
         
-        if noising == True:
+        if noising:
             noised_tensor = torch.clone(data)
-            snr = random.int(5, 30)
+            snr = random.randint(5, 30)
             noised_tensor = add_noise_to_spec(noised_tensor, noise_directory, snr)
             noised_tensor = noised_tensor.to(device)
             optimizer.zero_grad()
@@ -187,8 +187,7 @@ def test(model, device, test_loader, trigger_sync, nbr_columns, noise_directory,
             
             if noising:
                 noised_tensor = torch.clone(data)
-                # snr = random.int(5, 30)
-                snr = 5
+                snr = random.randint(5, 30)
                 noised_tensor = add_noise_to_spec(noised_tensor, noise_directory, snr)
                 noised_tensor = noised_tensor.to(device)
                 output = model(noised_tensor)
@@ -303,9 +302,9 @@ def main():
     mask = 5
     fine_tune_mask = 10
 
-    model_name = "new_script_masking_only"
-    train_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_train"
-    test_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_test"
+    model_name = "denoiser_nonorm"
+    train_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_data/noise_onetype"
+    test_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_data/noise_onetype"
     # wandb
     wandb.init(config=args, dir="/work/tc062/tc062/s2501147/autoencoder", mode="offline")
     wandb.watch(model, log_freq=100)
@@ -316,9 +315,9 @@ def main():
     scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
     for epoch in range(1, args.epochs + 1):
         train_loss = train(args, model, device, train_loader, optimizer, epoch, trigger_sync,
-                            mask, model_name, train_noise_dir, masking=True, noising=False)
+                            mask, model_name, train_noise_dir, masking=False, noising=True)
         test_loss = test(model, device, test_loader, trigger_sync, mask,
-                            test_noise_dir, masking=True, noising=False)
+                            test_noise_dir, masking=False, noising=True)
         scheduler.step()
 
     if args.save_model:
