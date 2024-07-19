@@ -32,9 +32,9 @@ def add_noise_to_spec(spectrogram, noise_dir, snr_db, device='cuda'):
     """
     noise = random.choice(os.listdir(f"{noise_dir}"))
     noise_file = os.path.join(noise_dir, noise)
-    noise_spectrogram = wav_to_tensor(noise_file, f"noise_{noise}")
-    # noise_spectrogram = torch.load(noise_file) and add another unsqueeze 0; comment out function
-    noise_spectrogram = noise_spectrogram.unsqueeze(0)
+    # noise_spectrogram = wav_to_tensor(noise_file, f"noise_{noise}")
+    noise_spectrogram = torch.load(noise_file)
+    noise_spectrogram = noise_spectrogram.unsqueeze(0).unsqueeze(0)
     noise_spectrogram = noise_spectrogram.to(device)
     # noise_spectrogram = torch.load("/work/tc062/tc062/s2501147/FastPitch/FastPitches/PyTorch/SpeechSynthesis/FastPitch/wav_files/mels/Typing_4.pt")
     # noise_spectrogram = noise_spectrogram.unsqueeze(0)
@@ -49,12 +49,13 @@ def add_noise_to_spec(spectrogram, noise_dir, snr_db, device='cuda'):
             
             noise_spectrogram = noise_spectrogram[:, :, :,
                                                     trd_dim_random_start: trd_dim_random_end]
-            
+
+        # can eventually change to just "else:"
         if noise_spectrogram.shape[3] < spectrogram.shape[3]:
             # # If noise is shorter, repeat it
             repeats = spectrogram.shape[3] // noise_spectrogram.shape[3] + 1
             noise_spectrogram = noise_spectrogram.repeat(1, 1, 1, repeats)[:, :, :, :spectrogram.shape[3]]
-            # return spectrogram
+    
     # Calculate signal power
     signal_power = torch.mean((spectrogram)**2)
     
@@ -69,19 +70,5 @@ def add_noise_to_spec(spectrogram, noise_dir, snr_db, device='cuda'):
     # print(f"Noise: {noise}")
     # Scale and add noise to spectrogram
     noisy_spectrogram = spectrogram + scale * noise_spectrogram
-    # torch.save(noisy_spectrogram.squeeze(0), f"{tensor_dir}/noisy_audio5db_again.pt")
+
     return noisy_spectrogram
-
-# when actually training, get random between 5 to 30 db to match Miipher
-# snr_db = 5
-
-# clean_audio = "/work/tc062/tc062/s2501147/FastPitch/FastPitches/PyTorch/SpeechSynthesis/FastPitch/wav_files/wavs/14_208_000005_000000.wav"
-# noisy_directory = "/work/tc062/tc062/s2501147/autoencoder/noise_train_waveglow"
-# result_tensors = "/work/tc062/tc062/s2501147/FastPitch/FastPitches/PyTorch/SpeechSynthesis/FastPitch/torch_saved/mels"
-
-# clean_spectrogram = wav_to_tensor(clean_audio, result_tensors, 'clean_audio5db')
-# clean_spectrogram = torch.load('/work/tc062/tc062/s2501147/FastPitch/FastPitches/PyTorch/SpeechSynthesis/FastPitch/wav_files/mels/14_208_000005_000000.pt')
-# noisy_spectrogram = add_noise_to_spec(clean_spectrogram, noisy_directory, result_tensors, snr_db)
-
-# print(f"Original spectrogram shape: {clean_spectrogram.shape}")
-# print(f"Noisy spectrogram shape: {noisy_spectrogram.shape}")

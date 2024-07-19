@@ -239,7 +239,7 @@ def main():
                         help='input batch size for training (default: 64)')
     parser.add_argument('--test-batch-size', type=int, default=12, metavar='N',
                         help='input batch size for testing (default: 1000)')
-    parser.add_argument('--val-batch-size', type=int, default=4, metavar='N',
+    parser.add_argument('--dev-batch-size', type=int, default=4, metavar='N',
                         help='input batch size for validation (default: 32)')
     parser.add_argument('--epochs', type=int, default=10, metavar='N',
                         help='number of epochs to train (default: 14)')
@@ -277,21 +277,21 @@ def main():
     print("device: ", device)
     train_kwargs = {'batch_size': args.batch_size}
     test_kwargs = {'batch_size': args.test_batch_size}
-    val_kwargs = {'batch_size': args.val_batch_size}
+    dev_kwargs = {'batch_size': args.dev_batch_size}
     if use_cuda:
         cuda_kwargs = {'num_workers': 1,
                        'pin_memory': True,
                        'shuffle': True}
         train_kwargs.update(cuda_kwargs)
         test_kwargs.update(cuda_kwargs)
-        val_kwargs.update(cuda_kwargs)
+        dev_kwargs.update(cuda_kwargs)
         
-    base_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_big_libriTTS"
+    base_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/libriTTS_wg"
     
-    train_dataset, val_dataset, test_dataset = load_datasets(base_dir)
+    train_dataset, dev_dataset, test_dataset = load_datasets(base_dir)
     
     train_loader = torch.utils.data.DataLoader(train_dataset, **train_kwargs, collate_fn=custom_collate)
-    val_dataset = torch.utils.data.DataLoader(val_dataset, **val_kwargs, collate_fn=custom_collate)
+    dev_dataset = torch.utils.data.DataLoader(dev_dataset, **dev_kwargs, collate_fn=custom_collate)
     test_loader = torch.utils.data.DataLoader(test_dataset, **test_kwargs, collate_fn=custom_collate)
 
 
@@ -302,9 +302,9 @@ def main():
     mask = 5
     fine_tune_mask = 10
 
-    model_name = "denoiser_nonorm"
-    train_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_data/noise_onetype"
-    test_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_data/noise_onetype"
+    model_name = "denoiser_wg"
+    train_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/only_air_con"
+    test_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/only_air_con"
     # wandb
     wandb.init(config=args, dir="/work/tc062/tc062/s2501147/autoencoder", mode="offline")
     wandb.watch(model, log_freq=100)

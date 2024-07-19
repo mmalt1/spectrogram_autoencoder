@@ -1,8 +1,8 @@
 import os
 
 # Define the paths
-wav_directory = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/libritts_train_clean_fp/wavs'
-output_txt_file = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/libritts_train_clean_fp/output.txt'
+wav_directory = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/libritts_r/train/wavs'
+output_txt_file = '/work/tc062/tc062/s2501147/autoencoder/libritts_data/libritts_r/train/output.txt'
 dummy_transcription = "This is a dummy transcription."
 
 with open(output_txt_file, 'w') as f:

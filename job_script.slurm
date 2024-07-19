@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #SBATCH --job-name=old_var
-#SBATCH --time=03:00:00
+#SBATCH --time=00:10:00
 #SBATCH --partition=gpu
-#SBATCH --qos=gpu
+#SBATCH --qos=short
 #SBATCH --account=tc062-pool2
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:1
@@ -13,4 +13,4 @@ module load pytorch/1.13.1-gpu
 
 source /work/tc062/tc062/s2501147/venv/mgpu_env/bin/activate
 
-srun python variable_length_restoration.py --epochs 2
+srun python denoiser_user.py
