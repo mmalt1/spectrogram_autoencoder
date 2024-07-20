@@ -243,7 +243,7 @@ def main():
                         help='input batch size for validation (default: 32)')
     parser.add_argument('--epochs', type=int, default=10, metavar='N',
                         help='number of epochs to train (default: 14)')
-    parser.add_argument('--lr', type=float, default=0.00005, metavar='LR',
+    parser.add_argument('--lr', type=float, default=0.0001, metavar='LR',
                         help='learning rate (default: 0.001)')
     parser.add_argument('--gamma', type=float, default=0.7, metavar='M',
                         help='Learning rate step gamma (default: 0.7)')
@@ -302,9 +302,9 @@ def main():
     mask = 5
     fine_tune_mask = 10
 
-    model_name = "denoiser_1noise_00005lr"
-    train_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/only_air_con"
-    test_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/only_air_con"
+    model_name = "denoiser_speakers"
+    train_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/speakers_train"
+    test_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/speakers_test"
     # wandb
     wandb.init(config=args, dir="/work/tc062/tc062/s2501147/autoencoder", mode="offline")
     wandb.watch(model, log_freq=100)

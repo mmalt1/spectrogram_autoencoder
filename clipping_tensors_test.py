@@ -3,56 +3,54 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 import numpy as np
 
-def align_tensors(tensor1, tensor2):
-    if tensor1.shape[1] == tensor2.shape:
-        print('The two tensors are the same shape')
-        return tensor1, tensor2
-
-    elif tensor1.shape[1] > tensor2.shape[1]:
-        print('Tensor 1 is longer than Tensor 2')
-        correlation = F.conv1d(
-            tensor1.unsqueeze(0).float(),
-            tensor2.flip(1).unsqueeze(0).float(),
-            padding=tensor1.shape[1] - 1
-        )
-
-        offset = correlation.argmax() - (tensor1.shape[1] - 1)
-
-        trimmed_tensor1 = tensor1[:, offset:offset + tensor2.shape[1]]
-
-        return trimmed_tensor1, tensor2        
-
-    elif tensor1.shape[1] < tensor2.shape[1]:
-        print('Tensor 1 is shorter than Tensor 2')
-        tensor1, tensor2 = tensor2, tensor1
-
-        correlation = F.conv1d(
-            tensor1.unsqueeze(0).float(),
-            tensor2.flip(1).unsqueeze(0).float(),
-            padding=tensor1.shape[1] - 1
-        )
-
-        offset = correlation.argmax() - (tensor1.shape[1] - 1)
-
-        trimmed_tensor1 = tensor1[:, offset:offset + tensor2.shape[1]]
-
-        return trimmed_tensor1, tensor2
-
-# libri_tts = torch.randn(80, 90)
-# libri_tts_r = torch.randn(80, 87)
-
-# Align the tensors
-# aligned_libri_tts, libri_tts_r = align_tensors(libri_tts, libri_tts_r)
-
-# print("Aligned LibriTTS shape:", aligned_libri_tts.shape)
-# print("LibriTTS-R shape:", libri_tts_r.shape)
+def clip_to_equal_tensors(libritts_tensor, librittsr_tensor):
+    l_length = libritts_tensor.shape[1]
+    lr_length =  librittsr_tensor.shape[1]
     
+    if l_length == lr_length:
+        return libritts_tensor, librittsr_tensor
+    
+    elif l_length < lr_length:
+        difference = lr_length - l_length
+        print("difference: ", difference)
+        if difference%2 == 0:
+            clip = int(difference/2)
+            print('clip: ', clip)
+            librittsr_tensor = librittsr_tensor[:, clip:lr_length-(clip)]
+        else:
+            difference = int(difference/2)
+            beginning_clip = difference
+            end_clip = difference + 1
+            librittsr_tensor = librittsr_tensor[:, beginning_clip: lr_length - end_clip]
+
+    else:
+        difference = l_length - lr_length
+        print("difference: ", difference)
+        if difference%2 == 0:
+            clip = int(difference/2)
+            print('clip: ', clip)
+            libritts_tensor = libritts_tensor[:, clip:l_length-(clip)]
+        else:
+            difference = int(difference/2)
+            beginning_clip = difference
+            print('beginning clip: ', beginning_clip)
+            end_clip = difference + 1
+            print('end clip: ', end_clip)
+            libritts_tensor = libritts_tensor[:, beginning_clip: l_length - end_clip]
+
+    return libritts_tensor, librittsr_tensor
+
 
 libritts_path = "libritts_data/libriTTS_wg/dev/84_121123_000008_000002.pt"
 librittsr_path = "libritts_data/libritts_r/dev/mels/84_121123_000008_000002.pt"
 
-libritts_tensor = torch.load(libritts_path)
-librittsr_tensor = torch.load(librittsr_path)
+libritts_t = torch.load(libritts_path)
+librittsr_t = torch.load(librittsr_path)
+
+print('LibriTTS shape: ', libritts_t.shape)
+print('LibriTTS-R shape: ', librittsr_t.shape)
+
+libritts_tensor, librittsr_tensor = clip_to_equal_tensors(libritts_t, librittsr_t)
 
 libritts_np = libritts_tensor.numpy()
 librittsr_np = librittsr_tensor.numpy()
@@ -73,4 +71,4 @@ axs[1].axis('off')
 axs[1].invert_yaxis()
 
 plt.show()
-plt.savefig('comparing_spectograms3.png')
+plt.savefig('comparing_spectograms3_clipped.png')
