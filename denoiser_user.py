@@ -2,6 +2,7 @@
 
 import matplotlib.pyplot as plt 
 import torch
+import torch.nn as nn
 import random
 from PIL import Image
 from torchvision import datasets, transforms
@@ -29,21 +30,24 @@ def load_and_preprocess_tensor(image_path, noise_directory, snr, save_dir):
     noised_tensor = torch.clone(spec_tensor)
     noised_tensor = add_noise_to_spec(noised_tensor, noise_directory, snr, device='cpu')
     saving_tensor = noised_tensor.squeeze()
-    torch.save(saving_tensor, f"{save_dir}/denoiser_checkpoint4_input.pt")
+    torch.save(saving_tensor, f"{save_dir}/denoiser_env_checkpoint3_input.pt")
     
     return noised_tensor
 
-def predict_image_output(model, image_tensor, save_dir):
+def predict_image_output(model, image_tensor, save_dir, input_path):
     model.eval()
     with torch.no_grad():
         print('size of image tensor: ', image_tensor.shape)
+        input = torch.load(input_path)
         output = model(image_tensor)
         flip_output = torch.flip(output, dims=[3])
         saved_output = flip_output.squeeze()
         print('saved ouput shape: ', saved_output.shape)
         saved_output = torch.flip(saved_output, dims=[1])
         print('saved ouput shape: ', saved_output.shape)
-        torch.save(saved_output, f"{save_dir}/denoiser_checkpoint4_output.pt")
+        torch.save(saved_output, f"{save_dir}/denoiser_env_checkpoint3_output.pt")
+        mse_loss = nn.MSELoss()(output, input)
+        print("Mean Squared Error: ", mse_loss)
     
     return saved_output
 
@@ -72,7 +76,7 @@ def visualize_image(og_tensor, tensor_noised, predicted_image_tensor, save_dir):
     axs[2].invert_yaxis()
    
     plt.show()
-    plt.savefig('denoiser_checkpoint4.png')
+    plt.savefig('denoiser_env_checkpoint3.png')
 
 
 print('STARTING JOB')
@@ -88,17 +92,17 @@ model = VariableLengthRAutoencoder().to(device)
 total_params = sum(p.numel() for p in model.parameters())
 print("total params: ", total_params)
 
-model.load_state_dict(torch.load("denoiser_wg/checkpoint_4.pt"))
+model.load_state_dict(torch.load("denoiser_env/checkpoint_3.pt"))
 
 save_directory = '/work/tc062/tc062/s2501147/FastPitch/FastPitches/PyTorch/SpeechSynthesis/FastPitch/torch_saved/mels'
-noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/only_air_con"
+noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/environments_test"
 tensor = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/libriTTS_wg/dev/84_121123_000007_000001.pt"
 array = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_big_libriTTS/test/array_14_208_000015_000002.wav.npy"
 # og_tensor = torch.tensor(np.load(array))
 og_tensor = torch.load(tensor)
 
 noised_spec = load_and_preprocess_tensor(tensor, noise_dir, 5, save_directory)
-predicted_image = predict_image_output(model, noised_spec, save_directory)
+predicted_image = predict_image_output(model, noised_spec, save_directory, tensor)
 # print("predicted digit: ", predicted_digit)
 
 visualize_image(og_tensor, noised_spec, predicted_image, save_directory)
