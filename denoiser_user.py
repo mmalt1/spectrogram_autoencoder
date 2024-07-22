@@ -30,7 +30,7 @@ def load_and_preprocess_tensor(image_path, noise_directory, snr, save_dir):
     noised_tensor = torch.clone(spec_tensor)
     noised_tensor = add_noise_to_spec(noised_tensor, noise_directory, snr, device='cpu')
     saving_tensor = noised_tensor.squeeze()
-    torch.save(saving_tensor, f"{save_dir}/denoiser_env_checkpoint3_input.pt")
+    torch.save(saving_tensor, f"{save_dir}/denoiser_finetunedspeakers_checkpoint8_input.pt")
     
     return noised_tensor
 
@@ -45,7 +45,7 @@ def predict_image_output(model, image_tensor, save_dir, input_path):
         print('saved ouput shape: ', saved_output.shape)
         saved_output = torch.flip(saved_output, dims=[1])
         print('saved ouput shape: ', saved_output.shape)
-        torch.save(saved_output, f"{save_dir}/denoiser_env_checkpoint3_output.pt")
+        torch.save(saved_output, f"{save_dir}/denoiser_finetunedspeakers_checkpoint8_output.pt")
         mse_loss = nn.MSELoss()(output, input)
         print("Mean Squared Error: ", mse_loss)
     
@@ -76,7 +76,7 @@ def visualize_image(og_tensor, tensor_noised, predicted_image_tensor, save_dir):
     axs[2].invert_yaxis()
    
     plt.show()
-    plt.savefig('denoiser_env_checkpoint3.png')
+    plt.savefig('denoiser_finetunedspeakers_checkpoint8.png')
 
 
 print('STARTING JOB')
@@ -92,10 +92,10 @@ model = VariableLengthRAutoencoder().to(device)
 total_params = sum(p.numel() for p in model.parameters())
 print("total params: ", total_params)
 
-model.load_state_dict(torch.load("denoiser_env/checkpoint_3.pt"))
+model.load_state_dict(torch.load("denoiser_finetuned_speakers/checkpoint_8.pt"))
 
 save_directory = '/work/tc062/tc062/s2501147/FastPitch/FastPitches/PyTorch/SpeechSynthesis/FastPitch/torch_saved/mels'
-noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/environments_test"
+noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/speakers_test"
 tensor = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/libriTTS_wg/dev/84_121123_000007_000001.pt"
 array = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_big_libriTTS/test/array_14_208_000015_000002.wav.npy"
 # og_tensor = torch.tensor(np.load(array))

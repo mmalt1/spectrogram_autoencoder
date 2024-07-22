@@ -91,98 +91,88 @@ def custom_loss(output, target):
     
     return total_loss
 
-def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr_columns, name, noise_directory, accumulation_steps=4, masking=False, noising=False):
+def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr_columns, name,
+           noise_directory, accumulation_steps=4, masking=False, noising=False, enhancer=False):
     model.train()
     total_loss = 0
     optimizer.zero_grad()
 
-    for batch_idx, (data, lengths) in enumerate(train_loader):
-        data = data.to(device)
-        # print('shape of data: ', data.shape)
-
-        lengths = lengths.to(device)
-        # print('lengths: ', lengths)
-        # print('length type: ', type(lengths))
-        batch_size, _, height, max_width = data.shape
-        
-        # create mask for padding
-        mask = torch.arange(max_width, device=device)[None, None, None, :] < lengths[:, None, None, None]
-        mask = mask.float()
-        # print('shape of mask: ', mask.shape)
-
-        if masking:
-        # zero out random columns in non-padded area
-            zeroed_tensor = torch.clone(data)
-            for i, length in enumerate(lengths):
-                columns = random.sample(range(length.item()), min(nbr_columns, length.item()))
-                zeroed_tensor[i, :, :, columns] = 0
-            optimizer.zero_grad()
-            output = model(zeroed_tensor)
-        
-        if noising:
-            noised_tensor = torch.clone(data)
-            snr = random.randint(5, 30)
-            noised_tensor = add_noise_to_spec(noised_tensor, noise_directory, snr)
-            noised_tensor = noised_tensor.to(device)
-            optimizer.zero_grad()
-            output = model(noised_tensor)
-        
-        # Apply mask to both output and target
-        loss = custom_loss(output * mask, data * mask)
-        loss.backward()
-        # optimizer.step()
-        total_loss += loss.item()
-
-        # Perform optimizer step every 'accumulation_steps' batches
-        if (batch_idx + 1) % accumulation_steps == 0:
-            optimizer.step()
-            optimizer.zero_grad
-
-        if batch_idx % args.log_interval == 0:
-            print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                epoch, batch_idx * len(data), len(train_loader.dataset),
-                100. * batch_idx / len(train_loader), loss.item()))
-            wandb.log({"loss": loss.item()})
-            trigger_sync()
-            subprocess.Popen("sed -i 's|.*|/work/tc062/tc062/s2501147/autoencoder|g' {}/*.command".format(comm_dir),
-                             shell=True,
-                             stdout=subprocess.PIPE,
-                             stdin=subprocess.PIPE)
-
-    # Perform a final optimizer step if there are remaining gradients
-    if (batch_idx + 1) % accumulation_steps != 0:
-        optimizer.step()
-        optimizer.zero_grad()
-
-    avg_loss = total_loss / len(train_loader)
-    print('Train Epoch for model {}: {} Average loss: {:.4f}'.format(name, epoch, avg_loss))
-    wandb.log({"epoch_loss": avg_loss})
-
-    torch.save(model.state_dict(), f"{name}/checkpoint_{epoch}.pt")
-    print(f"Model saved at epoch {epoch}")
-
-def test(model, device, test_loader, trigger_sync, nbr_columns, noise_directory, masking=True, noising=False):
-    model.eval()
-    test_loss = 0
-    total_pixels = 0
-    with torch.no_grad():
-        for data, lengths in test_loader:
+    if enhancer:
+        for batch_idx, (data, enhanced_data, lengths) in enumerate(train_loader):
+            # try to change to one loop by unzipping into 2 when enhanced and keeping at one when not enhanced
             data = data.to(device)
+            enhanced_data = enhanced_data.to(device)
             lengths = lengths.to(device)
+            # print("Data shape: ", data.shape)
+            # print("Enhanced data shape: ", enhanced_data.shape)
+
+            batch_size, _, height, max_width = data.shape
+            mask = torch.arange(max_width, device=device)[None, None, None, :] < lengths[:, None, None, None]
+            mask = mask.float()
+
+            if noising:
+                noised_tensor = torch.clone(data)
+                snr = random.randint(5, 30)
+                noised_tensor = add_noise_to_spec(noised_tensor, noise_directory, snr)
+                noised_tensor = noised_tensor.to(device)
+                output = model(noised_tensor)
+            else:
+                output = model(data)
+
+            loss = custom_loss(output * mask, enhanced_data * mask)
+            loss.backward()
+            # optimizer.step()
+            total_loss += loss.item()        
+
+            if (batch_idx + 1) % accumulation_steps == 0:
+                optimizer.step()
+                optimizer.zero_grad()
+
+            if batch_idx % args.log_interval == 0:
+                print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                    epoch, batch_idx * len(data), len(train_loader.dataset),
+                    100. * batch_idx / len(train_loader), loss.item()))
+                wandb.log({"loss": loss.item()})
+                trigger_sync()
+                subprocess.Popen("sed -i 's|.*|/work/tc062/tc062/s2501147/autoencoder|g' {}/*.command".format(comm_dir),
+                                shell=True,
+                                stdout=subprocess.PIPE,
+                                stdin=subprocess.PIPE)
+             # Perform a final optimizer step if there are remaining gradients
+        if (batch_idx + 1) % accumulation_steps != 0:
+            optimizer.step()
+            optimizer.zero_grad()
+
+        avg_loss = total_loss / len(train_loader)
+        print('Train Epoch for model {}: {} Average loss: {:.4f}'.format(name, epoch, avg_loss))
+        wandb.log({"epoch_loss": avg_loss})
+
+        torch.save(model.state_dict(), f"{name}/checkpoint_{epoch}.pt")
+        print(f"Model saved at epoch {epoch}")
+
+        
+    if enhancer==False:
+        for batch_idx, (data, lengths) in enumerate(train_loader):
+            data = data.to(device)
+            # print('shape of data: ', data.shape)
+            print("data shape: ", data.shape)
+            lengths = lengths.to(device)
+            # print('lengths: ', lengths)
+            # print('length type: ', type(lengths))
             batch_size, _, height, max_width = data.shape
             
             # create mask for padding
             mask = torch.arange(max_width, device=device)[None, None, None, :] < lengths[:, None, None, None]
             mask = mask.float()
+            # print('shape of mask: ', mask.shape)
 
             if masking:
-            # zero out random columns (only in non-padded area)
+            # zero out random columns in non-padded area
                 zeroed_tensor = torch.clone(data)
-                # print('zeroed tensor shape: ', zeroed_tensor.shape)
                 for i, length in enumerate(lengths):
                     columns = random.sample(range(length.item()), min(nbr_columns, length.item()))
                     zeroed_tensor[i, :, :, columns] = 0
-                # print('shape of zeroed tensor after mask: ', zeroed_tensor.shape)
+                # optimizer.zero_grad()
                 output = model(zeroed_tensor)
             
             if noising:
@@ -193,22 +183,145 @@ def test(model, device, test_loader, trigger_sync, nbr_columns, noise_directory,
                 output = model(noised_tensor)
             
             # Apply mask to both output and target
-            # loss = F.mse_loss(output * mask, data * mask, reduction='sum')
             loss = custom_loss(output * mask, data * mask)
-            test_loss += loss.item()
-            # total_pixels += mask.sum().item()
-    
+            loss.backward()
+            # optimizer.step()
+            total_loss += loss.item()
+
+            # Perform optimizer step every 'accumulation_steps' batches
+            if (batch_idx + 1) % accumulation_steps == 0:
+                optimizer.step()
+                optimizer.zero_grad()
+
+            if batch_idx % args.log_interval == 0:
+                print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                    epoch, batch_idx * len(data), len(train_loader.dataset),
+                    100. * batch_idx / len(train_loader), loss.item()))
+                wandb.log({"loss": loss.item()})
+                trigger_sync()
+                subprocess.Popen("sed -i 's|.*|/work/tc062/tc062/s2501147/autoencoder|g' {}/*.command".format(comm_dir),
+                                shell=True,
+                                stdout=subprocess.PIPE,
+                                stdin=subprocess.PIPE)
+
+        # Perform a final optimizer step if there are remaining gradients
+        if (batch_idx + 1) % accumulation_steps != 0:
+            optimizer.step()
+            optimizer.zero_grad()
+
+        avg_loss = total_loss / len(train_loader)
+        print('Train Epoch for model {}: {} Average loss: {:.4f}'.format(name, epoch, avg_loss))
+        wandb.log({"epoch_loss": avg_loss})
+
+        torch.save(model.state_dict(), f"{name}/checkpoint_{epoch}.pt")
+        print(f"Model saved at epoch {epoch}")
+
+def test(model, device, test_loader, trigger_sync, nbr_columns, noise_directory,
+          masking=True, noising=False, enhancer=False):
+    model.eval()
+    test_loss = 0
+    total_pixels = 0
+    with torch.no_grad():
+        if enhancer:
+            for data, enhanced_data, lengths in test_loader:
+                data = data.to(device)
+                enhanced_data = enhanced_data.to(device)
+                lengths = lengths.to(device)
+                batch_size, _, height, max_width = data.shape
+
+                mask = torch.arange(max_width, device=device)[None, None, None, :] < lengths[:, None, None, None]
+                mask = mask.float()
+
+                if noising:
+                    noised_tensor = torch.clone(data)
+                    snr = random.randint(10, 30)
+                    noised_tensor = add_noise_to_spec(noised_tensor, noise_directory, snr)
+                    noised_tensor = noised_tensor.to(device)
+                    output = model(noised_tensor)
+                else:
+                    output = model(data)
+
+                loss = custom_loss(output * mask, enhanced_data * mask)
+                test_loss += loss.item()
+
+
+        if enhancer==False:
+            for data, lengths in test_loader:
+                data = data.to(device)
+                lengths = lengths.to(device)
+                batch_size, _, height, max_width = data.shape
+                
+                # create mask for padding
+                mask = torch.arange(max_width, device=device)[None, None, None, :] < lengths[:, None, None, None]
+                mask = mask.float()
+
+                if masking:
+                # zero out random columns (only in non-padded area)
+                    zeroed_tensor = torch.clone(data)
+                    # print('zeroed tensor shape: ', zeroed_tensor.shape)
+                    for i, length in enumerate(lengths):
+                        columns = random.sample(range(length.item()), min(nbr_columns, length.item()))
+                        zeroed_tensor[i, :, :, columns] = 0
+                    # print('shape of zeroed tensor after mask: ', zeroed_tensor.shape)
+                    output = model(zeroed_tensor)
+                
+                if noising:
+                    noised_tensor = torch.clone(data)
+                    snr = random.randint(10, 30)
+                    noised_tensor = add_noise_to_spec(noised_tensor, noise_directory, snr)
+                    noised_tensor = noised_tensor.to(device)
+                    output = model(noised_tensor)
+            
+
+
+
+                # Apply mask to both output and target
+                # loss = F.mse_loss(output * mask, data * mask, reduction='sum')
+                loss = custom_loss(output * mask, data * mask)
+                test_loss += loss.item()
+                # total_pixels += mask.sum().item()
+        
     # test_loss /= total_pixels  # Average loss per non-padded pixel
     average_test_loss = test_loss / len(test_loader)
     print('\nTest set: Average loss: {:.4f}\n'.format(average_test_loss))
     wandb.log({"test_loss": average_test_loss})
     trigger_sync()
     subprocess.Popen("sed -i 's|.*|/work/tc062/tc062/s2501147/autoencoder|g' {}/*.command".format(comm_dir),
-                     shell=True,
-                     stdout=subprocess.PIPE,
-                     stdin=subprocess.PIPE)
-    
+                        shell=True,
+                        stdout=subprocess.PIPE,
+                        stdin=subprocess.PIPE)
+        
     return average_test_loss
+
+def enhanced_custom_collate(batch):
+    # Unpack the batch
+    spectrograms, enhanced_spectrograms, lengths = zip(*batch)
+
+    # Find the maximum length in the batch
+    max_len = max(spec.shape[2] for spec in spectrograms)
+
+    # Pad spectrograms and enhanced spectrograms
+    padded_spectrograms = []
+    padded_enhanced_spectrograms = []
+    for spec, enhanced_spec in zip(spectrograms, enhanced_spectrograms):
+        # Ensure both spec and enhanced_spec have the same length
+        assert spec.shape[2] == enhanced_spec.shape[2], f"Spectrogram and enhanced spectrogram lengths don't match: {spec.shape} vs {enhanced_spec.shape}"
+        
+        pad_len = max_len - spec.shape[2]
+        padded_spec = F.pad(spec, (0, pad_len), mode='constant', value=0)
+        padded_enhanced_spec = F.pad(enhanced_spec, (0, pad_len), mode='constant', value=0)
+        
+        padded_spectrograms.append(padded_spec)
+        padded_enhanced_spectrograms.append(padded_enhanced_spec)
+
+    # Stack tensors
+    padded_spectrograms = torch.stack(padded_spectrograms)
+    padded_enhanced_spectrograms = torch.stack(padded_enhanced_spectrograms)
+    lengths = torch.LongTensor(lengths)
+
+    # print(f"Batch shapes: Spec {padded_spectrograms.shape}, Enhanced {padded_enhanced_spectrograms.shape}")
+
+    return padded_spectrograms, padded_enhanced_spectrograms, lengths
 
 
 def custom_collate(batch):
@@ -280,29 +393,28 @@ def main():
     dev_kwargs = {'batch_size': args.dev_batch_size}
     if use_cuda:
         cuda_kwargs = {'num_workers': 1,
-                       'pin_memory': True,
-                       'shuffle': True}
+                       'pin_memory': True}
         train_kwargs.update(cuda_kwargs)
         test_kwargs.update(cuda_kwargs)
         dev_kwargs.update(cuda_kwargs)
         
-    base_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/libriTTS_wg"
+    base_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/enhancement_dataset"
     
     train_dataset, dev_dataset, test_dataset = load_datasets(base_dir)
     
-    train_loader = torch.utils.data.DataLoader(train_dataset, **train_kwargs, collate_fn=custom_collate)
-    dev_dataset = torch.utils.data.DataLoader(dev_dataset, **dev_kwargs, collate_fn=custom_collate)
-    test_loader = torch.utils.data.DataLoader(test_dataset, **test_kwargs, collate_fn=custom_collate)
+    train_loader = torch.utils.data.DataLoader(train_dataset, **train_kwargs, collate_fn=enhanced_custom_collate, shuffle=None)
+    dev_dataset = torch.utils.data.DataLoader(dev_dataset, **dev_kwargs, collate_fn=enhanced_custom_collate, shuffle=None)
+    test_loader = torch.utils.data.DataLoader(test_dataset, **test_kwargs, collate_fn=enhanced_custom_collate, shuffle=None)
 
 
-    model = VariableLengthRAutoencoder().to(device)
-    # model.load_state_dict(torch.load("reconstructor_baseline.pt"))
-    # model.to(device)
+    model = VariableLengthRAutoencoder()
+    model.load_state_dict(torch.load("enhancer_finetuned/checkpoint_4.pt"))
+    model.to(device)
 
     mask = 5
     fine_tune_mask = 10
 
-    model_name = "denoiser_speakers"
+    model_name = "enhancer_finetuned"
     train_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/speakers_train"
     test_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/speakers_test"
     # wandb
@@ -315,9 +427,10 @@ def main():
     scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
     for epoch in range(1, args.epochs + 1):
         train_loss = train(args, model, device, train_loader, optimizer, epoch, trigger_sync,
-                            mask, model_name, train_noise_dir, masking=False, noising=True)
+                            mask, model_name, train_noise_dir,
+                            masking=False, noising=False, enhancer=True)
         test_loss = test(model, device, test_loader, trigger_sync, mask,
-                            test_noise_dir, masking=False, noising=True)
+                            test_noise_dir, masking=False, noising=False, enhancer=True)
         scheduler.step()
 
     if args.save_model:
