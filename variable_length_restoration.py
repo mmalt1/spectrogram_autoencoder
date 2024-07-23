@@ -18,10 +18,10 @@ from noiser_function import add_noise_to_spec, wav_to_tensor
 comm_dir = "/work/tc062/tc062/s2501147/autoencoder/.wandb_osh_command_dir"
 
 class VariableLengthRAutoencoder(nn.Module):
-    def __init__(self, debug=False):
+    def __init__(self, debug=False, vae=False):
         super(VariableLengthRAutoencoder, self).__init__()
         self.debug = debug
-
+        self.vae = vae
         # Encoder
         self.encoder = nn.Sequential(
             nn.Conv2d(1, 64, kernel_size=3, stride=1, padding=1),
@@ -37,6 +37,9 @@ class VariableLengthRAutoencoder(nn.Module):
             nn.BatchNorm2d(512),
             nn.LeakyReLU(0.2)
         )
+        if self.vae:
+            self.mean_layer = nn.Conv2d(512, 512, kernel_size=1)
+            self.log_var_layer = nn.Conv2d(512, 512, kernel_size=1)
 
         # Decoder
         self.decoder = nn.Sequential(
@@ -56,28 +59,30 @@ class VariableLengthRAutoencoder(nn.Module):
         self.scaling = nn.Parameter(torch.FloatTensor([1.0]))
         self.shifting = nn.Parameter(torch.FloatTensor([0.0]))
 
-    def forward(self, x):
-        if self.debug:
-            print(f"Input shape: {x.shape}")
+    def forward(self, x):            
 
         encoded = self.encoder(x)
-        if self.debug:
-            print(f"Encoded shape: {encoded.shape}")
-
-        decoded = self.decoder(encoded)
-        if self.debug:
-            print(f"decoded shape: {decoded.shape}")
-        
-        scaled = decoded * self.scaling + self.shifting
-        
-        if self.debug:
-            print(f"scaled shape: {scaled.shape}")
+        if self.vae:
+            mean, var = self.mean_layer(encoded), self.log_var_layer(encoded)
+            variable = torch.randn_like(var)
+            #if blocks here then check the device
+            sample = mean + var*variable
+            decoded = self.decoder(sample)
+        else:
+            decoded = self.decoder(encoded)
+       
+        scaled = decoded * self.scaling + self.shifting 
+        # if self.debug:
+        #     print(f"scaled shape: {scaled.shape}")
         
         resized = F.interpolate(scaled, size=(x.size(2), x.size(3)), mode='bilinear', align_corners=False)
-        if self.debug:
-            print(f"resized shape: {resized.shape}")
+        # if self.debug:
+        #     print(f"resized shape: {resized.shape}")
         
-        return resized
+        if self.vae:
+            return resized, mean, var
+        else:
+            return resized
     
     def set_debug(self, debug):
         self.debug = debug
@@ -91,12 +96,18 @@ def custom_loss(output, target):
     
     return total_loss
 
+def vae_loss(output, enhanced, mean, logvar):
+    rep_loss = F.mse_loss(output, enhanced, reduction='sum')
+    kld = -0.5 * torch.sum(1+logvar - mean.pow(2) - logvar.exp())
+
+    return rep_loss + kld
+
 def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr_columns, name,
            noise_directory, accumulation_steps=4, masking=False, noising=False, enhancer=False):
     model.train()
     total_loss = 0
     optimizer.zero_grad()
-
+    loss = 0
     if enhancer:
         for batch_idx, (data, enhanced_data, lengths) in enumerate(train_loader):
             # try to change to one loop by unzipping into 2 when enhanced and keeping at one when not enhanced
@@ -117,9 +128,10 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
                 noised_tensor = noised_tensor.to(device)
                 output = model(noised_tensor)
             else:
-                output = model(data)
+                output, mean, var = model(data)
 
-            loss = custom_loss(output * mask, enhanced_data * mask)
+            loss = vae_loss(output * mask, enhanced_data * mask, mean, var)
+            # loss = rep_loss + kld
             loss.backward()
             # optimizer.step()
             total_loss += loss.item()        
@@ -154,11 +166,7 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
     if enhancer==False:
         for batch_idx, (data, lengths) in enumerate(train_loader):
             data = data.to(device)
-            # print('shape of data: ', data.shape)
-            print("data shape: ", data.shape)
             lengths = lengths.to(device)
-            # print('lengths: ', lengths)
-            # print('length type: ', type(lengths))
             batch_size, _, height, max_width = data.shape
             
             # create mask for padding
@@ -267,13 +275,11 @@ def test(model, device, test_loader, trigger_sync, nbr_columns, noise_directory,
                 
                 if noising:
                     noised_tensor = torch.clone(data)
-                    snr = random.randint(10, 30)
+                    # snr = random.randint(10, 30)
+                    snr = 0
                     noised_tensor = add_noise_to_spec(noised_tensor, noise_directory, snr)
                     noised_tensor = noised_tensor.to(device)
                     output = model(noised_tensor)
-            
-
-
 
                 # Apply mask to both output and target
                 # loss = F.mse_loss(output * mask, data * mask, reduction='sum')
@@ -407,14 +413,14 @@ def main():
     test_loader = torch.utils.data.DataLoader(test_dataset, **test_kwargs, collate_fn=enhanced_custom_collate, shuffle=None)
 
 
-    model = VariableLengthRAutoencoder()
-    model.load_state_dict(torch.load("enhancer_finetuned/checkpoint_4.pt"))
-    model.to(device)
+    model = VariableLengthRAutoencoder(vae=True).to(device)
+    # model.load_state_dict(torch.load("enhancer_finetuned/checkpoint_4.pt"))
+    # model.to(device)
 
     mask = 5
     fine_tune_mask = 10
 
-    model_name = "enhancer_finetuned"
+    model_name = "enhancer_vae"
     train_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/speakers_train"
     test_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/speakers_test"
     # wandb
