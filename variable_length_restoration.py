@@ -63,7 +63,8 @@ class VariableLengthRAutoencoder(nn.Module):
 
         encoded = self.encoder(x)
         if self.vae:
-            mean, var = self.mean_layer(encoded), self.log_var_layer(encoded)
+            mean, log_var = self.mean_layer(encoded), self.log_var_layer(encoded)
+            var = log_var.exp()
             variable = torch.randn_like(var)
             #if blocks here then check the device
             sample = mean + var*variable
@@ -80,7 +81,7 @@ class VariableLengthRAutoencoder(nn.Module):
         #     print(f"resized shape: {resized.shape}")
         
         if self.vae:
-            return resized, mean, var
+            return resized, mean, log_var
         else:
             return resized
     
@@ -97,10 +98,12 @@ def custom_loss(output, target):
     return total_loss
 
 def vae_loss(output, enhanced, mean, logvar):
-    rep_loss = F.mse_loss(output, enhanced, reduction='sum')
-    kld = -0.5 * torch.sum(1+logvar - mean.pow(2) - logvar.exp())
+    reconstruction_loss = nn.MSELoss()(output, enhanced)
+    # print('reconstruction_loss: ', reconstruction_loss)
+    kld = -0.5 * torch.mean(1+logvar - mean.pow(2) - logvar.exp())
+    # print('kld: ', kld)
 
-    return rep_loss + kld
+    return reconstruction_loss + kld
 
 def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr_columns, name,
            noise_directory, accumulation_steps=4, masking=False, noising=False, enhancer=False):
@@ -131,7 +134,7 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
                 output, mean, var = model(data)
 
             loss = vae_loss(output * mask, enhanced_data * mask, mean, var)
-            # loss = rep_loss + kld
+            # loss = torch.nn.KLDivLoss()
             loss.backward()
             # optimizer.step()
             total_loss += loss.item()        
