@@ -66,6 +66,5 @@ save_dir = "/work/tc062/tc062/s2501147/autoencoder/test_noised_wavs"
 snr_db = 5  # desired SNR in dB
 
 noisy_audio, sample_rate = add_noise_to_wav(clean_wav_path, noise_dir, snr_db)
-
 # If you want to save the noisy audio
 torchaudio.save(f"{save_dir}/noisy_audio2.wav", noisy_audio.cpu(), sample_rate)

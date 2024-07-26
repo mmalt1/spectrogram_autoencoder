@@ -17,15 +17,15 @@ def predict_image_output(model, save_dir, og_tensor):
     model.eval()
     with torch.no_grad():
         print('size of image tensor: ', og_tensor.shape)
-        torch.save(og_tensor, f"{save_dir}/enhancer_checkpoint7_input.pt")
+        torch.save(og_tensor, f"{save_dir}/enhancer__vae_custom_checkpoint4_input.pt")
         og_tensor = og_tensor.unsqueeze(0).unsqueeze(0)
-        output = model(og_tensor)
+        output, _, _ = model(og_tensor)
         flip_output = torch.flip(output, dims=[3])
         saved_output = flip_output.squeeze()
         print('saved ouput shape: ', saved_output.shape)
         saved_output = torch.flip(saved_output, dims=[1])
         print('saved ouput shape: ', saved_output.shape)
-        torch.save(saved_output, f"{save_dir}/enhancer_checkpoint7_output.pt")
+        torch.save(saved_output, f"{save_dir}/enhancer_vae_custom_checkpoint4_output.pt")
         mse_loss = nn.MSELoss()(output, og_tensor)
         print("Mean Squared Error: ", mse_loss)
     
@@ -33,7 +33,7 @@ def predict_image_output(model, save_dir, og_tensor):
 
 def visualize_image(enhanced_tensor, og_tensor, predicted_tensor, save_dir):
     
-    torch.save(enhanced_tensor, f"{save_dir}/enhancer_checkpoint7_reference.pt")
+    torch.save(enhanced_tensor, f"{save_dir}/enhancer_vae_custom_checkpoint4_reference.pt")
     enhanced_image = enhanced_tensor.numpy()
     og_image = og_tensor.numpy()
     predicted_image = predicted_tensor.numpy()
@@ -57,7 +57,7 @@ def visualize_image(enhanced_tensor, og_tensor, predicted_tensor, save_dir):
     axs[2].invert_yaxis()
    
     plt.show()
-    plt.savefig('enhancer_checkpoint7.png')
+    plt.savefig('enhancer_vae_custom_checkpoint4.png')
 
 
 print('STARTING JOB')
@@ -69,11 +69,11 @@ device = torch.device("cpu")
 print("device: ", device)
 
 
-model = VariableLengthRAutoencoder().to(device)
+model = VariableLengthRAutoencoder(vae=True).to(device)
 total_params = sum(p.numel() for p in model.parameters())
 print("total params: ", total_params)
 
-model.load_state_dict(torch.load("enhancer/checkpoint_7.pt"))
+model.load_state_dict(torch.load("enhancer_vae_custom_loss/checkpoint_4.pt"))
 
 save_directory = '/work/tc062/tc062/s2501147/FastPitch/FastPitches/PyTorch/SpeechSynthesis/FastPitch/torch_saved/mels'
 tensor = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/enhancement_dataset/dev/84_121123_000007_000001.pt"

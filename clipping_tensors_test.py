@@ -51,20 +51,20 @@ def clip_to_equal_tensors(libritts_tensor, librittsr_tensor):
 # libritts_t = torch.load(libritts_path)
 # librittsr_t = torch.load(librittsr_path)
 
-libritts_t = torch.rand(1,80,545)
-librittsr_t = torch.rand(1,80,540)
+# libritts_t = torch.rand(1,80,545)
+# librittsr_t = torch.rand(1,80,540)
 
 
-print('LibriTTS shape: ', libritts_t.shape)
-print('LibriTTS-R shape: ', librittsr_t.shape)
+# print('LibriTTS shape: ', libritts_t.shape)
+# print('LibriTTS-R shape: ', librittsr_t.shape)
 
-libritts_tensor, librittsr_tensor = clip_to_equal_tensors(libritts_t, librittsr_t)
+# libritts_tensor, librittsr_tensor = clip_to_equal_tensors(libritts_t, librittsr_t)
 
-libritts_np = libritts_tensor.numpy()
-librittsr_np = librittsr_tensor.numpy()
+# libritts_np = libritts_tensor.numpy()
+# librittsr_np = librittsr_tensor.numpy()
 
-print('LibriTTS shape: ', libritts_tensor.shape)
-print('LibriTTS-R shape: ', librittsr_tensor.shape)
+# print('LibriTTS shape: ', libritts_tensor.shape)
+# print('LibriTTS-R shape: ', librittsr_tensor.shape)
 
 # # fig, axs = plt.subplots(2, 1)
 

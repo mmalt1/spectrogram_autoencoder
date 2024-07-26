@@ -58,15 +58,15 @@ def load_datasets(base_dir):
     # print("In load datasets")
     train_dataset = VarSpectrogramDataset(tensor_dir=os.path.join(base_dir, "train"),
                                           enhanced_tensor_dir=os.path.join(base_dir, "train_enhanced"),
-                                          transform=None, enhancement=True)
+                                          transform=None, enhancement=False)
     # print("train dataset loaded")
     dev_dataset = VarSpectrogramDataset(tensor_dir=os.path.join(base_dir, "dev"),
                                         enhanced_tensor_dir=os.path.join(base_dir, "dev_enhanced"),
-                                        transform=None, enhancement=True)
+                                        transform=None, enhancement=False)
     # print("val dataset loaded")
     test_dataset = VarSpectrogramDataset(tensor_dir=os.path.join(base_dir, "test"),
                                          enhanced_tensor_dir=os.path.join(base_dir, "test_enhanced"),
-                                        transform=None, enhancement=True)
+                                        transform=None, enhancement=False)
     # print("test dataset loaded")
     
     return train_dataset, dev_dataset, test_dataset

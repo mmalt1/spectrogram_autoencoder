@@ -30,7 +30,7 @@ def load_and_preprocess_tensor(image_path, noise_directory, snr, save_dir):
     noised_tensor = torch.clone(spec_tensor)
     noised_tensor = add_noise_to_spec(noised_tensor, noise_directory, snr, device='cpu')
     saving_tensor = noised_tensor.squeeze()
-    torch.save(saving_tensor, f"{save_dir}/speaker_1_{snr}_log.pt")
+    # torch.save(saving_tensor, f"{save_dir}/denoiser_finetunedspeakers_checkpoint8_input.pt")
     
     return noised_tensor
 
@@ -76,7 +76,7 @@ def visualize_image(og_tensor, tensor_noised, predicted_image_tensor, save_dir):
     axs[2].invert_yaxis()
    
     plt.show()
-    # plt.savefig('denoiser_0dbtest.png')
+    plt.savefig('denoiser_0dbtest.png')
 
 
 print('STARTING JOB')
@@ -95,15 +95,14 @@ print("total params: ", total_params)
 model.load_state_dict(torch.load("denoiser_test_0db/checkpoint_1.pt"))
 
 save_directory = '/work/tc062/tc062/s2501147/FastPitch/FastPitches/PyTorch/SpeechSynthesis/FastPitch/torch_saved/mels'
-noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/speakers_1_test"
+noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/speakers_test"
 tensor = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/libriTTS_wg/dev/84_121123_000007_000001.pt"
 array = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_big_libriTTS/test/array_14_208_000015_000002.wav.npy"
 # og_tensor = torch.tensor(np.load(array))
 og_tensor = torch.load(tensor)
 
-for snr in [1,5,10,15,20,30]:
-    noised_spec = load_and_preprocess_tensor(tensor, noise_dir, snr, save_directory)
-# predicted_image = predict_image_output(model, noised_spec, save_directory, tensor)
-# # print("predicted digit: ", predicted_digit)
+noised_spec = load_and_preprocess_tensor(tensor, noise_dir, 0, save_directory)
+predicted_image = predict_image_output(model, noised_spec, save_directory, tensor)
+# print("predicted digit: ", predicted_digit)
 
-# visualize_image(og_tensor, noised_spec, predicted_image, save_directory)
+visualize_image(og_tensor, noised_spec, predicted_image, save_directory)

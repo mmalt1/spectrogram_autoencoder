@@ -10,6 +10,8 @@
 module load python/3.10.8-gpu 
 module load pytorch/1.13.1-gpu
 
+export PATH=/work/tc062/shared/bin:$PATH
+
 source /work/tc062/tc062/s2501147/venv/mgpu_env/bin/activate
 
-srun clipping_tensors_test.py
+srun python test.py

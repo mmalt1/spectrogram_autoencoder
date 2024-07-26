@@ -1,5 +1,4 @@
 import torch
-import torchaudio
 import librosa
 import numpy as np
 import os, random
@@ -57,10 +56,10 @@ def add_noise_to_spec(spectrogram, noise_dir, snr_db, device='cuda'):
             noise_spectrogram = noise_spectrogram.repeat(1, 1, 1, repeats)[:, :, :, :spectrogram.shape[3]]
     
     # Calculate signal power
-    signal_power = torch.mean((spectrogram)**2)
+    signal_power = torch.mean(spectrogram**2)
     
     # Calculate noise power
-    noise_power = torch.mean((noise_spectrogram)**2)
+    noise_power = torch.mean(noise_spectrogram**2)
     
     # Calculate scaling factor for noise
     snr = 10**(snr_db / 10)
@@ -69,6 +68,6 @@ def add_noise_to_spec(spectrogram, noise_dir, snr_db, device='cuda'):
     # print('noisy spectrogram size: ', noise_spectrogram.shape)
     # print(f"Noise: {noise}")
     # Scale and add noise to spectrogram
-    noisy_spectrogram = spectrogram + scale * noise_spectrogram
-
-    return noisy_spectrogram
+    print(scale)
+    noisy_spectrogram = torch.exp(spectrogram) + (scale * torch.exp(noise_spectrogram))
+    return torch.log(noisy_spectrogram)

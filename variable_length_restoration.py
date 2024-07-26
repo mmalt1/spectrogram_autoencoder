@@ -38,9 +38,14 @@ class VariableLengthRAutoencoder(nn.Module):
             nn.LeakyReLU(0.2)
         )
         if self.vae:
-            self.mean_layer = nn.Conv2d(512, 512, kernel_size=1)
-            self.log_var_layer = nn.Conv2d(512, 512, kernel_size=1)
-
+            # self.mean_layer = nn.Conv2d(512, 512, kernel_size=1)
+            # self.log_var_layer = nn.Conv2d(512, 512, kernel_size=1)
+            latent_dim = 512
+            self.mean_layer = nn.Linear(latent_dim, 2)
+            self.log_var_layer = nn.Linear(latent_dim, 2)
+            self.decoder_input = nn.Linear(2, latent_dim)
+        
+        # change first conv to 513 instead of 512 when vae
         # Decoder
         self.decoder = nn.Sequential(
             nn.ConvTranspose2d(512, 256, kernel_size=3, stride=1, padding=1),
@@ -63,12 +68,22 @@ class VariableLengthRAutoencoder(nn.Module):
 
         encoded = self.encoder(x)
         if self.vae:
+            time_frames = encoded.shape[-1]
+            encoded = encoded.mean(dim=-1)
+            encoded = encoded.mean(dim=-1)
+            encoded = torch.flatten(encoded, start_dim=1)
             mean, log_var = self.mean_layer(encoded), self.log_var_layer(encoded)
             var = log_var.exp()
             variable = torch.randn_like(var)
             #if blocks here then check the device
             sample = mean + var*variable
-            decoded = self.decoder(sample)
+            resample = self.decoder_input(sample)
+            resample = resample.unsqueeze(-1).unsqueeze(-1)
+            resample_repeat = resample.repeat(1, 1, 20, time_frames) #  [160, 154112]
+            downscaled = F.interpolate(x, (20, time_frames))
+            decoder_input = torch.cat([resample_repeat, downscaled], 1)
+            decoded = self.decoder(decoder_input)
+
         else:
             decoded = self.decoder(encoded)
        
@@ -98,9 +113,10 @@ def custom_loss(output, target):
     return total_loss
 
 def vae_loss(output, enhanced, mean, logvar):
-    reconstruction_loss = nn.MSELoss()(output, enhanced)
+    # reconstruction_loss = nn.MSELoss()(output, enhanced)
+    reconstruction_loss = custom_loss(output, enhanced)
     # print('reconstruction_loss: ', reconstruction_loss)
-    kld = -0.5 * torch.mean(1+logvar - mean.pow(2) - logvar.exp())
+    kld = -0.5 * torch.sum(1+logvar - mean.pow(2) - logvar.exp())
     # print('kld: ', kld)
 
     return reconstruction_loss + kld
@@ -134,7 +150,6 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
                 output, mean, var = model(data)
 
             loss = vae_loss(output * mask, enhanced_data * mask, mean, var)
-            # loss = torch.nn.KLDivLoss()
             loss.backward()
             # optimizer.step()
             total_loss += loss.item()        
@@ -191,10 +206,11 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
                 snr = random.randint(5, 30)
                 noised_tensor = add_noise_to_spec(noised_tensor, noise_directory, snr)
                 noised_tensor = noised_tensor.to(device)
-                output = model(noised_tensor)
+                output, mean, logvar = model(noised_tensor)
             
             # Apply mask to both output and target
-            loss = custom_loss(output * mask, data * mask)
+            loss = vae_loss(output*mask, data*mask, mean, logvar)
+            # loss = custom_loss(output * mask, data * mask)
             loss.backward()
             # optimizer.step()
             total_loss += loss.item()
@@ -250,9 +266,9 @@ def test(model, device, test_loader, trigger_sync, nbr_columns, noise_directory,
                     noised_tensor = noised_tensor.to(device)
                     output = model(noised_tensor)
                 else:
-                    output = model(data)
+                    output, mean, logvar = model(data)
 
-                loss = custom_loss(output * mask, enhanced_data * mask)
+                loss = vae_loss(output * mask, enhanced_data * mask, mean, logvar)
                 test_loss += loss.item()
 
 
@@ -286,6 +302,7 @@ def test(model, device, test_loader, trigger_sync, nbr_columns, noise_directory,
 
                 # Apply mask to both output and target
                 # loss = F.mse_loss(output * mask, data * mask, reduction='sum')
+                # loss = vae_loss(output*mask, data*mask, mean, logvar)
                 loss = custom_loss(output * mask, data * mask)
                 test_loss += loss.item()
                 # total_pixels += mask.sum().item()
@@ -411,19 +428,19 @@ def main():
     
     train_dataset, dev_dataset, test_dataset = load_datasets(base_dir)
     
-    train_loader = torch.utils.data.DataLoader(train_dataset, **train_kwargs, collate_fn=enhanced_custom_collate, shuffle=None)
-    dev_dataset = torch.utils.data.DataLoader(dev_dataset, **dev_kwargs, collate_fn=enhanced_custom_collate, shuffle=None)
-    test_loader = torch.utils.data.DataLoader(test_dataset, **test_kwargs, collate_fn=enhanced_custom_collate, shuffle=None)
+    train_loader = torch.utils.data.DataLoader(train_dataset, **train_kwargs, collate_fn=custom_collate, shuffle=None)
+    dev_dataset = torch.utils.data.DataLoader(dev_dataset, **dev_kwargs, collate_fn=custom_collate, shuffle=None)
+    test_loader = torch.utils.data.DataLoader(test_dataset, **test_kwargs, collate_fn=custom_collate, shuffle=None)
 
 
-    model = VariableLengthRAutoencoder(vae=True).to(device)
+    model = VariableLengthRAutoencoder(vae=False).to(device)
     # model.load_state_dict(torch.load("enhancer_finetuned/checkpoint_4.pt"))
     # model.to(device)
 
     mask = 5
     fine_tune_mask = 10
 
-    model_name = "enhancer_vae"
+    model_name = "denoiser_vae"
     train_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/speakers_train"
     test_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/speakers_test"
     # wandb
@@ -437,9 +454,9 @@ def main():
     for epoch in range(1, args.epochs + 1):
         train_loss = train(args, model, device, train_loader, optimizer, epoch, trigger_sync,
                             mask, model_name, train_noise_dir,
-                            masking=False, noising=False, enhancer=True)
+                            masking=False, noising=True, enhancer=False)
         test_loss = test(model, device, test_loader, trigger_sync, mask,
-                            test_noise_dir, masking=False, noising=False, enhancer=True)
+                            test_noise_dir, masking=False, noising=True, enhancer=False)
         scheduler.step()
 
     if args.save_model:
