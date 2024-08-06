@@ -18,77 +18,50 @@ from noiser_function import add_noise_to_spec, wav_to_tensor
 
 comm_dir = "/work/tc062/tc062/s2501147/autoencoder/.wandb_osh_command_dir"
 
-class PositionalEncoding(nn.Module):
-    """
-    Code from https://github.com/wesbz/audioset_tagging_cnn/blob/master/pytorch/models.py
-   
-    Create the positional embedding.
-    """
-
-    def __init__(self, d_model, max_len=10000):
-        super(PositionalEncoding, self).__init__()
-        pe = torch.zeros(max_len, d_model)
-        position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)
-        div_term = torch.exp(torch.arange(0, d_model, 2).float() * (-math.log(10000.0) / d_model))
-        pe[:, 0::2] = torch.sin(position * div_term)
-        pe[:, 1::2] = torch.cos(position * div_term)
-        pe = pe.unsqueeze(0).transpose(0, 1)
-        self.register_buffer('pe', pe)
-
-    def forward(self, x):
-        return x + self.pe[:x.size(0), :]
-
 class VariableLengthRAutoencoder(nn.Module):
-    def __init__(self, debug=False, vae=False, transformer=False):
+    def __init__(self, debug=False):
         super(VariableLengthRAutoencoder, self).__init__()
         self.debug = debug
-        self.vae = vae
-        self.transformer = transformer
         # Encoder
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 64, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(64),
-            nn.LeakyReLU(0.2),
-            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(1, 128, kernel_size=3, stride=2, padding=1),  # output size: (32, 40, 40)
             nn.BatchNorm2d(128),
             nn.LeakyReLU(0.2),
-            nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(256),
-            nn.LeakyReLU(0.2),
-            nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
+            nn.Conv2d(128, 512, kernel_size=3, stride=2, padding=1),  # output size: (64, 20, 20)
             nn.BatchNorm2d(512),
-            nn.LeakyReLU(0.2)
+            nn.LeakyReLU(0.2),
+            nn.Conv2d(512, 1024, kernel_size=3, stride=1, padding=1),  # output size: (128, 10, 10)
+            nn.BatchNorm2d(1024),
+            nn.LeakyReLU(0.2),
+            # nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),  # output size: (256, 5, 5)
+            # nn.BatchNorm2d(256),
+            # nn.ReLU(True),
+            # nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),  # output size: (512, 5, 5)
+            # nn.BatchNorm2d(512),
+            # nn.ReLU(True),
+            # nn.Conv2d(512, 1024, kernel_size=3, stride=1, padding=1),  # output size: (1024, 5, 5)
+            # nn.BatchNorm2d(1024),
+            # nn.ReLU(True)
         )
-        if self.transformer:
-            self.flatten = nn.Flatten(start_dim=2)
-            self.pos_encoder = PositionalEncoding(d_model=512)
-            
-            transformer_layer = nn.TransformerEncoderLayer(d_model=512, nhead=8)
-            self.transformer = nn.TransformerEncoder(transformer_layer, num_layers=2)
-
-            self.linear_reshape = nn.Linear(512, 512*80)
-        
-        if self.vae:
-            latent_dim = 512
-            self.mean_layer = nn.Linear(latent_dim, 2)
-            self.log_var_layer = nn.Linear(latent_dim, 2)
-            self.decoder_input = nn.Linear(2, latent_dim)
-        
-        # change first conv to 513 instead of 512 when vae
         # Decoder
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(512, 256, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(256),
-            nn.LeakyReLU(0.2),
-            nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1),
+            # nn.ConvTranspose2d(1024, 512, kernel_size=3, stride=1, padding=1),  # output size: (512, 5, 5)
+            # nn.BatchNorm2d(512),
+            # nn.ReLU(True),
+            # nn.ConvTranspose2d(512, 256, kernel_size=3, stride=1, padding=1),  # output size: (256, 5, 5)
+            # nn.BatchNorm2d(256),
+            # nn.ReLU(True),
+            # nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (128, 10, 10)
+            # nn.BatchNorm2d(128),
+            # nn.ReLU(True),
+            nn.ConvTranspose2d(1024, 512, kernel_size=3, stride=1, padding=1, output_padding=0),  # output size: (64, 20, 20)
+            nn.BatchNorm2d(512),
+            nn.LeakyReLU(True),
+            nn.ConvTranspose2d(512, 128, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (32, 40, 40)
             nn.BatchNorm2d(128),
-            nn.LeakyReLU(0.2),
-            nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=1, output_padding=1),
-            nn.BatchNorm2d(64),
-            nn.LeakyReLU(0.2),
-            nn.ConvTranspose2d(64, 1, kernel_size=3, stride=1, padding=1)
+            nn.LeakyReLU(True),
+            nn.ConvTranspose2d(128, 1, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (1, 80, 80)
         )
-
         # # Custom scaling layer
         self.scaling = nn.Parameter(torch.FloatTensor([1.0]))
         self.shifting = nn.Parameter(torch.FloatTensor([0.0]))
@@ -99,71 +72,20 @@ class VariableLengthRAutoencoder(nn.Module):
         encoded = self.encoder(x)
         # print(f"Memory allocated: { torch.cuda.memory_allocated()/1024**3:.2f}")
         # print('shape of encoded: ', encoded.shape)
-        if self.transformer:
-            # # flattened = self.flatten(encoded)
-            # print(f"Flattened allocated: { torch.cuda.memory_allocated()/1024**3:.2f}")
-            # # del encoded
-            # pos_encoded = self.pos_encoder(flattened.permute(2, 0, 1))
-            # print(f"pos encoded allocated: { torch.cuda.memory_allocated()/1024**3:.2f}")
-            # del flattened
-            # transformed = self.transformer(pos_encoded)
-            # print(f"transformed allocated: { torch.cuda.memory_allocated()/1024**3:.2f}")
-            # del pos_encoded
-            
-            # batch_size, _, time_frames = transformed.shape
-            # print(f"transformed shapeallocated: { torch.cuda.memory_allocated()/1024**3:.2f}")
-            # reshaped = self.linear_reshape(transformed.permute(1, 0, 2)).view(batch_size, 512, 80, time_frames)
-            # print(f"reshaped allocated: { torch.cuda.memory_allocated()/1024**3:.2f}")
-            # del transformed
-            # decoded = self.decoder(reshaped)
-            # print(f"decoded allocated: { torch.cuda.memory_allocated()/1024**3:.2f}")
-            # del reshaped
-            pos_encoded = self.pos_encoder(encoded.permute(2,0,1))
-            print("pos encoded shape: ", pos_encoded.shape)
-            print(f"POS_encoded Memory allocated: { torch.cuda.memory_allocated()/1024**3:.2f}")
-            transformer_out = self.transformer(pos_encoded)
-            print("transformer out shape: ", transformer_out.shape)
-            print(f"transformer out Memory allocated: { torch.cuda.memory_allocated()/1024**3:.2f}")
-            reshaped = self.linear_reshape(transformer_out.permute(1, 0, 2))
-            print("reshape shape: ", reshaped.shape)
 
-            decoded = self.decoder(reshaped)
-            print('decoded shape: ', decoded.shape)
-
-
-        elif self.vae:
-            time_frames = encoded.shape[-1]
-            encoded = encoded.mean(dim=-1)
-            encoded = encoded.mean(dim=-1)
-            encoded = torch.flatten(encoded, start_dim=1)
-            mean, log_var = self.mean_layer(encoded), self.log_var_layer(encoded)
-            var = log_var.exp()
-            variable = torch.randn_like(var)
-            sample = mean + var*variable
-            resample = self.decoder_input(sample)
-            resample = resample.unsqueeze(-1).unsqueeze(-1)
-            resample_repeat = resample.repeat(1, 1, 20, time_frames) #  [160, 154112]
-            downscaled = F.interpolate(x, (20, time_frames))
-            decoder_input = torch.cat([resample_repeat, downscaled], 1)
-            decoded = self.decoder(decoder_input)
-
-        else:
-            decoded = self.decoder(encoded)
+        decoded = self.decoder(encoded)
        
-        scaled = decoded * self.scaling + self.shifting 
+        # scaled = decoded * self.scaling + self.shifting 
         # print(f"scaled allocated: { torch.cuda.memory_allocated()/1024**3:.2f}")
         # if self.debug:
         #     print(f"scaled shape: {scaled.shape}")
         
-        resized = F.interpolate(scaled, size=(x.size(2), x.size(3)), mode='bilinear', align_corners=False)
+        resized = F.interpolate(decoded, size=(x.size(2), x.size(3)), mode='bilinear', align_corners=False)
         # print(f"resized allocated: { torch.cuda.memory_allocated()/1024**3:.2f}")
         # if self.debug:
         #     print(f"resized shape: {resized.shape}")
         
-        if self.vae:
-            return resized, mean, log_var
-        else:
-            return resized
+        return resized
     
     def set_debug(self, debug):
         self.debug = debug
@@ -495,14 +417,14 @@ def main():
     test_loader = torch.utils.data.DataLoader(test_dataset, **test_kwargs, collate_fn=custom_collate, shuffle=None)
 
 
-    model = VariableLengthRAutoencoder(vae=False, transformer=False).to(device)
+    model = VariableLengthRAutoencoder().to(device)
     # model.load_state_dict(torch.load("enhancer_finetuned/checkpoint_4.pt"))
     # model.to(device)
 
     mask = 5
     fine_tune_mask = 10
 
-    model_name = "denoiser_unintelligible_aircon_01"
+    model_name = "masking_quitepicnic"
     train_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/only_air_con"
     test_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/only_air_con_test"
     # wandb
@@ -516,9 +438,9 @@ def main():
     for epoch in range(1, args.epochs + 1):
         train_loss = train(args, model, device, train_loader, optimizer, epoch, trigger_sync,
                             mask, model_name, train_noise_dir,
-                            masking=False, noising=True, enhancer=False)
+                            masking=True, noising=False, enhancer=False)
         test_loss = test(model, device, test_loader, trigger_sync, mask,
-                            test_noise_dir, masking=False, noising=True, enhancer=False)
+                            test_noise_dir, masking=True, noising=False, enhancer=False)
         scheduler.step()
 
     if args.save_model:

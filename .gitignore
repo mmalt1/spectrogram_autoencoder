@@ -9,6 +9,7 @@
 *.wav
 
 # Ignore all files in the build/ directory
+mp3_data/
 test_zeroed_tensors/
 wandb/
 libritts_data/

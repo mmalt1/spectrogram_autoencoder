@@ -1,20 +1,5 @@
 import torch
-import librosa
-import numpy as np
 import os, random
-
-
-def wav_to_tensor(wav_file, name):
-    
-    wav, sr = librosa.load(wav_file, sr=24000) # sr in LibriTTS = 24 kHz
-    stft_wav = librosa.stft(wav, n_fft=2048, hop_length=256, win_length=1024, window='hann', center=True, dtype=None, pad_mode='constant', out=None)
-    spec = librosa.amplitude_to_db(abs(stft_wav), ref=np.max)
-    mel_spec = librosa.feature.melspectrogram(S=spec, sr=24000, n_fft=1024, hop_length=256, win_length=1024, n_mels=80, fmin=0.0, fmax=8000.0, power=1.0)
-    mel_spec= torch.tensor(mel_spec)
-    mel_spec_tensor = torch.unsqueeze(mel_spec, dim=0)
-    # torch.save(mel_spec, f"{tensor_dir}/{name}.pt")
-    
-    return mel_spec_tensor
 
 
 def add_noise_to_spec(spectrogram, noise_dir, snr_db, device='cuda'):
@@ -40,12 +25,12 @@ def add_noise_to_spec(spectrogram, noise_dir, snr_db, device='cuda'):
     if noise_spectrogram.shape != spectrogram.shape:
 
         if noise_spectrogram.shape[3] > spectrogram.shape[3]:
-            trd_dim_random_start = random.randint(0, (noise_spectrogram.shape[3] - spectrogram.shape[3]))
-            # trd_dim_start = 0
-            trd_dim_end = trd_dim_random_start+spectrogram.shape[3]
+            # trd_dim_random_start = random.randint(0, (noise_spectrogram.shape[3] - spectrogram.shape[3]))
+            trd_dim_start = 0
+            trd_dim_end = trd_dim_start+spectrogram.shape[3]
             
             noise_spectrogram = noise_spectrogram[:, :, :,
-                                                    trd_dim_random_start: trd_dim_end]
+                                                    trd_dim_start: trd_dim_end]
 
         # can eventually change to just "else:"
         if noise_spectrogram.shape[3] < spectrogram.shape[3]:

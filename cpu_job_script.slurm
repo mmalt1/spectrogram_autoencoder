@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#SBATCH --job-name=autoenc_pics
-#SBATCH --time=00:15:00
+#SBATCH --job-name=mass_inf
+#SBATCH --time=00:10:00
 #SBATCH --partition=standard
 #SBATCH --qos=standard
 #SBATCH --account=tc062-pool2
@@ -14,4 +14,8 @@ export PATH=/work/tc062/shared/bin:$PATH
 
 source /work/tc062/tc062/s2501147/venv/mgpu_env/bin/activate
 
-srun python test.py
+echo "Starting job on $(date)"
+
+srun python mp3_encoder.py
+
+echo "Finished job on $(date)"

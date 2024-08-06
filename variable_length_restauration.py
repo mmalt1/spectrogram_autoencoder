@@ -24,33 +24,26 @@ class VariableLengthRAutoencoder(nn.Module):
 
         # Encoder
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 64, kernel_size=3, stride=1, padding=1),
+            nn.Conv2d(1, 32, kernel_size=3, stride=2, padding=1),  # output size: (32, 40, 40)
+            nn.BatchNorm2d(32),
+            nn.LeakyReLU(0.2),
+            nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=1),  # output size: (64, 20, 20)
             nn.BatchNorm2d(64),
             nn.LeakyReLU(0.2),
-            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),  # output size: (128, 10, 10)
             nn.BatchNorm2d(128),
             nn.LeakyReLU(0.2),
-            nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(256),
-            nn.LeakyReLU(0.2),
-            nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(512),
-            nn.LeakyReLU(0.2)
         )
 
-        # Decoder
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(512, 256, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(256),
-            nn.LeakyReLU(0.2),
-            nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1),
-            nn.BatchNorm2d(128),
-            nn.LeakyReLU(0.2),
-            nn.ConvTranspose2d(128, 64, kernel_size=3, stride=2, padding=1, output_padding=1),
+            nn.ConvTranspose2d(128, 64, kernel_size=3, stride=1, padding=1),  # output size: (64, 20, 20)
             nn.BatchNorm2d(64),
             nn.LeakyReLU(0.2),
-            nn.ConvTranspose2d(64, 1, kernel_size=3, stride=1, padding=1),
-            nn.Sigmoid()
+            nn.ConvTranspose2d(64, 32, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (32, 40, 40)
+            nn.BatchNorm2d(32),
+            nn.LeakyReLU(0.2),
+            nn.ConvTranspose2d(32, 1, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (1, 80, 80)
+            nn.Sigmoid()  # Assuming the output is an image, use Sigmoid to map output to [0, 1]
         )
 
         # # Custom scaling layer
@@ -292,7 +285,7 @@ def main():
         test_kwargs.update(cuda_kwargs)
         val_kwargs.update(cuda_kwargs)
         
-    base_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/train_big_libriTTS"
+    base_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/enhancement_dataset"
     
     train_dataset, val_dataset, test_dataset = load_datasets(base_dir)
     
@@ -308,7 +301,7 @@ def main():
     mask = 5
     fine_tune_mask = 10
     model_name = "restaurator_sigmoid"
-    noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_train"
+    noise_dir = "autoencoder/noise_dataset/mels/environments_test"
     # wandb
     wandb.init(config=args, dir="/work/tc062/tc062/s2501147/autoencoder", mode="offline")
     wandb.watch(model, log_freq=100)
