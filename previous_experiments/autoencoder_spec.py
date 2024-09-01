@@ -76,7 +76,7 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync):
                 break
 
 
-def test(model, device, test_loader):
+def test(model, device, test_loader, trigger_sync):
     model.eval()
     test_loss = 0
     with torch.no_grad():
@@ -167,7 +167,7 @@ def main():
     scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
     for epoch in range(1, args.epochs + 1):
         train_loss = train(args, model, device, train_loader, optimizer, epoch, trigger_sync)
-        test_loss = test(model, device, test_loader)
+        test_loss = test(model, device, test_loader, trigger_sync)
         scheduler.step()
 
     if args.save_model:
