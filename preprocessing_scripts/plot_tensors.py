@@ -8,19 +8,15 @@ spectrogram2_path = "/work/tc062/tc062/s2501147/autoencoder/torch_saved/bigdata3
 spectrogram1 = torch.load(spectrogram1_path)
 spectrogram2 = torch.load(spectrogram2_path)
 
-# Flattening spectrograms
 flat_spec1 = spectrogram1.flatten()
 flat_spec2 = spectrogram2.flatten()
 
-# Create the histograms and get the counts
 counts1, bins1, _ = plt.hist(flat_spec1, bins=100, alpha=0.5, label='Input Spectrogram')
 counts2, bins2, _ = plt.hist(flat_spec2, bins=100, alpha=0.5, label='Output Spectrogram')
 
-# Calculate the sum of the bars for each histogram
 sum_bars1 = np.sum(counts1)
 sum_bars2 = np.sum(counts2)
 
-# Customize the plot
 plt.xlabel('Magnitude')
 plt.ylabel('Frequency')
 plt.title('Histogram Comparison of Two Spectrograms')

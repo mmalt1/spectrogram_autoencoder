@@ -19,51 +19,71 @@ from noiser_function import add_noise_to_spec, wav_to_tensor
 comm_dir = "/work/tc062/tc062/s2501147/autoencoder/.wandb_osh_command_dir"
 
 class VariableLengthRAutoencoder(nn.Module):
+    """
+    A Variable Length Restoration Autoencoder neural network class. 
+    This class implements a spectrogram restoration/reconstruction CNN autoencoder, supporting variable
+    length input, with an optional variational autoencoder (VAE) functionality. It supports residual
+    (skip) connections and can be configured for debugging purposes.
+
+    Args:
+        deubg (bool, optional): If True, enables debugging for additional output. Defaults to False
+        vae (bool, optional): If True, enable VAE functionality. Defaults to False. 
+
+    Attributes:
+        debug (bool): flag for debug mode
+        vae (bool): flag for VAE mode
+        enc1, enc2, enc3, enc4 (nn.Sequential): encoder layers
+        dec1, dec2, dec3, dec4 (nn.Sequential): decoder layers
+        mean_layer (nn.Linear): layer for computing mean layer from latent representation in VAE mode
+        log_var_layer (nn.Linear): layer for computiong log variance from latent representation in VAE mode
+        decoder_input (nn.Linear): layer for processing VAE latent space
+        scaling (nn.Parameter): learnable scaling parameter 
+        shifting (nn.Parameter): learnable shifting parameter 
+    """
     def __init__(self, debug=False, vae=False):
         super(VariableLengthRAutoencoder, self).__init__()
         self.debug = debug
         self.vae = vae
-        # Encoder
+
+        # encoder
         self.enc1 = nn.Sequential(
             nn.Conv2d(1, 64, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(64),
-            nn.LeakyReLU(0.2)
-        )
+            nn.LeakyReLU(0.2))
+        
         self.enc2 = nn.Sequential(
             nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(128),
-            nn.LeakyReLU(0.2)
-        )
+            nn.LeakyReLU(0.2))
+        
         self.enc3 = nn.Sequential(
             nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(256),
-            nn.LeakyReLU(0.2)
-        )
+            nn.LeakyReLU(0.2))
+        
         self.enc4 = nn.Sequential(
             nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(512),
-            nn.LeakyReLU(0.2)
-        )
+            nn.LeakyReLU(0.2))
         
-        # Decoder (modified to accept skip connections)
+        # decoder that accepts skip connections
         self.dec1 = nn.Sequential(
             nn.ConvTranspose2d(512 + 256, 256, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(256),
-            nn.LeakyReLU(0.2)
-        )
+            nn.LeakyReLU(0.2))
+
         self.dec2 = nn.Sequential(
             nn.ConvTranspose2d(256 + 128, 128, kernel_size=3, stride=2, padding=1, output_padding=1),
             nn.BatchNorm2d(128),
-            nn.LeakyReLU(0.2)
-        )
+            nn.LeakyReLU(0.2))
+        
         self.dec3 = nn.Sequential(
             nn.ConvTranspose2d(128 + 64, 64, kernel_size=3, stride=2, padding=1, output_padding=1),
             nn.BatchNorm2d(64),
-            nn.LeakyReLU(0.2)
-        )
+            nn.LeakyReLU(0.2))
+        
         self.dec4 = nn.Sequential(
-            nn.ConvTranspose2d(64 + 1, 1, kernel_size=3, stride=1, padding=1)
-        )
+            nn.ConvTranspose2d(64 + 1, 1, kernel_size=3, stride=1, padding=1))
         
         if self.vae:
             latent_dim = 512
@@ -71,12 +91,28 @@ class VariableLengthRAutoencoder(nn.Module):
             self.log_var_layer = nn.Linear(latent_dim, 2)
             self.decoder_input = nn.Linear(2, latent_dim)
 
-        # Custom scaling layer
+        # custom scaling layer
         self.scaling = nn.Parameter(torch.FloatTensor([1.0]))
         self.shifting = nn.Parameter(torch.FloatTensor([0.0]))
 
     def forward(self, x):  
-        # Encoder
+        """
+        Forward pass of the autoencoder. 
+
+        This method processes the input through the encoder and decoder, applying skip connections
+        with a optional VAE processing. 
+
+        Args:
+            x (torch.Tensor): input tensor of shape (batch_size, channels, height, width) where
+                            height is the spectrogram's mel-frequency bins and width is time
+
+        Returns:
+            torch.Tensor or tuple: if VAE mode is disabled, returns the reconstructed input
+                                   if VAE mode is enabled, returns a tuple 
+                                   (reconstructed_input, mean, log_var) 
+        """
+
+        # encoder
         e1 = self.enc1(x)
         e2 = self.enc2(e1)
         e3 = self.enc3(e2)
@@ -91,25 +127,26 @@ class VariableLengthRAutoencoder(nn.Module):
             encoded = torch.flatten(encoded, start_dim=1)
             mean, log_var = self.mean_layer(encoded), self.log_var_layer(encoded)
             var = log_var.exp()
-            variable = torch.randn_like(var)
-            sample = mean + var*variable
+            variance_tensor= torch.randn_like(var)
+            sample = mean + var*variance_tensor
             resample = self.decoder_input(sample)
             resample = resample.unsqueeze(-1).unsqueeze(-1)
-            resample_repeat = resample.repeat(1, 1, 20, time_frames) #  [160, 154112]
+            resample_repeat = resample.repeat(1, 1, 20, time_frames) 
             downscaled = F.interpolate(x, (20, time_frames))
             decoder_input = torch.cat([resample_repeat, downscaled], 1)
             decoded = self.decoder(decoder_input)
 
         else:
-            # Decoder with skip connections
+            # decoder with skip connections
             d1 = self.dec1(torch.cat([encoded, F.interpolate(e3, size=encoded.shape[2:], mode='bilinear', align_corners=False)], dim=1))
             d2 = self.dec2(torch.cat([d1, F.interpolate(e2, size=d1.shape[2:], mode='bilinear', align_corners=False)], dim=1))
             d3 = self.dec3(torch.cat([d2, F.interpolate(e1, size=d2.shape[2:], mode='bilinear', align_corners=False)], dim=1))
-            d4 = self.dec4(torch.cat([d3, F.interpolate(x, size=d3.shape[2:], mode='bilinear', align_corners=False)], dim=1))
+            decoded = self.dec4(torch.cat([d3, F.interpolate(x, size=d3.shape[2:], mode='bilinear', align_corners=False)], dim=1))
 
-        scaled = d4 * self.scaling + self.shifting 
+        scaled = decoded * self.scaling + self.shifting 
     
         resized = F.interpolate(scaled, size=(x.size(2), x.size(3)), mode='bilinear', align_corners=False)
+        
         # print(f"resized allocated: { torch.cuda.memory_allocated()/1024**3:.2f}")
         # if self.debug:
         #     print(f"resized shape: {resized.shape}")
@@ -120,9 +157,24 @@ class VariableLengthRAutoencoder(nn.Module):
             return resized
     
     def set_debug(self, debug):
+        """Set the debug mode for the autoencoder
+
+        Args:
+            debug (bool): if True, enable debug mode for additional output
+        """
         self.debug = debug
 
 def custom_loss(output, target):
+    """Calculates a custom reconstruction loss, combining L1 loss for overall structure and MSE loss
+    for finer reconstruction details for a balanced spectrogram recosntruction loss.
+
+    Args:
+        output (torch.Tensor): model output spectrogram
+        target (torch.Tensor): target spectrogram with which to calculate the loss
+
+    Returns:
+        float: total_loss, the spectrogram reconstruction loss between the model output and the target
+    """
     # L1 loss for overall structure
     l1_loss = nn.L1Loss()(output, target)
     # MSE loss for fine details
@@ -132,16 +184,74 @@ def custom_loss(output, target):
     return total_loss
 
 def vae_loss(output, enhanced, mean, logvar):
-    # reconstruction_loss = nn.MSELoss()(output, enhanced)
+    """ Calculates combined reconstruction loss and KL divergence between a Normal distribution (0,1)
+    and the mean and log variance sampled from the probability distribution for the latent 
+    representation when using the VAE option of the model
+
+    Args:
+        output (tensor): VAE model output (log mel-spectrogram)
+        enhanced (tensor): enhanced target log mel-spectrogram
+        mean (tensor): mean tensor of VAE latent representation distribution
+        logvar (tensor): log variance tensor of VAE latent representation distribution
+
+    Returns:
+        float: VAE loss (reconstruction loss + KL divergence)
+    """
     reconstruction_loss = custom_loss(output, enhanced)
-    # print('reconstruction_loss: ', reconstruction_loss)
     kld = -0.5 * torch.sum(1+logvar - mean.pow(2) - logvar.exp())
-    # print('kld: ', kld)
 
     return reconstruction_loss + kld
 
 def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr_columns, name,
            noise_directory, accumulation_steps=4, masking=False, noising=False, enhancer=False):
+    """ 
+    Train the VariableLengthRAutoencoder model with options for the following tasks: masking
+    (i.e. inpainting), noising (i.e. denoising) and enhancing speech log mel-spectrograms. 
+
+    This function handles the training of a VariableLengthRAutoencoder model for a single epoch.
+    Depending on the flags 'masking', 'noising' and 'enhancing', the function adapts the training
+    process for different tasks. The gradients are accumulated over a specified number of steps
+    (accumulation_steps) before performing an optimization step. 
+
+    If the 'enhancer' flag is True, the function trains the model using mid-quality input data and 
+    an enhanced version as target data. It supports an optional 'noising' flag, where noise is
+    added to the mid-quality input spectrogram, which is denoised and enhanced through the model. 
+
+    If the 'enhancer' flag is False, the function trains the model to reconstruct the original
+    spectrogram from a corrupted version through either a 'masking' or 'noising' corruption. The 
+    'masking' flag zeroes out a specified number of columns (nbr_columns) from the spectrogram for
+    model to be trained for an inpainting task. The 'noising' flag triggers the same denoising task
+    as previously stated. 
+
+
+    Args:
+        args (list): list of command line arguments with training configurations
+        model (VariableLengthRAutoencoder): model to train
+        device (torch.device): device (CPU or GPU) where the model and data are placed
+        train_loader (torch.utils.data.DataLoader): data loader object providing training data
+        optimizer (optim): optimizer for updating model parameters
+        epoch (int): current epoch number for model checkpoints and logging
+        trigger_sync (TriggerWandbSyncHook): Weights & Biases offline synchronization trigger
+        nbr_columns (int): number of columns to zero out in inpainting task when 'masking' is True
+        name (str): current model name, for checkpoints
+        noise_directory (str): directory path containing noises for denoising task when 'noising'
+                                is True
+        accumulation_steps (int, optional): number of steps before accumulating the gradients.
+                                            Defaults to 4.
+        masking (bool, optional): If True, performs the masking task where random columns are zeroed out
+                                in the input data. Defaults to False.
+        noising (bool, optional): If True, performs the denoising task where noise is added to the input
+                                data. Defaults to False.
+        enhancer (bool, optional): If True, performs the enhancing task where parallel mid-quality and
+                                enhanced data is used to train the model. Defaults to False.
+
+    Returns:
+        None
+    
+    Notes:
+        The training loss and average epoch loss are logged with Weights & Biases
+        Model checkpoints are saved after each epoch
+    """
     model.train()
     total_loss = 0
     optimizer.zero_grad()
@@ -152,9 +262,8 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
             data = data.to(device)
             enhanced_data = enhanced_data.to(device)
             lengths = lengths.to(device)
-            # print("Data shape: ", data.shape)
-            # print("Enhanced data shape: ", enhanced_data.shape)
-
+            
+            # create mask for padding because of variable length withing 1 batch 
             batch_size, _, height, max_width = data.shape
             mask = torch.arange(max_width, device=device)[None, None, None, :] < lengths[:, None, None, None]
             mask = mask.float()
@@ -168,11 +277,12 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
             else:
                 output, mean, var = model(data)
 
+            # apply mask to both output and target
             loss = vae_loss(output * mask, enhanced_data * mask, mean, var)
             loss.backward()
-            # optimizer.step()
-            total_loss += loss.item()        
+            total_loss += loss.item()   
 
+            # perform optimizer step every 'accumulation_steps' batches
             if (batch_idx + 1) % accumulation_steps == 0:
                 optimizer.step()
                 optimizer.zero_grad()
@@ -187,7 +297,8 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
                                 shell=True,
                                 stdout=subprocess.PIPE,
                                 stdin=subprocess.PIPE)
-             # Perform a final optimizer step if there are remaining gradients
+
+        # perform a final optimizer step if there are remaining gradients
         if (batch_idx + 1) % accumulation_steps != 0:
             optimizer.step()
             optimizer.zero_grad()
@@ -209,7 +320,6 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
             # create mask for padding
             mask = torch.arange(max_width, device=device)[None, None, None, :] < lengths[:, None, None, None]
             mask = mask.float()
-            # print('shape of mask: ', mask.shape)
 
             if masking:
             # zero out random columns in non-padded area
@@ -217,7 +327,6 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
                 for i, length in enumerate(lengths):
                     columns = random.sample(range(length.item()), min(nbr_columns, length.item()))
                     zeroed_tensor[i, :, :, columns] = 0
-                # optimizer.zero_grad()
                 output = model(zeroed_tensor)
             
             if noising:
@@ -227,13 +336,12 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
                 noised_tensor = noised_tensor.to(device)
                 output = model(noised_tensor)
             
-            # Apply mask to both output and target
+            # apply mask to both output and target
             loss = custom_loss(output * mask, data * mask)
             loss.backward()
-            # optimizer.step()
             total_loss += loss.item()
 
-            # Perform optimizer step every 'accumulation_steps' batches
+            # perform optimizer step every 'accumulation_steps' batches
             if (batch_idx + 1) % accumulation_steps == 0:
                 optimizer.step()
                 optimizer.zero_grad()
@@ -249,7 +357,7 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
                                 stdout=subprocess.PIPE,
                                 stdin=subprocess.PIPE)
 
-        # Perform a final optimizer step if there are remaining gradients
+        # perform a final optimizer step if there are remaining gradients
         if (batch_idx + 1) % accumulation_steps != 0:
             optimizer.step()
             optimizer.zero_grad()
@@ -263,6 +371,41 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
 
 def test(model, device, test_loader, trigger_sync, nbr_columns, noise_directory,
           masking=True, noising=False, enhancer=False):
+    """
+    Tests a VariableLengthRAutoencoder with options for the following spectrogram corruptions/tasks: 
+    'masking' (inpainting task), 'noising' (denoising task) and 'enhancer' (enhancement task)
+
+    This function evaluates the model's performance on a given test dataset using an average test loss,
+    provided by the test_loader after training for each epoch. It supports different testing scenarios
+    including masking, noising and enhancement of input data. 
+
+    If the 'enhancer' flag is True, it tests the model's ability to enhance the mid-quality input data
+    to the enhanced quality of the target. It supports an optional 'noising' flag, where noise is
+    added to the mid-quality input spectrogram, which is denoised and enhanced through the model. 
+
+    If the 'enhancer' flag is False, it tests the model's ability to reconstruct the original
+    spectrogram from a corrupted version through either a 'masking' or 'noising' corruption. The 
+    'masking' flag zeroes out a specified number of columns (nbr_columns) from the spectrogram for
+    model to be tested for an inpainting task. The 'noising' flag triggers the same denoising task
+    as previously stated. 
+
+    Args:
+        model (VariableLengthRAutoencoder): model to be tested
+        device (torch.device): device (CPU or GPU) where the model and data are placed
+        test_loader (torch.utils.data.DataLoader): DataLoader containing the test dataset.
+        trigger_sync (TriggerWandbSyncHook): Weights & Biases offline synchronization trigger
+        nbr_columns (int): number of columns to zero out in inpainting task when 'masking' is True
+        noise_directory (str): directory path containing noises for denoising task when 'noising'
+                                is True        
+        masking (bool, optional): If True, performs the masking task where random columns are zeroed out
+                                in the input data. Defaults to False.
+        noising (bool, optional): If True, performs the denoising task where noise is added to the input
+                                data. Defaults to False.
+        enhancer (bool, optional): If True, performs the enhancing task where parallel mid-quality and
+                                enhanced data is used to train the model. Defaults to False.
+    Returns:
+        float: average test loss accross all batches in test loader
+    """
     model.eval()
     test_loss = 0
     total_pixels = 0
@@ -274,6 +417,7 @@ def test(model, device, test_loader, trigger_sync, nbr_columns, noise_directory,
                 lengths = lengths.to(device)
                 batch_size, _, height, max_width = data.shape
 
+                # create mask for padding
                 mask = torch.arange(max_width, device=device)[None, None, None, :] < lengths[:, None, None, None]
                 mask = mask.float()
 
@@ -286,6 +430,7 @@ def test(model, device, test_loader, trigger_sync, nbr_columns, noise_directory,
                 else:
                     output, mean, logvar = model(data)
 
+                # apply mask to both output and target
                 loss = vae_loss(output * mask, enhanced_data * mask, mean, logvar)
                 test_loss += loss.item()
 
@@ -303,27 +448,22 @@ def test(model, device, test_loader, trigger_sync, nbr_columns, noise_directory,
                 if masking:
                 # zero out random columns (only in non-padded area)
                     zeroed_tensor = torch.clone(data)
-                    # print('zeroed tensor shape: ', zeroed_tensor.shape)
                     for i, length in enumerate(lengths):
                         columns = random.sample(range(length.item()), min(nbr_columns, length.item()))
                         zeroed_tensor[i, :, :, columns] = 0
-                    # print('shape of zeroed tensor after mask: ', zeroed_tensor.shape)
                     output = model(zeroed_tensor)
                 
                 if noising:
                     noised_tensor = torch.clone(data)
                     snr = random.randint(5, 30)
-                    # snr = 0
                     noised_tensor = add_noise_to_spec(noised_tensor, noise_directory, snr)
                     noised_tensor = noised_tensor.to(device)
                     output = model(noised_tensor)
 
-                # Apply mask to both output and target
+                # apply mask to both output and target
                 loss = custom_loss(output * mask, data * mask)
                 test_loss += loss.item()
-                # total_pixels += mask.sum().item()
         
-    # test_loss /= total_pixels  # Average loss per non-padded pixel
     average_test_loss = test_loss / len(test_loader)
     print('\nTest set: Average loss: {:.4f}\n'.format(average_test_loss))
     wandb.log({"test_loss": average_test_loss})
@@ -336,17 +476,45 @@ def test(model, device, test_loader, trigger_sync, nbr_columns, noise_directory,
     return average_test_loss
 
 def enhanced_custom_collate(batch):
-    # Unpack the batch
+    """
+    Custom collate function for batching spectrograms and their enhanced versions.
+
+    This function takes a batch of original mid-quality spectrograms, the enhanced target versions
+    and their lengths and pads them to an equal length within the batch for processing in the model.
+    It ensures that the original and enhanced spectrograms are padded to the same length. 
+
+    Args:
+        batch (list): list of tuples, where each tuple contains:
+                    (spectrogram, enhance_spectorgram, length)
+                    spectrogram (torch.Tensor): the original mid-quality spectrogram 
+                    enhanced_spectrogram (torch.Tensor): enhanced version of the spectrogram
+                    length (int): original length of the spectrogram (its enhanced version being the
+                    same length)
+
+    Returns:
+        tuple: tuple containing:
+            (padded_spectrograms, padded_enhanced_spectrograms, lengths)
+            padded_spectrograms (torch.Tensor): batch of padded original mid-quality spectrograms
+            padded_enhanced_spectrograms (torch.Tensor): batch of padded enhanced spectrograms
+            lengths (torch.Tensor): original lengths of spectrograms before padding
+
+    Raises:
+        AssertionError: if the lengths of the original and enhanced spectrograms don't match
+
+    Note:
+        This function assumes that the input spectrogram and enhanced versions are 3D tensors
+        (channel, mel_frequency_bins, time), where time is the dimension being padded
+
+    """
     spectrograms, enhanced_spectrograms, lengths = zip(*batch)
 
-    # Find the maximum length in the batch
+    # maximum length in the batch
     max_len = max(spec.shape[2] for spec in spectrograms)
 
-    # Pad spectrograms and enhanced spectrograms
     padded_spectrograms = []
     padded_enhanced_spectrograms = []
     for spec, enhanced_spec in zip(spectrograms, enhanced_spectrograms):
-        # Ensure both spec and enhanced_spec have the same length
+        # ensure both spec and enhanced_spec have the same length
         assert spec.shape[2] == enhanced_spec.shape[2], f"Spectrogram and enhanced spectrogram lengths don't match: {spec.shape} vs {enhanced_spec.shape}"
         
         pad_len = max_len - spec.shape[2]
@@ -356,18 +524,36 @@ def enhanced_custom_collate(batch):
         padded_spectrograms.append(padded_spec)
         padded_enhanced_spectrograms.append(padded_enhanced_spec)
 
-    # Stack tensors
     padded_spectrograms = torch.stack(padded_spectrograms)
     padded_enhanced_spectrograms = torch.stack(padded_enhanced_spectrograms)
     lengths = torch.LongTensor(lengths)
-
-    # print(f"Batch shapes: Spec {padded_spectrograms.shape}, Enhanced {padded_enhanced_spectrograms.shape}")
 
     return padded_spectrograms, padded_enhanced_spectrograms, lengths
 
 
 def custom_collate(batch):
-    # because goes by batch has shape [1, 80, time]
+    """
+    Custom collate function for batching spectrograms of variable lengths.
+
+    This function takes a batch of original spectrograms and their lengths and pads them
+    to an equal length within the batch for processing in the model. It sorts them in descending
+    order of length and pads the spectrograms in the batch to the length of the longest one. 
+
+    Args:
+        batch (list): list of tuples, where each tuple contains:
+                    (spectrogram, length)
+                    spectrogram (torch.Tensor): the original spectrogram 
+                    length (int): original length of the spectrogram
+    Returns:
+        tuple: tuple containing:
+            (padded_spectrograms, lengths)
+            padded_spectrograms (torch.Tensor): batch of padded original spectrograms
+            lengths (torch.Tensor): original lengths of spectrograms before padding
+    Note:
+        This function assumes that the input spectrogram is a 3D tensor
+        (channel, mel_frequency_bins, time), where time is the dimension being padded
+
+    """
     # sort the batch in descending order of length
     batch.sort(key=lambda x: x[1], reverse=True)
     spectrograms, lengths = zip(*batch)
@@ -380,7 +566,7 @@ def custom_collate(batch):
         padded_spec = np.pad(spec, ((0, 0), (0, 0), (0, pad_len)), mode='constant')
         padded_spectrograms.append(padded_spec)
 
-    # Convert to tensors
+    # convert to tensors
     padded_spectrograms = torch.FloatTensor(np.stack(padded_spectrograms))
     lengths = torch.LongTensor(lengths)
 
@@ -388,7 +574,7 @@ def custom_collate(batch):
 
 
 def main():
-    # Training settings
+    # training configuration
     parser = argparse.ArgumentParser(description='PyTorch Autoencoder for Sepctrograms')
     parser.add_argument('--batch-size', type=int, default=8, metavar='N',
                         help='input batch size for training (default: 64)')
@@ -445,7 +631,6 @@ def main():
     train_dataset, dev_dataset, test_dataset = load_datasets(base_dir)
     
     train_loader = torch.utils.data.DataLoader(train_dataset, **train_kwargs, collate_fn=custom_collate, shuffle=None)
-    # dev_dataset = torch.utils.data.DataLoader(dev_dataset, **dev_kwargs, collate_fn=custom_collate, shuffle=None)
     test_loader = torch.utils.data.DataLoader(test_dataset, **test_kwargs, collate_fn=custom_collate, shuffle=None)
 
 
@@ -456,7 +641,7 @@ def main():
     mask = 5
     fine_tune_mask = 10
 
-    model_name = "denoiser_aircon_skip"
+    model_name = "denoiser_aircon_skip_connections"
     train_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/only_aircon"
     test_noise_dir = "/work/tc062/tc062/s2501147/autoencoder/noise_dataset/mels/only_aircon_test"
     # wandb

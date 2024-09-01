@@ -31,28 +31,11 @@ class Autoencoder(nn.Module):
             nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),  # output size: (128, 10, 10)
             nn.BatchNorm2d(128),
             nn.LeakyReLU(0.2),
-            # nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),  # output size: (256, 5, 5)
-            # nn.BatchNorm2d(256),
-            # nn.ReLU(True),
-            # nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),  # output size: (512, 5, 5)
-            # nn.BatchNorm2d(512),
-            # nn.ReLU(True),
-            # nn.Conv2d(512, 1024, kernel_size=3, stride=1, padding=1),  # output size: (1024, 5, 5)
-            # nn.BatchNorm2d(1024),
-            # nn.ReLU(True)
         )
 
         # Decoder
         self.decoder = nn.Sequential(
-            # nn.ConvTranspose2d(1024, 512, kernel_size=3, stride=1, padding=1),  # output size: (512, 5, 5)
-            # nn.BatchNorm2d(512),
-            # nn.ReLU(True),
-            # nn.ConvTranspose2d(512, 256, kernel_size=3, stride=1, padding=1),  # output size: (256, 5, 5)
-            # nn.BatchNorm2d(256),
-            # nn.ReLU(True),
-            # nn.ConvTranspose2d(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (128, 10, 10)
-            # nn.BatchNorm2d(128),
-            # nn.ReLU(True),
+
             nn.ConvTranspose2d(128, 64, kernel_size=3, stride=1, padding=1, output_padding=0),  # output size: (64, 20, 20)
             nn.BatchNorm2d(64),
             nn.LeakyReLU(True),
@@ -60,7 +43,6 @@ class Autoencoder(nn.Module):
             nn.BatchNorm2d(32),
             nn.LeakyReLU(True),
             nn.ConvTranspose2d(32, 1, kernel_size=3, stride=2, padding=1, output_padding=1),  # output size: (1, 80, 80)
-            # nn.Sigmoid()  # To output values between 0 and 1
         )
 
     def forward(self, x):
@@ -170,15 +152,12 @@ def main():
     base_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/saved_chopped_arrays"
     
     train_dataset, val_dataset, test_dataset = load_datasets(base_dir)
-    # train_loader, val_loader, test_loader = create_dataloaders(train_dataset, val_dataset, test_dataset, batch_size=64)
     
     train_loader = torch.utils.data.DataLoader(train_dataset, **train_kwargs)
     val_dataset = torch.utils.data.DataLoader(val_dataset, **val_kwargs)
     test_loader = torch.utils.data.DataLoader(test_dataset, **test_kwargs)
     
     model = Autoencoder().to(device)
-
-    # wandb
     
     wandb.init(config=args, dir="/work/tc062/tc062/s2501147/autoencoder", mode="offline")
     wandb.watch(model, log_freq=100)
@@ -200,6 +179,4 @@ def main():
 
 if __name__ == '__main__':
     print("working directory: ", os.getcwd())
-    # os.chdir("/work/tc062/tc062/s2501147/autoencoder")
-    # print("working directory: ", os.getcwd())
     main()

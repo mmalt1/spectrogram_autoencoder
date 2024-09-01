@@ -6,11 +6,11 @@ def generate_ir(length, decay_factor=0.01):
     Generate an impulse response with exponential decay.
     
     Args:
-    - length (int): Length of the impulse response.
-    - decay_factor (float): Decay factor for the exponential decay.
+    length (int): Length of the impulse response.
+    decay_factor (float): Decay factor for the exponential decay.
     
     Returns:
-    - ir (torch.Tensor): Generated impulse response.
+    ir (torch.Tensor): Generated impulse response.
     """
     t = torch.arange(length)
     ir = torch.exp(-decay_factor * t)
@@ -21,11 +21,11 @@ def apply_reverb_to_spectrogram(spectrogram, ir):
     Apply reverb to a spectrogram by convolving each frequency band with the IR.
     
     Args:
-    - spectrogram (torch.Tensor): Input spectrogram (shape: [frequency, time]).
-    - ir (torch.Tensor): Impulse response (shape: [ir_length]).
+    spectrogram (torch.Tensor): Input spectrogram (shape: [frequency, time]).
+    ir (torch.Tensor): Impulse response (shape: [ir_length]).
     
     Returns:
-    - reverb_spectrogram (torch.Tensor): Spectrogram with reverb applied.
+    reverb_spectrogram (torch.Tensor): Spectrogram with reverb applied.
     """
     if ir.dim() != 1:
         raise ValueError("Impulse response must be a 1D tensor")

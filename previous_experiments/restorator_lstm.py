@@ -16,15 +16,12 @@ from wandb_osh.hooks import TriggerWandbSyncHook
 
 comm_dir = "/work/tc062/tc062/s2501147/autoencoder/.wandb_osh_command_dir"
 
+# NOTE: this class and model were used for previous experiments, but are not used for the final project
+
 class BiLSTMAutoencoder(nn.Module):
     def __init__(self, cnn_out=16, hidden_size=128, num_layers=2):
 
-        super(BiLSTMAutoencoder, self).__init__()
-
-        # Encoder
-        # TODO try 2 biLSTM layers + 1 linear
-        # TODO add conv layer 
-        
+        super(BiLSTMAutoencoder, self).__init__()        
         # Encoder
         self.encoder_conv = nn.Sequential(
             nn.Conv2d(1, cnn_out, kernel_size=(3, 3), stride=(1, 2), padding=(1, 1)),

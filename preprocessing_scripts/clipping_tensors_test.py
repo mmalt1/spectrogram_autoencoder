@@ -12,34 +12,26 @@ def clip_to_equal_tensors(libritts_tensor, librittsr_tensor):
     
     elif l_length < lr_length:
         difference = lr_length - l_length
-        # print("difference: ", difference)
         if difference%2 == 0:
             clip = int(difference/2)
-            # print('clip: ', clip)
             librittsr_tensor = librittsr_tensor[:, :, clip:lr_length-clip]
         else:
             difference = int(difference/2)
             beginning_clip = difference
             end_clip = difference + 1
-            # print('beginning clip: ', beginning_clip)
-            # print('end clip: ', end_clip)
             librittsr_tensor = librittsr_tensor[:, :, beginning_clip: lr_length - end_clip]
         
         return libritts_tensor, librittsr_tensor
     
     else:
         difference = l_length - lr_length
-        # print("difference: ", difference)
         if difference%2 == 0:
             clip = int(difference/2)
-            # print('clip: ', clip)
             libritts_tensor = libritts_tensor[:, :, clip:l_length-(clip)]
         else:
             difference = int(difference/2)
             beginning_clip = difference
-            # print('beginning clip: ', beginning_clip)
             end_clip = difference + 1
-            # print('end clip: ', end_clip)
             libritts_tensor = libritts_tensor[:, :, beginning_clip: l_length - end_clip]
 
         return libritts_tensor, librittsr_tensor
@@ -50,10 +42,6 @@ def clip_to_equal_tensors(libritts_tensor, librittsr_tensor):
 
 # libritts_t = torch.load(libritts_path)
 # librittsr_t = torch.load(librittsr_path)
-
-# libritts_t = torch.rand(1,80,545)
-# librittsr_t = torch.rand(1,80,540)
-
 
 # print('LibriTTS shape: ', libritts_t.shape)
 # print('LibriTTS-R shape: ', librittsr_t.shape)
@@ -66,7 +54,7 @@ def clip_to_equal_tensors(libritts_tensor, librittsr_tensor):
 # print('LibriTTS shape: ', libritts_tensor.shape)
 # print('LibriTTS-R shape: ', librittsr_tensor.shape)
 
-# # fig, axs = plt.subplots(2, 1)
+# fig, axs = plt.subplots(2, 1)
 
 # axs[0].imshow(libritts_np, cmap='gray')
 # axs[0].set_title('LibriTTS')

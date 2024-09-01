@@ -2,23 +2,32 @@ import os
 import numpy as np
 
 def get_max_min_values_with_source(directory):
+    """
+    Get the maximum and minimum 10 values of arrays in a directory. 
+
+    Args:
+    directory (str): directory of arrays
+
+    Returns:
+    min_10 (list): list of 10 minimum values in directory of arrays (int)
+    max_10 (list): list of 10 maximum values in directory of arrays (int)
+    """
+
     all_values = []
     
-    # Iterate through all files in the directory
     for filename in os.listdir(directory):
-        if filename.endswith('.npy'):  # Assuming the arrays are stored as .npy files
+        if filename.endswith('.npy'): 
             file_path = os.path.join(directory, filename)
             array = np.load(file_path)
             print(f'Loaded array: {filename}')
-            # Store each value with its filename and index
+            # store each value with its filename and index
             all_values.extend([(val, filename, idx) for idx, val in np.ndenumerate(array)])
     
-    # Sort based on the value
+    #sort based on the value
     sorted_values = sorted(all_values, key=lambda x: x[0])
     
-    # Get max 5 and min 5 values with their sources
     min_10 = sorted_values[:10]
-    max_10 = sorted_values[-10:][::-1]  # Reverse to get descending order
+    max_10 = sorted_values[-10:][::-1] 
     
     return min_10, max_10
 
