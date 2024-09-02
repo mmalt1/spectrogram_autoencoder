@@ -9,11 +9,24 @@ Automatic speech restoration has emerged as a solution, but state-of-the-art mod
 
 This Denoising Convolutional Autoencoder (DCAE, in variable_length_restoration.py) was created from scratch with PyTorch to explore smaller-scale denoising and restoration architectures for accessible TTS training data augmentation.
 
-## Experiments
+## Description
 The DCAE architecture is first used for denoising speech spectrograms and speaker isolation. The best results are achieved using a U-Net inspired addition with skip connections.
 This same architecture is then used with parallel mid-quality and enhanced training data for a fullt speech restoration task, but no conclusive results are found.
 Full speech restoration is here defined as joint speech dereverberation, declipping, denoising and bandwidth extension.
-The DCAE architecture can be extended with a Variational Autoencoder (VAE) component or a additional Transformer layers for the 
+The DCAE architecture can be extended with a Variational Autoencoder (VAE) generative component or additional Transformer layers for the full speech restoration task. 
 
 ## Data
-The LibriTTS and LibriTTS-R open-source speech datasets were used as training and testing data in this work. LibriTTS-R was used as parallel data to LibriTTS for the full speech restoration task. The open-source FastPitch preprocessing steps were used to transform the audio files into spectrograms, as they match many state-of-the-art vocoders. 
+The LibriTTS and LibriTTS-R open-source speech datasets were used as training and testing data in this work. LibriTTS-R was used as parallel data to LibriTTS for the full speech restoration task. The open-source FastPitch preprocessing steps were used to transform the audio files into spectrograms, as they match many state-of-the-art vocoders.
+
+## Acknowledgements
+@misc{zen2019librittscorpusderivedlibrispeech,
+      title={LibriTTS: A Corpus Derived from LibriSpeech for Text-to-Speech}, 
+      author={Heiga Zen and Viet Dang and Rob Clark and Yu Zhang and Ron J. Weiss and Ye Jia and Zhifeng Chen and Yonghui Wu},
+      year={2019},
+      eprint={1904.02882},
+      archivePrefix={arXiv},
+      primaryClass={cs.SD},
+      url={https://arxiv.org/abs/1904.02882}, 
+}
+
+

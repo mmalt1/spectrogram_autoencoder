@@ -1,3 +1,5 @@
+# NOTE: this class and model were used for previous experiments, but are not used for the final project
+
 import argparse
 import torch
 import os
@@ -15,8 +17,6 @@ import wandb
 from wandb_osh.hooks import TriggerWandbSyncHook  
 
 comm_dir = "/work/tc062/tc062/s2501147/autoencoder/.wandb_osh_command_dir"
-
-# NOTE: this class and model were used for previous experiments, but are not used for the final project
 
 class BiLSTMAutoencoder(nn.Module):
     def __init__(self, cnn_out=16, hidden_size=128, num_layers=2):

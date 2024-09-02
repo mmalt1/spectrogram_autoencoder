@@ -1,3 +1,6 @@
+"""Was used to check if the our noise addition for spectrograms would also work directly in the time
+domain. This script is not used in any models in this project. 
+"""
 import torch
 import torchaudio
 import random

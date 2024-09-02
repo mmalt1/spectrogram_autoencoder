@@ -1,3 +1,6 @@
+"""Adds Gaussian Noise to a speech spectrogram. Was used as an experiment for reducing vocoder artefacts
+from model outputs. 
+"""
 import torch
 
 original_tensor_path = "/work/tc062/tc062/s2501147/FastPitch/FastPitches/PyTorch/SpeechSynthesis/FastPitch/torch_saved/mels/denoiser_0005_env_output.pt"

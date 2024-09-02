@@ -1,3 +1,7 @@
+"""
+This scripts generates and adds an impulse response to a spectrogram. It was used for previous experiments
+but is nout used in the final project nor in any model training presented. 
+"""
 import torch
 import torch.nn.functional as F
 
