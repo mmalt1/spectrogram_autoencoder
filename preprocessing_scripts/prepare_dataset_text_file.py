@@ -1,3 +1,4 @@
+# NOTE: txt file necessary for FastPitch preprocessing steps
 import os
 
 # Define the paths

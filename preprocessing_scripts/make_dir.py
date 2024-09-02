@@ -1,3 +1,6 @@
+"""
+NOTE: used to create a directory of random 500 unseen tensors for testing the model. 
+"""
 import os
 import random
 import shutil

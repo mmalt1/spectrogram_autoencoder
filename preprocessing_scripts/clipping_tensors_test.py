@@ -4,6 +4,24 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def clip_to_equal_tensors(libritts_tensor, librittsr_tensor):
+    """This function takes two spectrograms tensors and clips the longest one so they're of equal length.
+    If the spectrograms are of equal length, directly returns them without modification. 
+    If the spectrograms are not of equal length and the difference is even, an equal number of frames
+    (corresponding to half of the difference) is subtracted from the start and end of the longer spectrogram
+    If the difference is uneven, one more time frame is subtracted from the end than the beginning of the
+    longer spectrogram. 
+
+    Args:
+        libritts_tensor (torch.Tensor): original mid-quality spectrogram tensor (channel, freq_bins, time)
+        librittsr_tensor (torch.Tensor): restored high-quality spectrogram tensor (channel, freq_bins, time)
+
+    Returns:
+        tuple: tuple containing:
+                libritts_tensor (torch.Tensor): original mid-quality spectrogram tensor, clipped if it was
+                                                longer than the other spectrogram (same shape as input)
+                librittsr_tensor (torch.Tensor): restored high-quality spectrogram tensor, clipped if it was
+                                                 longer than the other spectrogram (same shape as input)
+    """
     l_length = libritts_tensor.shape[2]
     lr_length =  librittsr_tensor.shape[2]
     
@@ -35,36 +53,3 @@ def clip_to_equal_tensors(libritts_tensor, librittsr_tensor):
             libritts_tensor = libritts_tensor[:, :, beginning_clip: l_length - end_clip]
 
         return libritts_tensor, librittsr_tensor
-
-
-# libritts_path = "libritts_data/enhancement_dataset/dev/84_121123_000011_000003.pt"
-# librittsr_path = "libritts_data/enhancement_dataset/dev_enhanced/84_121123_000011_000003.pt"
-
-# libritts_t = torch.load(libritts_path)
-# librittsr_t = torch.load(librittsr_path)
-
-# print('LibriTTS shape: ', libritts_t.shape)
-# print('LibriTTS-R shape: ', librittsr_t.shape)
-
-# libritts_tensor, librittsr_tensor = clip_to_equal_tensors(libritts_t, librittsr_t)
-
-# libritts_np = libritts_tensor.numpy()
-# librittsr_np = librittsr_tensor.numpy()
-
-# print('LibriTTS shape: ', libritts_tensor.shape)
-# print('LibriTTS-R shape: ', librittsr_tensor.shape)
-
-# fig, axs = plt.subplots(2, 1)
-
-# axs[0].imshow(libritts_np, cmap='gray')
-# axs[0].set_title('LibriTTS')
-# axs[0].axis('off')
-# axs[0].invert_yaxis()
-
-# axs[1].imshow(librittsr_np, cmap='gray')
-# axs[1].set_title('LibriTTS-R')
-# axs[1].axis('off')
-# axs[1].invert_yaxis()
-
-# plt.show()
-# plt.savefig('comparing_spectograms3_clipped.png')

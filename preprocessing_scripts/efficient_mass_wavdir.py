@@ -36,7 +36,7 @@ def copy_wavs_to_single_dir(directory, save_array_dir, log_file, batch_size=10):
                 if counter % batch_size == 0:
                     save_processed_files(log_file, processed_files)
 
-    # Final save of progress
+    # final save of progress
     save_processed_files(log_file, processed_files)
 
 

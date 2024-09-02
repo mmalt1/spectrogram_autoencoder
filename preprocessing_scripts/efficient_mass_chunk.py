@@ -18,7 +18,7 @@ def chop_arrays(input_directory, output_directory, log_file, frames_per_chunk=80
     """
     Chops spectrogram arrays into smaller chunks with a specified number of frames.
     
-    Parameters:
+    Args:
         input_directory (str): The directory containing the .npy files with spectrogram arrays.
         output_directory (str): The directory where the chopped .npy files will be saved.
         log_file (str): The file to log processed files.

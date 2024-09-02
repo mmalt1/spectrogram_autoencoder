@@ -34,6 +34,10 @@ U-Net original paper:
 
 Ronneberger, O., Fischer, P., Brox, T. (2015). U-Net: Convolutional Networks for Biomedical Image Segmentation. In: Navab, N., Hornegger, J., Wells, W., Frangi, A. (eds) Medical Image Computing and Computer-Assisted Intervention – MICCAI 2015. MICCAI 2015. Lecture Notes in Computer Science(), vol 9351. Springer, Cham. https://doi.org/10.1007/978-3-319-24574-4_28
 
+FastPitch original paper: 
+
+A. Łańcucki, "Fastpitch: Parallel Text-to-Speech with Pitch Prediction," ICASSP 2021 - 2021 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP), Toronto, ON, Canada, 2021, pp. 6588-6592, doi: 10.1109/ICASSP39728.2021.9413889. keywords: {Frequency synthesizers;Frequency modulation;Conferences;Semantics;Predictive models;Real-time systems;Acoustics;text-to-speech;speech synthesis;fundamental frequency},
+
 
 
 

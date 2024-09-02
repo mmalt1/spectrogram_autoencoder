@@ -1,3 +1,4 @@
+# NOTE: used to compare LibriTTS and LibriTTS-R spectrograms visually before clipping the longer ones
 import torch
 import numpy as np
 import matplotlib.pyplot as plt

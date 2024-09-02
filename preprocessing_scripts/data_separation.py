@@ -1,3 +1,6 @@
+""" NOTE: used for separating a dataset into train, validation and test sets, not used for final LibriTTS &
+LibriTTS-R dataset, already separated into subsets 
+"""
 import os
 import random
 import shutil

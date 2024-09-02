@@ -1,5 +1,8 @@
+"""
+NOTE: This script was used to remove the file in the LibriTTS dataset not present in the LibriTTS-R
+dataset to create a parallel dataset. 
+"""
 import os
-
 
 def get_files_in_directory(directory):
     """Get a set of file names in the given directory."""

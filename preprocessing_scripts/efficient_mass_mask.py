@@ -18,7 +18,7 @@ def zero_arrays(input_directory, output_directory, log_file, nbr_columns=15, bat
     """
     Zeroes out random columns of arrays to be used in in-painting training
     
-    Parameters:
+    Args:
         input_directory (str): The directory containing the .npy files with spectrogram arrays
         output_directory (str): The directory where the zeroed columns .npy files will be saved
         log_file (str): The file to log processed files
