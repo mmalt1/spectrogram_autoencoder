@@ -18,15 +18,22 @@ The DCAE architecture can be extended with a Variational Autoencoder (VAE) gener
 ## Data
 The LibriTTS and LibriTTS-R open-source speech datasets were used as training and testing data in this work. LibriTTS-R was used as parallel data to LibriTTS for the full speech restoration task. The open-source FastPitch preprocessing steps were used to transform the audio files into spectrograms, as they match many state-of-the-art vocoders.
 
-## Acknowledgements
-@misc{zen2019librittscorpusderivedlibrispeech,
-      title={LibriTTS: A Corpus Derived from LibriSpeech for Text-to-Speech}, 
-      author={Heiga Zen and Viet Dang and Rob Clark and Yu Zhang and Ron J. Weiss and Ye Jia and Zhifeng Chen and Yonghui Wu},
-      year={2019},
-      eprint={1904.02882},
-      archivePrefix={arXiv},
-      primaryClass={cs.SD},
-      url={https://arxiv.org/abs/1904.02882}, 
-}
+## References
+
+LibriTTS Dataset:
+
+Zen, H., Dang, V., Clark, R., Zhang, Y., Weiss, R.J., Jia, Y., Chen, Z., Wu, Y. (2019). LibriTTS: A Corpus Derived from LibriSPeech fo Text-to-Speech. https://arxiv.org/abs/1904.02882
+
+
+LibriTTS-R Dataset:
+
+Koizumi, Y., Zen, H., Karita, S., Ding, Y., Yatabe, K., Morioka, N., Bacchiani, M., Zhang, Y., Han, W., Bapna, A. (2023). LibriTTS-R: A Restored Multi-Speaker Text-to-Speech Corpus. https://arxiv.org/abs/2305.18802
+
+
+U-Net original paper:
+
+Ronneberger, O., Fischer, P., Brox, T. (2015). U-Net: Convolutional Networks for Biomedical Image Segmentation. In: Navab, N., Hornegger, J., Wells, W., Frangi, A. (eds) Medical Image Computing and Computer-Assisted Intervention – MICCAI 2015. MICCAI 2015. Lecture Notes in Computer Science(), vol 9351. Springer, Cham. https://doi.org/10.1007/978-3-319-24574-4_28
+
+
 
 
