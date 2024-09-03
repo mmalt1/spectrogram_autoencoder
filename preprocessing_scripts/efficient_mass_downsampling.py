@@ -16,7 +16,7 @@ def save_processed_files(log_file, processed_files):
     with open(log_file, 'w') as f:
         json.dump(processed_files, f)
 
-def copy_wavs_to_single_dir(directory, save_array_dir, log_file, batch_size=10):
+def downsample_files_in_dir(directory, save_array_dir, log_file, batch_size=10):
     processed_files = load_processed_files(log_file)
     counter = 0
     
@@ -50,5 +50,5 @@ current_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/LibriTTS_R/t
 save_array_dir = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/libritts_r/train/wavs"
 log_file = "downsampled_ttsr_test.json"
 
-copy_wavs_to_single_dir(current_dir, save_array_dir, log_file)
+downsample_files_in_dir(current_dir, save_array_dir, log_file)
 

@@ -1,3 +1,6 @@
+"""NOTE: used for experiments on masking columns in spectrograms, not used in any model training or 
+further experiments.
+"""
 import os
 import json
 import numpy as np

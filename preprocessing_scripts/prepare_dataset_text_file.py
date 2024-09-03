@@ -1,4 +1,6 @@
-# NOTE: txt file necessary for FastPitch preprocessing steps
+""" NOTE: txt file necessary for FastPitch preprocessing steps in:
+https://github.com/evdv/FastPitches/blob/main/PyTorch/SpeechSynthesis/FastPitch/prepare_dataset.py#L124
+"""
 import os
 
 # Define the paths

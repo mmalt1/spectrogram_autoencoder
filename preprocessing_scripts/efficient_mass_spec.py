@@ -1,3 +1,7 @@
+"""NOTE: used to transform wav files into spectrogram arrays in initial model development. DEPRECATED,
+not used for actual model training. All preprocessing is done through: 
+https://github.com/evdv/FastPitches/blob/main/PyTorch/SpeechSynthesis/FastPitch/prepare_dataset.py#L124
+"""
 import os
 import librosa
 import librosa.display
