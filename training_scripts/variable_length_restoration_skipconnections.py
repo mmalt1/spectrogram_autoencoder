@@ -1,20 +1,22 @@
-import argparse
-import torch # type:ignore
 import os
 import math
+import random
+import argparse
+import subprocess
+
+import wandb
+import numpy as np #type:ignore
+import torch # type:ignore
 import torch.nn as nn # type:ignore
 import torch.nn.functional as F #type:ignore
 import torch.optim as optim #type:ignore
-import subprocess
-import random
-import numpy as np #type:ignore
-from var_length_dataset import VarSpectrogramDataset, load_datasets
+from wandb_osh.hooks import TriggerWandbSyncHook  #type:ignore
 from torchvision import datasets, transforms #type:ignore
 from torch.optim.lr_scheduler import StepLR #type:ignore
 from torch.autograd import Variable #type:ignore
-import wandb
-from wandb_osh.hooks import TriggerWandbSyncHook  #type:ignore
-from noiser_function import add_noise_to_spec, wav_to_tensor
+
+from var_length_dataset import VarSpectrogramDataset, load_datasets
+from noiser_function import add_noise_to_spec
 
 comm_dir = "/work/tc062/tc062/s2501147/autoencoder/.wandb_osh_command_dir"
 
@@ -24,7 +26,7 @@ class VariableLengthRAutoencoder(nn.Module):
     This class implements a spectrogram restoration/reconstruction CNN autoencoder, supporting variable
     length input, with an optional variational autoencoder (VAE) functionality. It supports residual
     (skip) connections and can be configured for debugging purposes.
-    
+
     Attributes:
         debug (bool): flag for debug mode
         vae (bool): flag for VAE mode

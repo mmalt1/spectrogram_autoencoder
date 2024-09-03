@@ -1,20 +1,22 @@
-import argparse
-import torch # type:ignore
 import os
 import math
+import random
+import argparse
+import subprocess
+
+import wandb
+import numpy as np #type:ignore
+import torch # type:ignore
 import torch.nn as nn # type:ignore
 import torch.nn.functional as F #type:ignore
 import torch.optim as optim #type:ignore
-import subprocess
-import random
-import numpy as np #type:ignore
-from var_length_dataset import VarSpectrogramDataset, load_datasets
+from wandb_osh.hooks import TriggerWandbSyncHook  #type:ignore
 from torchvision import datasets, transforms #type:ignore
 from torch.optim.lr_scheduler import StepLR #type:ignore
 from torch.autograd import Variable #type:ignore
-import wandb
-from wandb_osh.hooks import TriggerWandbSyncHook  #type:ignore
-from noiser_function import add_noise_to_spec, wav_to_tensor
+
+from var_length_dataset import VarSpectrogramDataset, load_datasets
+from noiser_function import add_noise_to_spec
 
 comm_dir = "/work/tc062/tc062/s2501147/autoencoder/.wandb_osh_command_dir"
 
@@ -220,7 +222,7 @@ def custom_loss(output, target):
     return total_loss
 
 def vae_loss(output, enhanced, mean, logvar):
-    """Calculates combined reconstruction loss and KL divergence between a Normal distribution (0,1)
+    """Calculates combined reconstruction loss and KL divergence between a standard Normal distribution
     and the mean and log variance sampled from the probability distribution for the latent 
     representation when using the VAE option of the model
 
@@ -249,9 +251,9 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
     process for different tasks. The gradients are accumulated over a specified number of steps
     (accumulation_steps) before performing an optimization step. 
 
-    If the 'enhancer' flag is True, the function trains the model using mid-quality input data and 
+    If the 'enhancer' flag is True, the function trains the model using medium quality input data and 
     an enhanced version as target data. It supports an optional 'noising' flag, where noise is
-    added to the mid-quality input spectrogram, which is denoised and enhanced through the model. 
+    added to the medium quality input spectrogram, which is denoised and enhanced through the model. 
 
     If the 'enhancer' flag is False, the function trains the model to reconstruct the original
     spectrogram from a corrupted version through either a 'masking' or 'noising' corruption. The 
@@ -278,7 +280,7 @@ def train(args, model, device, train_loader, optimizer, epoch, trigger_sync, nbr
                                 in the input data. Defaults to False.
         noising (bool, optional): If True, performs the denoising task where noise is added to the input
                                 data. Defaults to False.
-        enhancer (bool, optional): If True, performs the enhancing task where parallel mid-quality and
+        enhancer (bool, optional): If True, performs the enhancing task where parallel medium quality and
                                 enhanced data is used to train the model. Defaults to False.
 
     Returns:
@@ -414,9 +416,9 @@ def test(model, device, test_loader, trigger_sync, nbr_columns, noise_directory,
     provided by the test_loader after training for each epoch. It supports different testing scenarios
     including masking, noising and enhancement of input data. 
 
-    If the 'enhancer' flag is True, it tests the model's ability to enhance the mid-quality input data
+    If the 'enhancer' flag is True, it tests the model's ability to enhance the medium quality input data
     to the enhanced quality of the target. It supports an optional 'noising' flag, where noise is
-    added to the mid-quality input spectrogram, which is denoised and enhanced through the model. 
+    added to the medium quality input spectrogram, which is denoised and enhanced through the model. 
 
     If the 'enhancer' flag is False, it tests the model's ability to reconstruct the original
     spectrogram from a corrupted version through either a 'masking' or 'noising' corruption. The 
@@ -436,7 +438,7 @@ def test(model, device, test_loader, trigger_sync, nbr_columns, noise_directory,
                                 in the input data. Defaults to False.
         noising (bool, optional): If True, performs the denoising task where noise is added to the input
                                 data. Defaults to False.
-        enhancer (bool, optional): If True, performs the enhancing task where parallel mid-quality and
+        enhancer (bool, optional): If True, performs the enhancing task where parallel medium quality and
                                 enhanced data is used to train the model. Defaults to False.
     Returns:
         float: average test loss accross all batches in test loader
@@ -511,14 +513,14 @@ def test(model, device, test_loader, trigger_sync, nbr_columns, noise_directory,
 def enhanced_custom_collate(batch):
     """Custom collate function for batching spectrograms and their enhanced versions.
 
-    This function takes a batch of original mid-quality spectrograms, the enhanced target versions
+    This function takes a batch of original medium quality spectrograms, the enhanced target versions
     and their lengths and pads them to an equal length within the batch for processing in the model.
     It ensures that the original and enhanced spectrograms are padded to the same length. 
 
     Args:
         batch (list): list of tuples, where each tuple contains:
                     (spectrogram, enhance_spectorgram, length)
-                    spectrogram (torch.Tensor): the original mid-quality spectrogram 
+                    spectrogram (torch.Tensor): the original medium quality spectrogram 
                     enhanced_spectrogram (torch.Tensor): enhanced version of the spectrogram
                     length (int): original length of the spectrogram (its enhanced version being the
                     same length)
@@ -526,7 +528,7 @@ def enhanced_custom_collate(batch):
     Returns:
         tuple: tuple containing:
             (padded_spectrograms, padded_enhanced_spectrograms, lengths)
-            padded_spectrograms (torch.Tensor): batch of padded original mid-quality spectrograms
+            padded_spectrograms (torch.Tensor): batch of padded original medium quality spectrograms
             padded_enhanced_spectrograms (torch.Tensor): batch of padded enhanced spectrograms
             lengths (torch.Tensor): original lengths of spectrograms before padding
 
