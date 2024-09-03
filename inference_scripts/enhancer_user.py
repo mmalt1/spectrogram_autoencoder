@@ -1,19 +1,27 @@
 #!/work/tc062/tc062/s2501147/venv/mgpu_env/bin/python
 
-import matplotlib.pyplot as plt 
-import torch
-import torch.nn as nn
-import random
-from PIL import Image
-from torchvision import datasets, transforms
-from torchvision.transforms import ToTensor, ToPILImage
-import torch.nn.functional as F
-from reconstructor import RAutoencoder
-from variable_length_restoration import VariableLengthRAutoencoder
-import numpy as np
-import os
+"""NOTE: Used for inference for the full speech restoration task."""
 
-def predict_image_output(model, save_dir, og_tensor):
+import os
+import torch
+import numpy as np
+import torch.nn as nn
+import matplotlib.pyplot as plt 
+from variable_length_restoration import VariableLengthRAutoencoder
+
+def predict_restored_output(model, save_dir, og_tensor):
+
+    """Inference, predicts the restored speech spectrogram output from a amateur recording quality speech
+    spectrogram, using a VariableLengthRAutoencoder trained model. 
+
+    Args:
+        model (VariablLengthRAutoencoder): trained restoration model
+        save_dir (str): path to saving the restored spectrogram
+        og_tensor (torch.Tensor): amateur recording quality speech spectrogram
+
+    Returns:
+        torch.Tensor: saved_output, denoised speech spectrogram
+    """
     model.eval()
     with torch.no_grad():
         print('size of image tensor: ', og_tensor.shape)
@@ -31,8 +39,15 @@ def predict_image_output(model, save_dir, og_tensor):
     
     return saved_output
 
-def visualize_image(enhanced_tensor, og_tensor, predicted_tensor, save_dir):
-    
+def visualize_spectrograms(enhanced_tensor, og_tensor, predicted_tensor, save_dir):
+    """Plot for visualizing the input amateur quality recording spectrogram, the output restored spectrogram
+    and a reference automatically restored version of the input spectrogram.
+    Args:
+        enhanced_tensor (torch.Tensor): reference automatically restored version of the input spectrogram
+        og_tensor (torch.Tensor): amateur quality input spectrogram
+        predicted_tensor (torch.Tensor): restored model output spectrogram
+        save_dir (str): path to save plot 
+    """
     torch.save(enhanced_tensor, f"{save_dir}/enhancer_vae_custom_checkpoint4_reference.pt")
     enhanced_image = enhanced_tensor.numpy()
     og_image = og_tensor.numpy()
@@ -81,7 +96,6 @@ enhanced_tensor = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/enhancem
 libritts_tensor = torch.load(tensor)
 librittsr_tensor = torch.load(enhanced_tensor)
 
-predicted_image = predict_image_output(model, save_directory, libritts_tensor)
-# print("predicted digit: ", predicted_digit)
+predicted_image = predict_restored_output(model, save_directory, libritts_tensor)
 
-visualize_image(librittsr_tensor, libritts_tensor, predicted_image, save_directory)
+visualize_spectrograms(librittsr_tensor, libritts_tensor, predicted_image, save_directory)

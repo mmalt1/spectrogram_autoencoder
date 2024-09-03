@@ -1,4 +1,6 @@
 #!/work/tc062/tc062/s2501147/venv/mgpu_env/bin/python
+"""NOTE: Mass inference in the denoising task, used for creating subjective listening test and objective
+metric evaluation data. """
 
 import os
 import json
@@ -7,6 +9,20 @@ from variable_length_restoration import VariableLengthRAutoencoder
 from test_noiser_function import add_noise_to_spec
 
 def load_and_preprocess_tensor(spectrogram, noise_directory, snr, save_dir, noise):
+    """Load and preprocesses the tensor necessary for inference. Noise is chosen randomly from a directory
+    of noises and added to the speech spectrogram (spectrogram) with a designated signal to noise ratio
+    (snr). 
+
+    Args:
+        spectrogram (torch.Tensor): spectrogram tensor to be loaded and preprocessed for inference
+        noise_directory (str): directory of noise spectrogram tensors
+        snr (int): Signal to Noise Ratio wanted when adding noise to speech 
+        save_dir (str): path for saving the model input tensor
+        noise (str): name of noise type, used for naming the save file
+
+    Returns:
+        torch.Tensor: noised_tensor, noisy speech spectrogram which will be used for inference
+    """
     
     spectrogram = spectrogram.unsqueeze(0)
     spec_tensor = spectrogram.unsqueeze(0)
@@ -19,7 +35,18 @@ def load_and_preprocess_tensor(spectrogram, noise_directory, snr, save_dir, nois
     
     return noised_tensor
 
-def predict_image_output(model, image_tensor, save_dir):
+def predict_spectrogram_output(model, image_tensor, save_dir):
+    """Inference, predicts the clean speech spectrogram output from the noisy speech spectrogram made in
+    load_and_preprocess_tensor, using a VariableLengthRAutoencoder trained model. 
+
+    Args:
+        model (VariablLengthRAutoencoder): trained denoising model
+        image_tensor (torch.Tensor): noisy speech spectrogram to be used as model input
+        save_dir (str): path to saving the denoised spectrogram
+
+    Returns:
+        torch.Tensor: saved_output, denoised speech spectrogram
+    """
     model.eval()
     with torch.no_grad():
         image_tensor = image_tensor.unsqueeze(0).unsqueeze(0)
@@ -58,17 +85,16 @@ print("device: ", device)
 model = VariableLengthRAutoencoder(vae=False).to(device)
 total_params = sum(p.numel() for p in model.parameters())
 print("total params: ", total_params)
-model_name = "denoiser_aircon" # rename the model to not have checkpoint
+model_name = "denoiser_aircon"
 common_path = "/work/tc062/tc062/s2501147/autoencoder"
 noise = "aircon1"
-# did speakers1, did aircon1, did env1, did station1, redo typing1
 speech = "/small_evaluation_set"
 snr = 20
 
 model.load_state_dict(torch.load(f"{model_name}.pt", map_location=torch.device('cpu')))
 
 unseen_data_directory = f"{common_path}{speech}"
-unseen_noise_directory = f"{common_path}/noise_dataset/mels/{noise}" # GET NAME OF NOISE THAT WAS TAKEN, REMOVE RANDOM IN 
+unseen_noise_directory = f"{common_path}/noise_dataset/mels/{noise}" 
 
 log_path = f"processed_{noise}_{model_name}_20_log.json"
 processed_files = load_log(log_path)
@@ -91,46 +117,10 @@ for filename in os.listdir(unseen_data_directory):
         og_tensor = torch.load(file, map_location=torch.device('cpu'))
         torch.save(og_tensor, f"{save_directory}/original.pt")
         noised_spec = load_and_preprocess_tensor(og_tensor, unseen_noise_directory, snr, save_directory, noise)
-        predict_image_output(model, og_tensor, save_directory)
+        predict_spectrogram_output(model, og_tensor, save_directory)
         
         processed_files.append(filename)
         save_log(processed_files, log_path)
 
     counter += 1
     print(f"Processed file {counter}")
-
-
-
-"""
-Output I want for Listening Test (not DNSMOS)
-NOTE: print out counter & name of file everytime to keep track and make sure everyone has the same things
-NOTE: shouldn't actually to visualise images, can do that in normal denoiser_user if needed
-
-Environment model
-    - input 
-    - noised
-        - noise dataset
-    - denoised
-        - noise dataset
-
-Mix model
-    - input
-    - noised
-        - noise dataset
-    - denoised
-        - noise dataset
-
-One noise model
-    - input
-    - noised
-        - noise dataset
-    - denoised
-        - noise dataset
-
-Found data experiment
-    - Model
-        - input
-        - noised
-        - denoised
-
-"""

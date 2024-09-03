@@ -1,21 +1,31 @@
 #!/work/tc062/tc062/s2501147/venv/mgpu_env/bin/python
 
+"""NOTE: Used for inference for the denoising task."""
+import os
+import numpy as np
 import matplotlib.pyplot as plt 
 import torch
 import torch.nn as nn
-import random
-from PIL import Image
-from torchvision import datasets, transforms
-from torchvision.transforms import ToTensor, ToPILImage
-import torch.nn.functional as F
-from reconstructor import RAutoencoder
 from variable_length_restoration_skipconnections import VariableLengthRAutoencoder
-import numpy as np
-import os
 from test_noiser_function import add_noise_to_spec
 
-def load_and_preprocess_tensor(image_path, noise_directory, snr, save_dir):
-    spectrogram = torch.load(image_path, map_location=torch.device('cpu'))
+def load_and_preprocess_tensor(spectrogram, noise_directory, snr, save_dir):
+    """Load and preprocesses the tensor necessary for inference. Noise is chosen randomly from a directory
+    of noises and added to the speech spectrogram (spectrogram) with a designated signal to noise ratio
+    (snr). 
+
+    Args:
+        spectrogram (torch.Tensor): spectrogram tensor to be loaded and preprocessed for inference
+        noise_directory (str): directory of noise spectrogram tensors
+        snr (int): Signal to Noise Ratio wanted when adding noise to speech 
+        save_dir (str): path for saving the model input tensor
+        noise (str): name of noise type, used for naming the save file
+
+    Returns:
+        torch.Tensor: noised_tensor, noisy speech spectrogram which will be used for inference
+    """
+
+    spectrogram = torch.load(spectrogram, map_location=torch.device('cpu'))
 
     # Add channel dimension to make it (1, 80, 80) ie grayscale
     spectrogram = spectrogram.unsqueeze(0)
@@ -30,12 +40,24 @@ def load_and_preprocess_tensor(image_path, noise_directory, snr, save_dir):
     
     return noised_tensor
 
-def predict_image_output(model, image_tensor, save_dir, input_path):
+def predict_spectrogram_output(model, noisy_speech_spectrogram, save_dir, input_path):
+    """Inference, predicts the clean speech spectrogram output from the noisy speech spectrogram made in
+    load_and_preprocess_tensor, using a VariableLengthRAutoencoder trained model. 
+
+    Args:
+        model (VariablLengthRAutoencoder): trained denoising model
+        noisy_speech_spectrogram (torch.Tensor): noisy speech spectrogram to be used as model input
+        save_dir (str): path to saving the denoised spectrogram
+
+    Returns:
+        torch.Tensor: saved_output, denoised speech spectrogram
+    """
+
     model.eval()
     with torch.no_grad():
-        print('size of image tensor: ', image_tensor.shape)
+        print('size of image tensor: ', noisy_speech_spectrogram.shape)
         input = torch.load(input_path, map_location=torch.device('cpu'))
-        output = model(image_tensor)
+        output = model(noisy_speech_spectrogram)
         flip_output = torch.flip(output, dims=[3])
         saved_output = flip_output.squeeze()
         print('saved ouput shape: ', saved_output.shape)
@@ -47,11 +69,20 @@ def predict_image_output(model, image_tensor, save_dir, input_path):
     
     return saved_output
 
-def visualize_image(og_tensor, tensor_noised, predicted_image_tensor, save_dir):
+def visualize_spectrograms(og_tensor, tensor_noised, predicted_denoised_tensor, save_dir):
+    """Plot for visualizing the input noisy spectrogram, output denoised spectrogram and the original
+    clean speech spectrogram. 
+
+    Args:
+        og_tensor (torch.Tensor): original non-masked spectrogram
+        tensor_noised (torch.Tensor): noisy spectrogram
+        predicted_denoised_tensor (torch.Tensor): denoised model output spectrogram
+        save_dir (str): path to save plot 
+    """
 
     tensor_noised = tensor_noised.squeeze().numpy()
     
-    predicted_image = predicted_image_tensor.numpy()
+    predicted_image = predicted_denoised_tensor.numpy()
     print("predicted_image size: ", predicted_image.shape)
 
     fig, axs = plt.subplots(3, 1)
@@ -96,12 +127,10 @@ model.load_state_dict(torch.load("denoiser_speakers_skip.pt", map_location=torch
 
 save_directory = '/work/tc062/tc062/s2501147/FastPitch/FastPitches/PyTorch/SpeechSynthesis/FastPitch/torch_saved/mels'
 noise_dir = "noise_dataset/mels/speakers_1_test"
-# tensor = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/enhancement_dataset/dev/84_121123_000007_000001.pt"
 tensor = "/work/tc062/tc062/s2501147/autoencoder/libritts_data/enhancement_dataset/dev/84_121123_000008_000000.pt"
-# tensor = "/work/tc062/tc062/s2501147/autoencoder/aircon1/5338_284437_000023_000001/denoiser_aircon_output.pt"
 og_tensor = torch.load(tensor, map_location=torch.device('cpu'))
 
 noised_spec = load_and_preprocess_tensor(tensor, noise_dir, 15, save_directory)
-predicted_image = predict_image_output(model, noised_spec, save_directory, tensor)
+denoised_spectrogram = predict_spectrogram_output(model, noised_spec, save_directory, tensor)
 
-visualize_image(og_tensor, noised_spec, predicted_image, save_directory)
+visualize_spectrograms(og_tensor, noised_spec, denoised_spectrogram, save_directory)
