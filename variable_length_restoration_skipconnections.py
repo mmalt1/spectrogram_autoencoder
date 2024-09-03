@@ -24,11 +24,7 @@ class VariableLengthRAutoencoder(nn.Module):
     This class implements a spectrogram restoration/reconstruction CNN autoencoder, supporting variable
     length input, with an optional variational autoencoder (VAE) functionality. It supports residual
     (skip) connections and can be configured for debugging purposes.
-
-    Args:
-        deubg (bool, optional): If True, enables debugging for additional output. Defaults to False
-        vae (bool, optional): If True, enable VAE functionality. Defaults to False. 
-
+    
     Attributes:
         debug (bool): flag for debug mode
         vae (bool): flag for VAE mode
@@ -41,6 +37,13 @@ class VariableLengthRAutoencoder(nn.Module):
         shifting (nn.Parameter): learnable shifting parameter 
     """
     def __init__(self, debug=False, vae=False):
+        """Initialises the VariableLengthRAutoencoder model
+
+        Args:
+            debug (bool, optional): If True, enables debugging for additional output. Defaults to False.
+            vae (bool, optional): If True, enable VAE functionality. Defaults to False.
+        """
+
         super(VariableLengthRAutoencoder, self).__init__()
         self.debug = debug
         self.vae = vae

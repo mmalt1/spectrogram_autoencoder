@@ -45,11 +45,6 @@ class VariableLengthRAutoencoder(nn.Module):
     length input, with an optional variational autoencoder (VAE) functionality, and an optional
     transformer functionality. 
 
-    Args:
-        deubg (bool, optional): If True, enables debugging for additional output. Defaults to False
-        vae (bool, optional): If True, enables VAE functionality. Defaults to False. 
-        transformer (bool, optional): If True, enables transformer functionality. Defaults to False
-
     Attributes:
         debug (bool): flag for debug mode
         vae (bool): flag for VAE mode
@@ -71,6 +66,13 @@ class VariableLengthRAutoencoder(nn.Module):
 
     """
     def __init__(self, debug=False, vae=False, transformer=False):
+        """Initialises the VariableLengthRAutoencoder model
+
+        Args:
+            debug (bool, optional): If True, enables debugging for additional output. Defaults to False.
+            vae (bool, optional):  If True, enables VAE functionality. Defaults to False.
+            transformer (bool, optional): If True, enables transformer functionality. Defaults to False.
+        """
         super(VariableLengthRAutoencoder, self).__init__()
         self.debug = debug
         self.vae = vae
